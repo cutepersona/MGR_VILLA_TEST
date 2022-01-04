@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "37307721803",
+    "project_id": "mgr-villa-70632",
+    "storage_bucket": "mgr-villa-70632.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37307721803:android:556849a8bb83b1172405ce",
+        "android_client_info": {
+          "package_name": "fastcampus.aop.part2.mgr_villa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37307721803-jsoj225g3sjkl5arslogvsdd6kb4lf2e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "fastcampus.aop.part2.mgr_villa",
+            "certificate_hash": "3b6e93e2c01c8e6d8514e8bb8a6932b3b9370437"
+          }
+        },
+        {
+          "client_id": "37307721803-41guskb1oofjpkeu0v5ca55ravkfvuop.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSk6Zsv_zbQMN0OPWuqg3QuHNFakn0dDA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "37307721803-41guskb1oofjpkeu0v5ca55ravkfvuop.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

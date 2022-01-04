@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/MainLogoLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/main_background"
+        app:layout_constraintBottom_toTopOf="@+id/ButtonLayout"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_weight="2">
+
+        <TextView
+            android:id="@+id/MainText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="60sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ButtonLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/main_background"
+        app:layout_constraintBottom_toTopOf="@+id/LoginCaseLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/MainLogoLayout"
+        app:layout_constraintVertical_weight="1">
+
+        <Button
+            android:id="@+id/Login"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:backgroundTint="@color/main_button_background"
+            android:text="@string/login_email"
+            app:layout_constraintBottom_toTopOf="@+id/searchId"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/searchId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:text="@string/searchID"
+            app:layout_constraintEnd_toStartOf="@+id/searchPw"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="@+id/Login"
+            app:layout_constraintTop_toBottomOf="@+id/Login"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/gradient"
+            app:layout_constraintBottom_toBottomOf="@+id/searchId"
+            app:layout_constraintEnd_toStartOf="@+id/searchPw"
+            app:layout_constraintStart_toEndOf="@+id/searchId"
+            app:layout_constraintTop_toTopOf="@+id/searchId" />
+
+        <Button
+            android:id="@+id/searchPw"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            android:background="@color/transparent"
+            android:text="@string/searchPW"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/searchId"
+            app:layout_constraintTop_toBottomOf="@+id/Login"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/gradient"
+            app:layout_constraintBottom_toBottomOf="@+id/searchPw"
+            app:layout_constraintEnd_toStartOf="@+id/signUp"
+            app:layout_constraintStart_toEndOf="@+id/searchPw"
+            app:layout_constraintTop_toTopOf="@+id/searchPw" />
+
+        <Button
+            android:id="@+id/signUp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:text="@string/signUp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/searchPw"
+            app:layout_constraintTop_toBottomOf="@+id/Login"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:id="@+id/lineLeft"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@drawable/gradient"
+            android:layout_margin="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/lineCenter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/lineCenter"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:text="or"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/lineRight"
+            app:layout_constraintStart_toEndOf="@+id/lineLeft"
+            tools:ignore="HardcodedText" />
+
+        <View
+            android:id="@+id/lineRight"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/gradient"
+            app:layout_constraintBottom_toBottomOf="@+id/lineCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lineCenter" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/LoginCaseLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/main_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ButtonLayout"
+        app:layout_constraintVertical_weight="2">
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp">
+
+    <TextView
+        android:id="@+id/road_address_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="도로명주소"
+        android:textStyle="bold"
+        android:layout_marginLeft="20dp"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/address_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="구 주소"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        app:layout_constraintLeft_toLeftOf="@+id/road_address_name"
+        app:layout_constraintTop_toBottomOf="@id/road_address_name"
+        />
+
+    <TextView
+        android:id="@+id/villa_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        app:layout_constraintLeft_toLeftOf="@+id/address_name"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

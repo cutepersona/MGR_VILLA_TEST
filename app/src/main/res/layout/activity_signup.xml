@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/communityToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/main_button_background"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/abc_vector_test">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/toolbar_hg_10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.15" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/toolbar_hg_90"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.85" />
+
+                <TextView
+                    android:id="@+id/toolBarTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/signUp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.Toolbar>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/signInputArea"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
+
+        <ScrollView
+            android:id="@+id/signUpScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/signUpArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp">
+
+                <TextView
+                    android:id="@+id/userEmailText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_email"
+                    android:textStyle="bold"
+                    tools:ignore="MissingConstraints" />
+
+                <EditText
+                    android:id="@+id/userEmailEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_email_hint"
+                    android:inputType="textWebEmailAddress"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userEmailText" />
+
+                <TextView
+                    android:id="@+id/userEmailValid1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/userEmailEditText"
+                    tools:ignore="MissingConstraints"
+
+                    />
+
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/user_name"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/userEmailEditText"
+                    tools:ignore="MissingConstraints" />
+
+                <EditText
+                    android:id="@+id/userNameEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_name_hint"
+                    android:inputType="text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+                <TextView
+                    android:id="@+id/userNameValid1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/userNameEditText"
+                    tools:ignore="MissingConstraints"
+
+                    />
+
+                <TextView
+                    android:id="@+id/userPassword"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/user_password"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/userNameEditText"
+                    tools:ignore="MissingConstraints" />
+
+                <EditText
+                    android:id="@+id/userPasswordEditText1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_password_hint"
+                    android:inputType="textWebPassword"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userPassword" />
+
+                <TextView
+                    android:id="@+id/userPWValid1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/userPasswordEditText1"
+                    tools:ignore="MissingConstraints"
+
+                    />
+
+
+                <EditText
+                    android:id="@+id/userPasswordEditText2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_password_hint2"
+                    android:inputType="textWebPassword"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userPWValid1" />
+
+                <TextView
+                    android:id="@+id/userPWValid3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/userPasswordEditText2"
+                    tools:ignore="MissingConstraints" />
+
+                <TextView
+                    android:id="@+id/userPhoneNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/user_phone"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/userPWValid3"
+                    tools:ignore="MissingConstraints" />
+
+                <EditText
+                    android:id="@+id/userPhoneNumberEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_phone_hint"
+                    android:inputType="number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userPhoneNumber"
+                    tools:ignore="TextFields" />
+
+                <TextView
+                    android:id="@+id/userPhoneNumberValid1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/userPhoneNumberEditText"
+                    tools:ignore="MissingConstraints" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/phoneSnsAuth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text="@string/smsAuthentication"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="@+id/userPhoneNumberEditText"
+                    app:layout_constraintTop_toTopOf="@+id/userPhoneNumberEditText"
+                    app:layout_constraintBottom_toBottomOf="@+id/userPhoneNumberEditText"
+                    android:layout_margin="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/sms_button_shape"
+                    />
+
+                <EditText
+                    android:id="@+id/userAuthCompleteEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/user_phone_hint2"
+                    android:inputType="number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/userPhoneNumberValid1"
+                    tools:ignore="TextFields" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/AuthComplete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:text="@string/smsAuthComplete"
+                    android:background="@drawable/sms_button_shape"
+                    android:textColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="@+id/userAuthCompleteEditText"
+                    app:layout_constraintTop_toTopOf="@+id/userAuthCompleteEditText"
+                    app:layout_constraintBottom_toBottomOf="@+id/userAuthCompleteEditText"
+                    android:layout_margin="10dp"
+                    android:layout_marginBottom="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/termsOfUse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_of_use"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@+id/userAuthCompleteEditText"
+                    tools:ignore="MissingConstraints" />
+
+                <Button
+                    android:id="@+id/AllUseTerms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@+id/termsOfUse"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:drawableLeft="@drawable/ic_check_all_terms"
+                    android:text="@string/all_terms_check"
+                    android:backgroundTint="@color/main_button_background"
+                    />
+
+                <CheckBox
+                    android:id="@+id/necessaryTermsCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/necessary_terms_agree"
+                    app:layout_constraintTop_toBottomOf="@+id/AllUseTerms"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+
+                <TextView
+                    android:id="@+id/necessaryTerms"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/confirm_terms_agree"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/necessaryTermsCheck"
+                    />
+
+                <CheckBox
+                    android:id="@+id/privacyPolicyCheck"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/necessary_privacy_policy"
+                    app:layout_constraintTop_toBottomOf="@+id/necessaryTerms"
+                    app:layout_constraintStart_toStartOf="parent"
+                    />
+                <TextView
+                    android:id="@+id/privacyPolicy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/confirm_privacy_policy"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/privacyPolicyCheck"
+                    />
+                <TextView
+                    android:id="@+id/privacyPolicyValid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/privacyPolicy"
+                    />
+
+
+                <TextView
+                    android:id="@+id/emptyButtomUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="70dp"
+                    android:text=""
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/privacyPolicyValid"
+                    android:visibility="gone"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </ScrollView>
+
+        <Button
+            android:id="@+id/SignUpDone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/main_button_background"
+            android:text="@string/signUpDone"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

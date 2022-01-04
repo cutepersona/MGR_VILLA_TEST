@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/activity_login.xml" value="0.3731481481481482" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/add_bottom_shape.xml" value="0.184375" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/button_background.xml" value="0.20833333333333334" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/gradient.xml" value="0.20833333333333334" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/home_background.xml" value="0.21041666666666667" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/ic_add_circle.xml" value="0.184375" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/ic_check_circle_complete.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/ic_login.xml" value="0.36944444444444446" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/ic_new_tenant.xml" value="0.20833333333333334" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/main_background.xml" value="0.20833333333333334" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/sms_button_shape.xml" value="0.2078125" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/test_list_item.xml" value="0.22083333333333333" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_addr_search.xml" value="0.1640625" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_changepw.xml" value="0.2046875" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_choice_mgr_tenant.xml" value="0.1640625" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_home.xml" value="0.18" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_login.xml" value="0.16" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_main.xml" value="0.17760416666666667" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_notice.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_searchid.xml" value="0.33" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_searchidComplete.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_searchidcomplete.xml" value="0.125" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_searchpw.xml" value="0.22" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_sign.xml" value="0.2504528985507246" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_signup.xml" value="0.2" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_villainfo.xml" value="0.2046875" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/add_fragment.xml" value="0.16822916666666668" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/mgr_check.xml" value="0.1640625" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/mgr_home_fragment.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/ok_popup.xml" value="0.16875" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_address.xml" value="0.18229166666666666" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_notices.xml" value="0.20260416666666667" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/test_list_item.xml" value="0.2046875" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/villa_mgrcost_fragment_in_home.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/villa_notice_fragment_in_home.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/villa_tenant_fragment_in_home.xml" value="0.3619791666666667" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.18489583333333334" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/xml/shake.xml" value="0.19157608695652173" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+  <component name="VisualizationToolProject">
+    <option name="state">
+      <ProjectState>
+        <option name="scale" value="0.1" />
+      </ProjectState>
+    </option>
+  </component>
+</project>
