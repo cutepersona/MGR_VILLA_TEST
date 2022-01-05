@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import fastcampus.aop.part2.mgr_villa.customdialog.mgrCheckDialog
-import fastcampus.aop.part2.mgr_villa.database.VillaUsersHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityChoiceMgrTenantBinding
 
 class ChoiceMgrTenantActivity: AppCompatActivity() {

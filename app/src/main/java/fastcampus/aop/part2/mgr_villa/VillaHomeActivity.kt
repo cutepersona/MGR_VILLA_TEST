@@ -12,13 +12,13 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import fastcampus.aop.part2.mgr_villa.adapter.PagerHomeAdapter
-import fastcampus.aop.part2.mgr_villa.database.VillaInfoHelper
-import fastcampus.aop.part2.mgr_villa.database.VillaUsersHelper
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityHomeBinding
 import fastcampus.aop.part2.mgr_villa.fragment.AddFragment
 import fastcampus.aop.part2.mgr_villa.fragment.MgrHomeFragment
 import fastcampus.aop.part2.mgr_villa.fragment.OkFragment
 import fastcampus.aop.part2.mgr_villa.fragment.VillaTenantFragment
+import fastcampus.aop.part2.mgr_villa.model.VillaNotice
 
 class VillaHomeActivity : AppCompatActivity() {
 
@@ -88,15 +88,15 @@ class VillaHomeActivity : AppCompatActivity() {
     // 로그인 정보 가져오기
     private fun initLoginData(email: String) {
 
-        val userdb = VillaUsersHelper.getInstance(applicationContext)
-        val villadb = VillaInfoHelper.getInstance(applicationContext)
+        val userdb = VillaNoticeHelper.getInstance(applicationContext)
+//        val villadb = VillaInfoHelper.getInstance(applicationContext)
 
         Thread(Runnable {
-            val user = userdb?.VillaUserDao()?.getUser(
+            val user = userdb?.VillaNoticeDao()?.getUser(
                 userEmail
             )
 
-            val villaInfo = villadb!!.VillaInfoDao().getVillaInfo(userEmail)
+            val villaInfo = userdb!!.VillaNoticeDao().getVillaInfo(userEmail)
             detailAddress = villaInfo.roomNumber
             address = villaInfo.villaAddress
 

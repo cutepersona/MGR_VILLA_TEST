@@ -18,7 +18,7 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import fastcampus.aop.part2.mgr_villa.database.VillaUsersHelper
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivitySearchpwBinding
 import kotlinx.coroutines.*
 import java.util.concurrent.TimeUnit
@@ -194,8 +194,8 @@ class SearchPwActivity : AppCompatActivity() {
         binding.searchPwDone.setOnClickListener {
 
             CoroutineScope(Dispatchers.IO).launch {
-                val userdb = VillaUsersHelper.getInstance(applicationContext)
-                val checkId = userdb!!.VillaUserDao().isUserId(
+                val userdb = VillaNoticeHelper.getInstance(applicationContext)
+                val checkId = userdb!!.VillaNoticeDao().isUserId(
                     binding.userEmailEditText.text.toString().trim()
                     ,binding.userPhoneNumberEditText.text.toString().trim()
                 )

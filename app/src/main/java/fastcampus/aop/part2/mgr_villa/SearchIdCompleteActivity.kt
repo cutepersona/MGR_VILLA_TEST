@@ -6,14 +6,13 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import fastcampus.aop.part2.mgr_villa.database.VillaUsersHelper
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivitySearchidcompleteBinding
+import fastcampus.aop.part2.mgr_villa.model.VillaNotice
 import fastcampus.aop.part2.mgr_villa.model.VillaUsers
 import java.util.*
 
 class SearchIdCompleteActivity: AppCompatActivity() {
-
-    private lateinit var userHelper: VillaUsersHelper
 
     private val binding:ActivitySearchidcompleteBinding by lazy { ActivitySearchidcompleteBinding.inflate(layoutInflater)}
 
@@ -31,11 +30,11 @@ class SearchIdCompleteActivity: AppCompatActivity() {
         val ab = supportActionBar!!
         ab.setDisplayHomeAsUpEnabled(true)
 
-        val userdb = VillaUsersHelper.getInstance(applicationContext)
+        val userdb = VillaNoticeHelper.getInstance(applicationContext)
 
         userPhone = intent.getStringExtra("phone").toString()
 
-        val user = userdb?.VillaUserDao()?.getUserId(userPhone)
+        val user = userdb?.VillaNoticeDao()?.getUserId(userPhone)
 
         binding.findMyId.text = user?.let { stringMasking(it) }
 

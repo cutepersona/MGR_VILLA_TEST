@@ -11,10 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.databinding.DataBindingUtil
-import fastcampus.aop.part2.mgr_villa.database.VillaInfoHelper
-import fastcampus.aop.part2.mgr_villa.database.VillaUsersHelper
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityLoginBinding
-import fastcampus.aop.part2.mgr_villa.fragment.OkFragment
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,18 +41,27 @@ class LoginActivity : AppCompatActivity() {
     private fun initDoLoginButton() {
         binding.DoLoginButton.setOnClickListener {
 
-            val userdb = VillaUsersHelper.getInstance(applicationContext)
-            val villadb = VillaInfoHelper.getInstance(applicationContext)
+//            val sharedPreferences = getSharedPreferences("villauser", MODE_PRIVATE)
+//            val userEditor = sharedPreferences.edit()
+//            userEditor.putString("email", binding.userEmailEditText.text.toString().trim())
+//            userEditor.putString("pw", binding.userPasswordEditText1.text.toString().trim())
+//            userEditor.apply()
+
+            MyApplication.prefs.setString("email", binding.userEmailEditText.text.toString().trim())
+            MyApplication.prefs.setString("pw", binding.userPasswordEditText1.text.toString().trim())
+
+            val userdb = VillaNoticeHelper.getInstance(applicationContext)
+//            val villadb = VillaInfoHelper.getInstance(applicationContext)
 
             Thread(Runnable {
-                val user = userdb?.VillaUserDao()?.userLogin(
+                val user = userdb?.VillaNoticeDao()?.userLogin(
                     binding.userEmailEditText.text.toString().trim(),
                     binding.userPasswordEditText1.text.toString().trim()
                 )
 
 //                villadb!!.VillaInfoDao().deleteAll()
 
-                val villaInfo = villadb!!.VillaInfoDao().isVilla(binding.userEmailEditText.text.toString())
+                val villaInfo = userdb!!.VillaNoticeDao().isVilla(binding.userEmailEditText.text.toString())
 
                 runOnUiThread {
                     if (user == null) {

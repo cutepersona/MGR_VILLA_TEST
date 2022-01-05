@@ -32,6 +32,9 @@
     <string name="tenantCurrentCount">입주수</string>
     <string name="tenantTotalCount">전체입주수</string>
     <string name="villaNotice">공지사항</string>
+    <string name="Notice">공지</string>
+    <string name="noticeContent">공지내용</string>
+    <string name="noticeWrite">등록하기</string>
     <string name="villaNoticeTitle">공지사항제목</string>
     <string name="villaNoticeTime">공지일시</string>
     <string name="mgrCost">관리비</string>

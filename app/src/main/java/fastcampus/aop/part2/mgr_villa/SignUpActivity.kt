@@ -23,7 +23,7 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.customdialog.welcomedialog
-import fastcampus.aop.part2.mgr_villa.database.VillaUsersHelper
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivitySignupBinding
 import fastcampus.aop.part2.mgr_villa.fragment.OkFragment
 import fastcampus.aop.part2.mgr_villa.model.VillaUsers
@@ -39,7 +39,6 @@ import java.util.regex.Pattern
 class SignUpActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
-    private lateinit var userHelper: VillaUsersHelper
 
     //    private val firebaseAuthSettings = auth.firebaseAuthSettings
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
@@ -380,7 +379,7 @@ class SignUpActivity : AppCompatActivity() {
                 return@setOnClickListener
             } else {
 //                    Log.d("checkForm", "${checkForm().toString()}")
-                val userdb = VillaUsersHelper.getInstance(applicationContext)
+                val userdb = VillaNoticeHelper.getInstance(applicationContext)
 
 //                Log.d("userEmail","${userEmailEditText.text}")
 //                Log.d("userName","${userNameEditText.text}")
@@ -388,7 +387,7 @@ class SignUpActivity : AppCompatActivity() {
 //                Log.d("userPhoneNumber","${userPhoneNumberEditText.text}")
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    userdb!!.VillaUserDao().insert(
+                    userdb!!.VillaNoticeDao().insert(
                         VillaUsers(
                             userEmailEditText.text.toString().trim(),
                             "1",

@@ -10,8 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
-import fastcampus.aop.part2.mgr_villa.database.VillaInfoHelper
-import fastcampus.aop.part2.mgr_villa.database.VillaUsersHelper
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityVillainfoBinding
 import fastcampus.aop.part2.mgr_villa.model.VillaInfo
 import java.lang.Exception
@@ -80,11 +79,11 @@ class VillaInfoActivity : AppCompatActivity() {
             if (!checkForm()) {
                 return@setOnClickListener
             } else {
-                val villadb = VillaInfoHelper.getInstance(applicationContext)
+                val villadb = VillaNoticeHelper.getInstance(applicationContext)
 
                 Thread(Runnable {
 
-                    villadb!!.VillaInfoDao()?.insert(
+                    villadb!!.VillaNoticeDao()?.insert(
                         VillaInfo(
                             binding.villaAddressEditText.text.toString().trim(),
                             binding.villaNameEditText.text.toString().trim(),

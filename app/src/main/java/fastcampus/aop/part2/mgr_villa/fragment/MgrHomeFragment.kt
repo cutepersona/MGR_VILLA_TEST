@@ -1,6 +1,5 @@
 package fastcampus.aop.part2.mgr_villa.fragment
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -8,12 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
-import fastcampus.aop.part2.mgr_villa.NoticeActivity
-import fastcampus.aop.part2.mgr_villa.R
+import fastcampus.aop.part2.mgr_villa.NoticeListActivity
 import fastcampus.aop.part2.mgr_villa.VillaHomeActivity
 import fastcampus.aop.part2.mgr_villa.databinding.MgrHomeFragmentBinding
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
 class MgrHomeFragment:Fragment(){
 
@@ -41,14 +39,16 @@ class MgrHomeFragment:Fragment(){
         binding.hAddress.text = address
         binding.hRoomNumber.text = villaDetailAddress
 
+        MyApplication.prefs.setString("villaAddress", address.trim())
+
         initFragOnClick()
 
     }
 
     private fun initFragOnClick(){
-        binding.villaTenantCountFragmentArea.setOnClickListener {
+        binding.villaNoticeFragmentArea.setOnClickListener {
 
-            val NoticeActivity = Intent(context, NoticeActivity::class.java)
+            val NoticeActivity = Intent(context, NoticeListActivity::class.java)
             startActivity(NoticeActivity)
 
         }

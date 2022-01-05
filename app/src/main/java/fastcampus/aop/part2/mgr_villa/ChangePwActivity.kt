@@ -11,13 +11,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.databinding.DataBindingUtil
-import fastcampus.aop.part2.mgr_villa.database.VillaUsersHelper
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityChangepwBinding
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityLoginBinding
 
 class ChangePwActivity : AppCompatActivity() {
-
-    private lateinit var userHelper: VillaUsersHelper
 
     private lateinit var binding: ActivityChangepwBinding
 
@@ -64,9 +62,9 @@ class ChangePwActivity : AppCompatActivity() {
     private fun changPassWord(): Boolean {
         return if (!email.isEmpty()) {
 
-            val userdb = VillaUsersHelper.getInstance(applicationContext)
+            val userdb = VillaNoticeHelper.getInstance(applicationContext)
 
-            userdb!!.VillaUserDao().updatePW(email, binding.userPasswordEditText1.text.toString())
+            userdb!!.VillaNoticeDao().updatePW(email, binding.userPasswordEditText1.text.toString())
             true
         } else {
             false

@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mgr_villa"
+        android:name=".sharedPreferences.MyApplication"
         >
         <activity
         android:name=".MainActivity"
@@ -43,6 +44,8 @@
         <activity android:name=".VillaInfoActivity"/>
 
         <activity android:name=".AddressSearchActivity"/>
+
+        <activity android:name=".NoticeListActivity"/>
 
         <activity android:name=".NoticeActivity"/>
 
