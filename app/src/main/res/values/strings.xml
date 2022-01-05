@@ -15,6 +15,8 @@
     <string name="Done">완료</string>
     <string name="villaInfoInsert">빌라등록하기</string>
     <string name="Insert">등록하기</string>
+    <string name="Update">수정하기</string>
+    <string name="Delete">삭제하기</string>
     <string name="villaAddress">건물주소</string>
     <string name="villaDetailAddress">상세주소(동,호수 등)</string>
     <string name="villaName">건물명</string>

@@ -26,7 +26,7 @@ interface VillaNoticeDao {
     fun getNotice(noticeNo: Long): VillaNotice
 
     // Update
-    @Query("UPDATE VillaNotice SET noticeTitle = :noticeTitle AND noticeContent = :noticeContent WHERE noticeNo = :noticeNo")
+    @Query("UPDATE VillaNotice SET noticeTitle = :noticeTitle, noticeContent = :noticeContent WHERE noticeNo = :noticeNo")
     fun updateNotice(noticeTitle: String, noticeContent: String, noticeNo: Long)
 
     // Delete

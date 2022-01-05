@@ -90,19 +90,6 @@ class NoticeListActivity: AppCompatActivity() {
             }
         }).start()
 
-//            for(document in searchResult!!.documents){
-//                // 결과를 리싸이클러 뷰에 추가
-//                var item = AddrLayout(document.road_address_name
-//                    ,document.address_name
-//                    ,document.place_name
-//                )
-//                NoticeListItems.add(item)
-//            }
-//
-//            NoticeListAdapter.notifyDataSetChanged()
-
-
-
     }
 
     private fun initToolBar() {

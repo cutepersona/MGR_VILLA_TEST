@@ -10,6 +10,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.NoticeAdapter
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -27,6 +28,7 @@ class NoticeActivity: AppCompatActivity() {
     private val binding: ActivityNoticeBinding by lazy { ActivityNoticeBinding.inflate(layoutInflater)}
 
     private var NoticeTitleFlag =  false
+    private var NoticeNo: Long = 0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +38,36 @@ class NoticeActivity: AppCompatActivity() {
         initToolBar()
 
         initButtonSetOnClick()
+
+        if(!intent.hasExtra("noticeNo")){
+            binding.WriteNoticeButton.isVisible = true
+            binding.UpdateNoticeButton.isVisible = false
+            binding.DeleteNoticeButton.isVisible = false
+        } else {
+            binding.WriteNoticeButton.isVisible = false
+            binding.UpdateNoticeButton.isVisible = true
+            binding.DeleteNoticeButton.isVisible = true
+
+            NoticeNo = intent.getLongExtra("noticeNo",0)
+            getNoticeContent()
+        }
+
+
+    }
+
+    // 공지사항 불러오기
+    private fun getNoticeContent() {
+        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+
+        Thread(Runnable {
+            var notice = villaNoticedb!!.VillaNoticeDao().getNotice(NoticeNo)
+
+            runOnUiThread {
+                binding.villaNoticeTitleEditText.setText(notice.noticeTitle)
+                binding.villaNoticeContentEditText.setText(notice.noticeContent)
+            }
+        }).start()
+
 
     }
 
@@ -58,35 +90,48 @@ class NoticeActivity: AppCompatActivity() {
                                 now.toString(),
                                 MyApplication.prefs.getString("villaAddress","").trim()
                             )
-//
-////                    villaNoticedb!!.VillaNoticeDao().villaNoticeInsert(
-////                        VillaNotice(
-////                            binding.villaNoticeTitleEditText.text.toString().trim(),
-////                            binding.villaNoticeContentEditText.text.toString().trim(),
-////                            DateTimeFormatter.ISO_DATE.toString(),
-////                            MyApplication.prefs.getString("villaAddress","")
-////                        )
                         )
 
                         runOnUiThread {
-//                        var now = LocalDate.now()
-//                        showToast(now.toString())
-//                        showToast(MyApplication.prefs.getString("villaAddress",""))
-//                        showToast(binding.villaNoticeTitleEditText.text.toString().trim())
-//                        showToast(binding.villaNoticeContentEditText.text.toString().trim())
-
-//
                         val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
-//                        NoticeListActivity.putExtra("email", binding.villaInfoEmailHidden.text.toString())
                         startActivity(NoticeListActivity)
                         }
                     }).start()
-
-
                 }
-
-
             }
+
+            binding.UpdateNoticeButton.setOnClickListener {
+                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+                Thread(Runnable {
+                    villaNoticedb!!.VillaNoticeDao().updateNotice(
+                            binding.villaNoticeTitleEditText.text.toString().trim(),
+                            binding.villaNoticeContentEditText.text.toString().trim(),
+                            NoticeNo
+                    )
+
+                    runOnUiThread {
+                        val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
+                        startActivity(NoticeListActivity)
+                    }
+                }).start()
+            }
+
+            binding.DeleteNoticeButton.setOnClickListener {
+                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+                Thread(Runnable {
+                    villaNoticedb!!.VillaNoticeDao().deleteNotice(
+                        NoticeNo
+                    )
+
+                    runOnUiThread {
+                        val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
+                        startActivity(NoticeListActivity)
+                    }
+                }).start()
+            }
+
+
+
         } catch ( e: Exception){
             Log.d("noticeInsert---------------->",e.stackTrace.toString())
         }
