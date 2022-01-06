@@ -76,7 +76,7 @@ class NoticeActivity: AppCompatActivity() {
     private fun initButtonSetOnClick() {
         try {
             binding.WriteNoticeButton.setOnClickListener {
-                var now = LocalDate.now()
+                val now = LocalDate.now()
                 if (!checkForm()) {
                     return@setOnClickListener
                 } else {

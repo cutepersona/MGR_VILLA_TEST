@@ -102,6 +102,10 @@ interface VillaNoticeDao {
 
     // Insert
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun constInsert(standardCost: StandardCost)
+    fun standardCostInsert(standardCost: StandardCost)
+
+    // Select
+    @Query("SELECT * FROM StandardCost WHERE villaAddr= :villaAddress")
+    fun getStandardCost(villaAddress: String) : StandardCost
 
 }
