@@ -50,6 +50,10 @@
     <string name="usunCost">유선비</string>
     <string name="mgrAccountNone">등록된 계좌가 없습니다.</string>
 
+    <string name="ContractDate">계약일</string>
+    <string name="LeaveDate">만료일</string>
+    <string name="roomNumber">호수</string>
+    <string name="addVillaRoomNumber">빌라가구 등록하기</string>
 
     <string name="user_email">이메일</string>
     <string name="user_name">이름</string>

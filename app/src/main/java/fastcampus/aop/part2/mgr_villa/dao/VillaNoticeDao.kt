@@ -2,10 +2,7 @@ package fastcampus.aop.part2.mgr_villa.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import fastcampus.aop.part2.mgr_villa.model.StandardCost
-import fastcampus.aop.part2.mgr_villa.model.VillaInfo
-import fastcampus.aop.part2.mgr_villa.model.VillaNotice
-import fastcampus.aop.part2.mgr_villa.model.VillaUsers
+import fastcampus.aop.part2.mgr_villa.model.*
 
 @Dao
 interface VillaNoticeDao {
@@ -107,5 +104,32 @@ interface VillaNoticeDao {
     // Select
     @Query("SELECT * FROM StandardCost WHERE villaAddr= :villaAddress")
     fun getStandardCost(villaAddress: String) : StandardCost
+
+    //-----------------------------------------VillaTenant------------------------------------------
+
+    // Insert
+    @Insert
+    fun villaTenantInsert(villaTenant: VillaTenant)
+
+    // Select
+    @Query("SELECT * FROM VillaTenant WHERE villaAddr =:villaAddress")
+    fun getAllTenantRooms(villaAddress: String) : List<VillaTenant>
+
+    // Update
+    @Query("UPDATE VillaTenant SET roomNumber= :newRoomNum WHERE villaAddr = :villaAddr AND roomNumber = :beforeRoomNum")
+    fun villaRoomNumberUpdate(newRoomNum: String, villaAddr: String, beforeRoomNum: String)
+
+    // 퇴거하기
+    @Query("UPDATE VillaTenant SET tenantEmail = '', tenantContractDate = '', tenantLeaveDate = '' WHERE villaAddr = :villaAddr AND roomNumber = :roomNumber")
+    fun leaveTenant(villaAddr: String, roomNumber: String)
+
+    // 입주시키기
+    @Query("UPDATE VillaTenant SET tenantEmail = :tenantEmail, tenantContractDate = :contractDate, tenantLeaveDate = :leaveDate WHERE villaAddr = :villaAddr AND roomNumber = :roomNumber")
+    fun intoTenant(tenantEmail: String, contractDate: String, leaveDate: String, villaAddr: String, roomNumber: String)
+
+    // Delete
+    @Query("DELETE FROM VillaTenant WHERE villaAddr =:villaAddr AND roomNumber =:roomNumber")
+    fun deleteTenant(villaAddr: String, roomNumber: String)
+
 
 }
