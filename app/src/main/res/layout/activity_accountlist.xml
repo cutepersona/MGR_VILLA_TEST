@@ -16,7 +16,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/UserTypeToolbar"
+                android:id="@+id/AccountsListToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/main_button_background"
@@ -51,14 +51,14 @@
                         android:id="@+id/toolBarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/userType"
+                        android:text="@string/mgrAccountTitle"
                         android:textColor="#FFFFFF"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginRight="50dp"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginRight="50dp"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -66,7 +66,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/userType"
+            android:id="@+id/SearchAddrArea"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -74,39 +74,62 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
 
-            <Button
-                android:id="@+id/TenantButton"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:backgroundTint="@color/main_button_background"
-                android:text="@string/tenant"
-                android:textSize="35sp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+            <TextView
+                android:id="@+id/emailHidden"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:ignore="MissingConstraints" />
+
+            <TextView
+                android:id="@+id/mgrAccountsNull"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/MgrButton"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"
+                android:textSize="20sp"
+                android:text="@string/mgrAccountNone"
+                android:textAlignment="center"
                 />
 
-            <Button
-                android:id="@+id/MgrButton"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:backgroundTint="@color/main_button_background"
-                android:text="@string/mgr"
-                android:textSize="35sp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/TenantButton"
-                app:layout_constraintStart_toEndOf="@+id/TenantButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/NoticeRecyclerViewArea"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mgrAccountsNull">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_Notices"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_margin="10dp"
+                    tools:listitem="@layout/recycleview_notices" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/AddAccountButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/main_button_background"
+            android:text="@string/mgrAccountAdd"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

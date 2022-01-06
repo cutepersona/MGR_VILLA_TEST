@@ -49,6 +49,12 @@
 
         <activity android:name=".NoticeActivity"/>
 
+        <activity android:name=".MgrCostDivActivity"/>
+
+        <activity android:name=".VillaMgrAccountsListActivity"/>
+
+        <activity android:name=".MgrStandardCostActivity"/>
+
     </application>
 
 </manifest>

@@ -40,6 +40,16 @@
     <string name="villaNoticeTitle">공지사항제목</string>
     <string name="villaNoticeTime">공지일시</string>
     <string name="mgrCost">관리비</string>
+    <string name="mgrAccountTitle">관리비계좌보기</string>
+    <string name="mgrAccountbt">관리비\n계좌보기</string>
+    <string name="mgrCostCal">관리비\n계산하기</string>
+    <string name="mgrAccountAdd">관리비계좌등록</string>
+    <string name="mgrStandardCostAdd">기준관리비등록</string>
+    <string name="tonCost">톤당금액</string>
+    <string name="cleanCost">청소비</string>
+    <string name="usunCost">유선비</string>
+    <string name="mgrAccountNone">등록된 계좌가 없습니다.</string>
+
 
     <string name="user_email">이메일</string>
     <string name="user_name">이름</string>

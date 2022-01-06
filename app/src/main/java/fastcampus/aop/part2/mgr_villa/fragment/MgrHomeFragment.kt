@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import fastcampus.aop.part2.mgr_villa.MgrCostDivActivity
 import fastcampus.aop.part2.mgr_villa.NoticeListActivity
 import fastcampus.aop.part2.mgr_villa.VillaHomeActivity
+import fastcampus.aop.part2.mgr_villa.VillaMgrAccountsListActivity
 import fastcampus.aop.part2.mgr_villa.databinding.MgrHomeFragmentBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
@@ -47,11 +49,17 @@ class MgrHomeFragment:Fragment(){
 
     private fun initFragOnClick(){
         binding.villaNoticeFragmentArea.setOnClickListener {
-
             val NoticeActivity = Intent(context, NoticeListActivity::class.java)
             startActivity(NoticeActivity)
-
         }
+
+        binding.villaMgrCostFragmentArea.setOnClickListener {
+            if (MyApplication.prefs.getString("userType","").equals("MGR")){
+                val mgrCostDivActivity = Intent(context, MgrCostDivActivity::class.java)
+                startActivity(mgrCostDivActivity)
+            }
+        }
+
     }
 
 

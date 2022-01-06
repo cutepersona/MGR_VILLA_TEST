@@ -53,6 +53,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/searchID"
                     android:textColor="#FFFFFF"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginRight="50dp"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"

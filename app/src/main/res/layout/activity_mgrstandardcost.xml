@@ -16,7 +16,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/LoginToolbar"
+                android:id="@+id/StandardCostToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/main_button_background"
@@ -51,7 +51,7 @@
                         android:id="@+id/toolBarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/login"
+                        android:text="@string/mgrStandardCostAdd"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -75,7 +75,7 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
 
             <ScrollView
-                android:id="@+id/signUpScrollView"
+                android:id="@+id/StandardCostScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:fillViewport="true"
@@ -86,70 +86,90 @@
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/signUpArea"
+                    android:id="@+id/StandardCostArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp">
 
                     <TextView
-                        android:id="@+id/userEmailText"
+                        android:id="@+id/tonCostText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/user_email"
+                        android:text="@string/tonCost"
                         android:textStyle="bold"
                         tools:ignore="MissingConstraints" />
 
                     <EditText
-                        android:id="@+id/userEmailEditText"
+                        android:id="@+id/tonCostEditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/user_email_hint"
-                        android:inputType="textWebEmailAddress"
+                        android:hint="@string/tonCost"
+                        android:inputType="number"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/userEmailText" />
+                        app:layout_constraintTop_toBottomOf="@+id/tonCostText" />
 
                     <TextView
-                        android:id="@+id/userEmailValid1"
+                        android:id="@+id/cleanCostText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:layout_marginTop="10dp"
+                        android:text="@string/cleanCost"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@+id/userEmailEditText"
-                        tools:ignore="MissingConstraints"
-
-                        />
-
-                    <TextView
-                        android:id="@+id/userPassword"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:text="@string/user_password"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@+id/userEmailValid1"
+                        app:layout_constraintTop_toBottomOf="@+id/tonCostEditText"
                         tools:ignore="MissingConstraints" />
 
                     <EditText
-                        android:id="@+id/userPasswordEditText1"
+                        android:id="@+id/cleanCostEditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/user_password_hint"
-                        android:inputType="textWebPassword"
+                        android:hint="@string/cleanCost"
+                        android:inputType="number"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/userPassword" />
+                        app:layout_constraintTop_toBottomOf="@+id/cleanCostText" />
 
                     <TextView
-                        android:id="@+id/userPWValid1"
+                        android:id="@+id/usunCostText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=""
+                        android:layout_marginTop="10dp"
+                        android:text="@string/usunCost"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@+id/userPasswordEditText1"
-                        tools:ignore="MissingConstraints"
+                        app:layout_constraintTop_toBottomOf="@+id/cleanCostEditText"
+                        tools:ignore="MissingConstraints" />
 
-                        />
+                    <EditText
+                        android:id="@+id/usunCostEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/usunCost"
+                        android:inputType="number"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/usunCostText" />
+
+                    <TextView
+                        android:id="@+id/mgrCostText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/mgrCost"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toBottomOf="@+id/usunCostEditText"
+                        tools:ignore="MissingConstraints" />
+
+                    <EditText
+                        android:id="@+id/mgrCostEditText"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/mgrCost"
+                        android:inputType="number"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/mgrCostText" />
+
+
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -158,11 +178,11 @@
             </ScrollView>
 
             <Button
-                android:id="@+id/DoLoginButton"
+                android:id="@+id/InsertMgrStandardCostButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/main_button_background"
-                android:text="@string/login"
+                android:text="@string/mgrStandardCostAdd"
                 android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -68,6 +68,8 @@ class LoginActivity : AppCompatActivity() {
                         showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
                     }
                     else {
+                        MyApplication.prefs.setString("userType",user.userType)
+
                         if (villaInfo >= 1) {
                             // TODO 홈화면으로 이동해야함.
                             if (user.userType.equals("MGR")){

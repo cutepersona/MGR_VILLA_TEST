@@ -53,6 +53,8 @@
                     android:text="@string/searchPW"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginRight="50dp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

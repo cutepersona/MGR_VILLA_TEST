@@ -2,6 +2,7 @@ package fastcampus.aop.part2.mgr_villa.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import fastcampus.aop.part2.mgr_villa.model.StandardCost
 import fastcampus.aop.part2.mgr_villa.model.VillaInfo
 import fastcampus.aop.part2.mgr_villa.model.VillaNotice
 import fastcampus.aop.part2.mgr_villa.model.VillaUsers
@@ -96,5 +97,11 @@ interface VillaNoticeDao {
 
     @Query("SELECT * FROM VillaInfo WHERE mailAddress = :email")
     fun getVillaInfo(email:String) : VillaInfo
+
+    //-----------------------------------------VillaCost------------------------------------------
+
+    // Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun constInsert(standardCost: StandardCost)
 
 }

@@ -16,7 +16,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/UserTypeToolbar"
+                android:id="@+id/MgrCostDivToolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/main_button_background"
@@ -51,14 +51,14 @@
                         android:id="@+id/toolBarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/userType"
+                        android:text="@string/mgrCost"
                         android:textColor="#FFFFFF"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginRight="50dp"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginRight="50dp"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -75,34 +75,48 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
 
             <Button
-                android:id="@+id/TenantButton"
+                android:id="@+id/MgrCostButton"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:backgroundTint="@color/main_button_background"
-                android:text="@string/tenant"
-                android:textSize="35sp"
+                android:text="@string/mgrCostCal"
+                android:textSize="25sp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/MgrButton"
+                app:layout_constraintEnd_toStartOf="@+id/MgrAccountButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 />
 
             <Button
-                android:id="@+id/MgrButton"
+                android:id="@+id/MgrAccountButton"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:backgroundTint="@color/main_button_background"
-                android:text="@string/mgr"
-                android:textSize="35sp"
+                android:text="@string/mgrAccountbt"
+                android:textSize="25sp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                app:layout_constraintBottom_toBottomOf="@+id/TenantButton"
-                app:layout_constraintStart_toEndOf="@+id/TenantButton"
+                app:layout_constraintBottom_toBottomOf="@+id/MgrCostButton"
+                app:layout_constraintStart_toEndOf="@+id/MgrCostButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 />
+
+            <Button
+                android:id="@+id/MgrStandardCostButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/main_button_background"
+                android:text="@string/mgrStandardCostAdd"
+                android:textSize="25sp"
+                android:layout_margin="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/MgrCostButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
