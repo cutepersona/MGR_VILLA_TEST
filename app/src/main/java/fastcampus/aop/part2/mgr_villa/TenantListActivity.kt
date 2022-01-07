@@ -92,6 +92,7 @@ class TenantListActivity: AppCompatActivity() {
             Thread(Runnable {
                 villadb?.VillaNoticeDao()?.villaTenantInsert(
                     VillaTenant(
+                        null,
                         binding.tenantRoomNumberEditText.text.toString().trim(),
                         "",
                         "",
