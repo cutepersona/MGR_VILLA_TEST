@@ -5,7 +5,8 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "VillaTenant",
+@Entity(primaryKeys= [ "villaAddr", "roomNumber" ],
+    tableName = "VillaTenant",
     foreignKeys = arrayOf(
         ForeignKey(
             entity = VillaInfo::class,
@@ -15,13 +16,11 @@ import androidx.room.PrimaryKey
         )
     )
 )
-
 data class VillaTenant (
-    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "villaAddr") var villaAddr: String,
     @ColumnInfo(name = "roomNumber") var roomNumber: String,
     @ColumnInfo(name = "tenantEmail") var tenantEmail: String?,
     @ColumnInfo(name = "tenantContractDate") var tenantContractDate: String?,
     @ColumnInfo(name = "tenantLeaveDate") var tenantLeaveDate: String?,
-    @ColumnInfo(name = "tenantStatus") var tenantStatus: String?,
-    @ColumnInfo(name = "villaAddr") var villaAddr: String
+    @ColumnInfo(name = "tenantStatus") var tenantStatus: String?
 )

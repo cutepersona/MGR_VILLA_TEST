@@ -15,6 +15,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityMainBinding
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,14 +37,14 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
-
 //        this.supportActionBar?.hide()
 
 //        Log.d("onCreate", "-----> animation start")
         var shake = AnimationUtils.loadAnimation(this, R.anim.shake)
         mainLogo.startAnimation(shake)
 
+
+        autoLogin()
 
         binding.signUp.setOnClickListener {
             val choiceUserTypeIntent = Intent(this, ChoiceMgrTenantActivity::class.java)
@@ -65,6 +66,16 @@ class MainActivity : AppCompatActivity() {
             startActivity(searchPwIntent)
         }
 
+    }
+
+    private fun autoLogin(){
+        if (!MyApplication.prefs.getString("email","").isEmpty()
+            && !MyApplication.prefs.getString("pw","").isEmpty()){
+            val mgrHomeActivity =
+                Intent(this, VillaHomeActivity::class.java)
+            mgrHomeActivity.putExtra("email", MyApplication.prefs.getString("email","").trim())
+            startActivity(mgrHomeActivity)
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
