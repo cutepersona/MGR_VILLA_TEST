@@ -22,6 +22,9 @@ class MgrHomeFragment:Fragment(){
     override fun onAttach(context: Context) {
         super.onAttach(context)
         address = (context as VillaHomeActivity).getAddress()
+        if(address.isNullOrEmpty()){
+            address = MyApplication.prefs.getString("villaAddress","")
+        }
     }
 
     override fun onCreateView(

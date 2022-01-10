@@ -43,9 +43,9 @@ class NoticeListActivity: AppCompatActivity() {
         NoticeListAdapter.setItemClickListener(object : NoticeAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
 
-                val NoticeUDActivity = Intent(v.context, NoticeActivity::class.java)
-                NoticeUDActivity.putExtra("noticeNo", NoticeListItems[position].noticeNo)
-                startActivity(NoticeUDActivity)
+                val addVillaInfoActivity = Intent(v.context, VillaInfoActivity::class.java)
+                addVillaInfoActivity.putExtra("noticeNo", NoticeListItems[position].noticeNo)
+                startActivity(addVillaInfoActivity)
 
             }
 
@@ -89,6 +89,19 @@ class NoticeListActivity: AppCompatActivity() {
                 NoticeListAdapter.notifyDataSetChanged()
             }
         }).start()
+
+//            for(document in searchResult!!.documents){
+//                // 결과를 리싸이클러 뷰에 추가
+//                var item = AddrLayout(document.road_address_name
+//                    ,document.address_name
+//                    ,document.place_name
+//                )
+//                NoticeListItems.add(item)
+//            }
+//
+//            NoticeListAdapter.notifyDataSetChanged()
+
+
 
     }
 

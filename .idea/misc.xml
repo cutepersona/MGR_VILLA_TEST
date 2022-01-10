@@ -11,6 +11,7 @@
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/home_background.xml" value="0.21041666666666667" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/ic_add_circle.xml" value="0.184375" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/ic_check_circle_complete.xml" value="0.14635416666666667" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/ic_create_write.xml" value="0.21041666666666667" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/ic_login.xml" value="0.36944444444444446" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/ic_new_tenant.xml" value="0.20833333333333334" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/main_background.xml" value="0.20833333333333334" />
@@ -42,7 +43,7 @@
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/ok_popup.xml" value="0.16875" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_address.xml" value="0.18229166666666666" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_notices.xml" value="0.25" />
-        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_tenants.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_tenants.xml" value="0.22" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/test_list_item.xml" value="0.2046875" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/villa_mgrcost_fragment_in_home.xml" value="0.3619791666666667" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/villa_notice_fragment_in_home.xml" value="0.3619791666666667" />

@@ -112,8 +112,11 @@ interface VillaNoticeDao {
     fun villaTenantInsert(villaTenant: VillaTenant)
 
     // Select
-    @Query("SELECT * FROM VillaTenant WHERE villaAddr =:villaAddress")
+    @Query("SELECT * FROM VillaTenant WHERE villaAddr =:villaAddress ORDER BY roomNumber")
     fun getAllTenantRooms(villaAddress: String) : List<VillaTenant>
+
+    @Query("SELECT villaTenantCount FROM VillaInfo WHERE villaAddress =:villaAddr")
+    fun checkTenantCount(villaAddr: String) : Int
 
     // Update
     @Query("UPDATE VillaTenant SET roomNumber= :newRoomNum WHERE villaAddr = :villaAddr AND roomNumber = :beforeRoomNum")
@@ -128,8 +131,8 @@ interface VillaNoticeDao {
     fun intoTenant(tenantEmail: String, contractDate: String, leaveDate: String, villaAddr: String, roomNumber: String)
 
     // Delete
-    @Query("DELETE FROM VillaTenant WHERE villaAddr =:villaAddr AND roomNumber =:roomNumber")
-    fun deleteTenant(villaAddr: String, roomNumber: String)
+    @Query("DELETE FROM VillaTenant WHERE villaAddr =:villaAddr AND roomId =:roomId")
+    fun deleteTenant(villaAddr: String, roomId: Long)
 
 
 }
