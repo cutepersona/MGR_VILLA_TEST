@@ -69,8 +69,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun autoLogin(){
-        if (!MyApplication.prefs.getString("email","").isEmpty()
-            && !MyApplication.prefs.getString("pw","").isEmpty()){
+        if (MyApplication.prefs.getString("email","") != ""
+            && MyApplication.prefs.getString("pw","") != ""
+        ){
             val mgrHomeActivity =
                 Intent(this, VillaHomeActivity::class.java)
             mgrHomeActivity.putExtra("email", MyApplication.prefs.getString("email","").trim())

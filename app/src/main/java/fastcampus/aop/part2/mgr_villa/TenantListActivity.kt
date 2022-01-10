@@ -82,9 +82,17 @@ class TenantListActivity: AppCompatActivity() {
     }
 
     private fun initAddTenantRoom(){
+
+
         binding.AddTenantButton.setOnClickListener {
 
+            if(binding.tenantRoomNumberEditText.text.isNullOrEmpty()){
+                showToast("호수는 반드시 입력해야 합니다.")
+                return@setOnClickListener
+            }
+
             TenantRoomListItems.clear()
+
 
             val villadb = VillaNoticeHelper.getInstance(applicationContext)
 

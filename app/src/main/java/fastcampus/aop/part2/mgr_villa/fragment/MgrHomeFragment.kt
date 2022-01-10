@@ -38,8 +38,6 @@ class MgrHomeFragment:Fragment(){
         binding.hAddress.text = address
         binding.hRoomNumber.text = villaDetailAddress
 
-        MyApplication.prefs.setString("villaAddress", address.trim())
-
         initFragOnClick()
 
     }

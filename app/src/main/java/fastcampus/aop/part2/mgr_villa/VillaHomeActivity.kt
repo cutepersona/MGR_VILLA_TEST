@@ -19,6 +19,7 @@ import fastcampus.aop.part2.mgr_villa.fragment.MgrHomeFragment
 import fastcampus.aop.part2.mgr_villa.fragment.OkFragment
 import fastcampus.aop.part2.mgr_villa.fragment.VillaTenantFragment
 import fastcampus.aop.part2.mgr_villa.model.VillaNotice
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
 class VillaHomeActivity : AppCompatActivity() {
 
@@ -99,6 +100,8 @@ class VillaHomeActivity : AppCompatActivity() {
             val villaInfo = userdb!!.VillaNoticeDao().getVillaInfo(userEmail)
             detailAddress = villaInfo.roomNumber
             address = villaInfo.villaAddress
+
+            MyApplication.prefs.setString("villaAddress", address.trim())
 
             runOnUiThread {
                 if (user == null || villaInfo.villaAddress.isNullOrEmpty()) {
