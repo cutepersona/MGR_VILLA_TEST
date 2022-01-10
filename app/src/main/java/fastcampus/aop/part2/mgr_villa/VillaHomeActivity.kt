@@ -33,6 +33,8 @@ class VillaHomeActivity : AppCompatActivity() {
     private var detailAddress: String =""
     private var address: String = ""
 
+    var backKeyPressedTime: Long = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -49,6 +51,22 @@ class VillaHomeActivity : AppCompatActivity() {
 //        setBindingFragment()
 
     }
+
+    override fun onBackPressed() {
+//        super.onBackPressed()
+
+        if (System.currentTimeMillis() > backKeyPressedTime + 2500) {
+            backKeyPressedTime = System.currentTimeMillis()
+
+            return
+        }
+
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
+            finishAffinity()
+        }
+
+    }
+
 
     private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.HomeToolbar)

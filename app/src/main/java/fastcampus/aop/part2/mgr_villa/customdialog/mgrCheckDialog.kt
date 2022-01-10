@@ -23,7 +23,7 @@ class mgrCheckDialog(context: Context)  {
     {
         dialog.setContentView(R.layout.mgr_check)
         dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
-        dialog.setCanceledOnTouchOutside(true)
+        dialog.setCanceledOnTouchOutside(false)
         dialog.setCancelable(true)
         dialog.show()
 

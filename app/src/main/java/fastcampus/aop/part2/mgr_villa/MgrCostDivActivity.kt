@@ -46,6 +46,9 @@ class MgrCostDivActivity: AppCompatActivity() {
         binding.MgrCostButton.setOnClickListener {
             // todo 호수 별로 관리비 등록 해야함.
             // todo 호수 목록이 존재해야함.
+
+
+
         }
 
         binding.MgrAccountButton.setOnClickListener {

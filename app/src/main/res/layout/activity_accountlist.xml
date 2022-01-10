@@ -94,14 +94,14 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/NoticeRecyclerViewArea"
+                android:id="@+id/AccountRecyclerViewArea"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/mgrAccountsNull">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_Notices"
+                    android:id="@+id/rv_Accounts"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"

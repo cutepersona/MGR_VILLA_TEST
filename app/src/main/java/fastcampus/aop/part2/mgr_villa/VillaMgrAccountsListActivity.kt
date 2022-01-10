@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,10 @@ class VillaMgrAccountsListActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         initToolBar()
+        binding.AddAccountButton.setOnClickListener {
+            val AddAccountActivity = Intent(this, AddAccountActivity::class.java)
+            startActivity(AddAccountActivity)
+        }
 
     }
 

@@ -48,6 +48,11 @@
     <string name="tonCost">톤당금액</string>
     <string name="cleanCost">청소비</string>
     <string name="usunCost">유선비</string>
+    <string name="mgrAddAccount">수납계좌등록</string>
+    <string name="AddAccount">계좌등록</string>
+    <string name="selectBank">은행선택</string>
+    <string name="AccountHolder">예금주명</string>
+    <string name="AccountNumber">계좌번호</string>
     <string name="mgrAccountNone">등록된 계좌가 없습니다.</string>
 
     <string name="ContractDate">계약일</string>
