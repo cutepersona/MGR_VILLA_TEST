@@ -90,33 +90,88 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp">
 
-                    <TextView
-                        android:id="@+id/bankSelectText"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/bankSpinnerArea"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/selectBank"
-                        android:textStyle="bold"
-                        tools:ignore="MissingConstraints" />
-
-                    <EditText
-                        android:id="@+id/bankSelectEditText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/bankSelectText" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toTopOf="@+id/accountHolder"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:id="@+id/bankSelectText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/selectBank"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
 
-                    <TextView
-                        android:id="@+id/bankSelectValid"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=""
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@+id/bankSelectEditText"
-                        tools:ignore="MissingConstraints"
+                        <TextView
+                            android:id="@+id/bankNameText"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
+                            android:hint="@string/BankHint"
+                            android:textStyle="bold"
+                            android:layout_marginTop="10dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:gravity="center_vertical"
+                            app:layout_constraintTop_toBottomOf="@+id/bankSelectText"
+                            />
 
-                        />
+                        <ImageView
+                            android:id="@+id/bankDropDown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_arrow_drop_down"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@+id/bankNameText"
+                            />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@drawable/gradient"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@+id/bankNameText"
+                            />
+
+
+<!--                        <Spinner-->
+<!--                            android:id="@+id/bankSelectSpinner"-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintTop_toBottomOf="@+id/bankSelectText"-->
+<!--                            />-->
+<!--                                            <EditText-->
+<!--                                                android:id="@+id/bankSelectEditText"-->
+<!--                                                android:layout_width="match_parent"-->
+<!--                                                android:layout_height="wrap_content"-->
+<!--                                                android:inputType="text"-->
+<!--                                                android:background="@drawable/gradient"-->
+<!--                                                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                                                app:layout_constraintStart_toStartOf="parent"-->
+<!--                                                app:layout_constraintTop_toBottomOf="@+id/bankSelectText" />-->
+
+                        <TextView
+                            android:id="@+id/bankSelectValid"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toBottomOf="@+id/bankNameText"
+                            tools:ignore="MissingConstraints"
+
+                            />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
                         android:id="@+id/accountHolder"
@@ -125,7 +180,7 @@
                         android:layout_marginTop="20dp"
                         android:text="@string/AccountHolder"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@+id/bankSelectValid"
+                        app:layout_constraintTop_toBottomOf="@+id/bankSpinnerArea"
                         tools:ignore="MissingConstraints" />
 
                     <EditText
@@ -134,7 +189,6 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:lines="15"
                         app:layout_constraintStart_toStartOf="parent"
                         android:gravity="top|left"
                         android:scrollbars="vertical"

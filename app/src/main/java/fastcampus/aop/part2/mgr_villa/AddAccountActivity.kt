@@ -5,6 +5,8 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +15,8 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.NoticeAdapter
+import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
+import fastcampus.aop.part2.mgr_villa.customdialog.mgrCheckDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityAccountBinding
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityNoticeBinding
@@ -36,6 +40,7 @@ class AddAccountActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         initToolBar()
+        initBankDialog()
 //
 //        initButtonSetOnClick()
 //
@@ -51,9 +56,15 @@ class AddAccountActivity: AppCompatActivity() {
 //            NoticeNo = intent.getLongExtra("noticeNo",0)
 //            getNoticeContent()
 //        }
-
-
     }
+
+    private fun initBankDialog(){
+        binding.bankSpinnerArea.setOnClickListener {
+            val mgrBankDialog = mgrAddAccountDialog(this)
+            mgrBankDialog.showDialog()
+        }
+    }
+
 //
 //    // 공지사항 불러오기
 //    private fun getNoticeContent() {
