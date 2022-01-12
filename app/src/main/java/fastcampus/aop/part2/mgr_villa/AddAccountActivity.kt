@@ -1,31 +1,14 @@
 package fastcampus.aop.part2.mgr_villa
 
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
-import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
-import fastcampus.aop.part2.mgr_villa.adapter.NoticeAdapter
+import fastcampus.aop.part2.mgr_villa.adapter.BankDialogAdapter
 import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
-import fastcampus.aop.part2.mgr_villa.customdialog.mgrCheckDialog
-import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityAccountBinding
-import fastcampus.aop.part2.mgr_villa.databinding.ActivityNoticeBinding
-import fastcampus.aop.part2.mgr_villa.model.AddrLayout
-import fastcampus.aop.part2.mgr_villa.model.NoticeLayout
-import fastcampus.aop.part2.mgr_villa.model.VillaNotice
-import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
-import java.lang.Exception
-import java.time.LocalDate
 
 class AddAccountActivity: AppCompatActivity() {
 
@@ -35,12 +18,17 @@ class AddAccountActivity: AppCompatActivity() {
     private var NoticeTitleFlag =  false
     private var NoticeNo: Long = 0
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        val bankList = resources.getStringArray(R.array.bankList)
+
         initToolBar()
-        initBankDialog()
+        initBankDialog(bankList)
+
 //
 //        initButtonSetOnClick()
 //
@@ -58,10 +46,28 @@ class AddAccountActivity: AppCompatActivity() {
 //        }
     }
 
-    private fun initBankDialog(){
+    private fun initBankDialog(bankList: Array<String>) {
         binding.bankSpinnerArea.setOnClickListener {
+
+//            val bankdialog = Dialog(this)
+            val BankListAdapter = BankDialogAdapter(bankList)            // 리싸이클러 뷰 어댑터
+//            bankdialog.setContentView(R.layout.mgr_addaccount)
+//            bankdialog.setCanceledOnTouchOutside(false)
+//            bankdialog.rv_banks.adapter = BankListAdapter
+//            bankdialog.rv_banks.layoutManager = LinearLayoutManager(this)
+//            bankdialog.show()
+
             val mgrBankDialog = mgrAddAccountDialog(this)
-            mgrBankDialog.showDialog()
+            mgrBankDialog.showDialog(BankListAdapter)
+
+            BankListAdapter.setItemClickListener(object : BankDialogAdapter.OnItemClickListener{
+                override fun onClick(v: View, position: Int) {
+                    binding.bankNameText.setText(BankListAdapter.bankList[position])
+//                    showToast(BankListAdapter.bankList[position])
+                    mgrBankDialog.DisMiss()
+                }
+
+            })
         }
     }
 

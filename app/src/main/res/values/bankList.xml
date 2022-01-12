@@ -1,8 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string-array name="bank">
-        <item></item>
+    <string-array name="bankList">
+        <item>기업은행</item>
+        <item>국민은행</item>
+        <item>농협중앙회</item>
+        <item>단위농협</item>
+        <item>우리은행</item>
+        <item>대구은행</item>
+        <item>외환은행</item>
+        <item>SC제일은행</item>
+        <item>부산은행</item>
+        <item>새마을금고</item>
+        <item>한국씨티은행</item>
+        <item>광주은행</item>
+        <item>경남은행</item>
+        <item>수협</item>
+        <item>신협</item>
+        <item>전북은행</item>
+        <item>제주은행</item>
+        <item>산림조합</item>
+        <item>우체국</item>
+        <item>카카오뱅크</item>
+        <item>케이뱅크</item>
+        <item>하나은행</item>
+        <item>신한은행</item>
+        <item>동양종금증권</item>
+        <item>한국투자증권</item>
+        <item>삼성증권</item>
+        <item>미래에셋</item>
+        <item>우리투자증권</item>
+        <item>현대증권</item>
+        <item>SK증권</item>
+        <item>신한금융투자</item>
+        <item>하이증권</item>
+        <item>HMC증권</item>
+        <item>대신증권</item>
+        <item>하나대투증권</item>
+        <item>동부증권</item>
+        <item>유진증권</item>
+        <item>메리츠증권</item>
+        <item>신영증권</item>
+        <item>대우증권</item>
     </string-array>
-
 </resources>
