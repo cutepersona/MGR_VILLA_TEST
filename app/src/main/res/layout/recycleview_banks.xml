@@ -7,40 +7,40 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     >
 
-    <RadioButton
-        android:id="@+id/radio_bank"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginLeft="20dp"
-        />
+<!--    <RadioButton-->
+<!--        android:id="@+id/radio_bank"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        android:layout_marginLeft="20dp"-->
+<!--        />-->
 
     <TextView
         android:id="@+id/bankName"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:text="은행이름"
         android:textStyle="bold"
+        android:layout_margin="10dp"
         android:textSize="18sp"
+        android:gravity="center_horizontal"
         android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/radio_bank"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <View
         android:id="@+id/bankBottomLine"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="1dp"
         android:layout_margin="2dp"
         android:background="@drawable/background_underline"
         app:layout_constraintTop_toBottomOf="@+id/bankName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+         />
 
 </LinearLayout>
 

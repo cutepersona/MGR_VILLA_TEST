@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import fastcampus.aop.part2.mgr_villa.R
 import fastcampus.aop.part2.mgr_villa.adapter.BankDialogAdapter
@@ -36,12 +37,13 @@ class mgrAddAccountDialog(context: Context){
 //        dialog.setCancelable(true)
         dialog.rv_banks.adapter = BankListAdapter
         dialog.rv_banks.layoutManager = LinearLayoutManager(dialog.context)
+//        dialog.rv_banks.addItemDecoration(DividerItemDecoration(dialog.context, LinearLayoutManager.VERTICAL))
         dialog.show()
-
-        dialog.cancelButton.setOnClickListener {
-            dialog.dismiss()
-        }
-
+//
+//        dialog.cancelButton.setOnClickListener {
+//            dialog.dismiss()
+//        }
+//
 //        dialog.finishButton.setOnClickListener {
 //            object : BankDialogAdapter.OnItemClickListener{
 //                override fun onClick(v: View, position: Int) {
