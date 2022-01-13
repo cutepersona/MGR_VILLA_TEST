@@ -134,5 +134,20 @@ interface VillaNoticeDao {
     @Query("DELETE FROM VillaTenant WHERE villaAddr =:villaAddr AND roomId =:roomId")
     fun deleteTenant(villaAddr: String, roomId: Long)
 
+    //-----------------------------------------VillaAccount------------------------------------------
+    @Insert
+    fun villaAccountInsert(villaAccount: VillaAccount)
+
+    // Select
+    @Query("SELECT * FROM VillaAccount WHERE villaAddr =:villaAddress ORDER BY accountId")
+    fun getAllVillaAccounts(villaAddress: String) : List<VillaAccount>
+
+    @Query("SELECT EXISTS (SELECT * FROM VillaAccount WHERE villaAddr = :villaAddress)")
+    fun isAccount(villaAddress: String): Int
+
+    // Delete
+    @Query("DELETE FROM VillaAccount WHERE villaAddr =:villaAddress AND accountId =:accountId")
+    fun deleteAccount(villaAddress: String, accountId: Long)
+
 
 }

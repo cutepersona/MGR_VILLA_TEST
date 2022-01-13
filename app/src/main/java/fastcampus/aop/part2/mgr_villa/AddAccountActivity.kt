@@ -1,21 +1,30 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isInvisible
+import com.google.android.datatransport.runtime.scheduling.jobscheduling.SchedulerConfig
 import fastcampus.aop.part2.mgr_villa.adapter.BankDialogAdapter
 import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityAccountBinding
+import fastcampus.aop.part2.mgr_villa.model.VillaAccount
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
 class AddAccountActivity: AppCompatActivity() {
 
 
     private val binding: ActivityAccountBinding by lazy { ActivityAccountBinding.inflate(layoutInflater)}
 
-    private var NoticeTitleFlag =  false
+    private var BankNameFlag =  false
+    private var AccountHolderFlag = false
+    private var AccountNumberFlag = false
     private var NoticeNo: Long = 0
 
 
@@ -29,21 +38,9 @@ class AddAccountActivity: AppCompatActivity() {
         initToolBar()
         initBankDialog(bankList)
 
-//
-//        initButtonSetOnClick()
-//
-//        if(!intent.hasExtra("noticeNo")){
-//            binding.WriteNoticeButton.isVisible = true
-//            binding.UpdateNoticeButton.isVisible = false
-//            binding.DeleteNoticeButton.isVisible = false
-//        } else {
-//            binding.WriteNoticeButton.isVisible = false
-//            binding.UpdateNoticeButton.isVisible = true
-//            binding.DeleteNoticeButton.isVisible = true
-//
-//            NoticeNo = intent.getLongExtra("noticeNo",0)
-//            getNoticeContent()
-//        }
+        initButtonSetOnClick()
+
+
     }
 
     private fun initBankDialog(bankList: Array<String>) {
@@ -67,6 +64,7 @@ class AddAccountActivity: AppCompatActivity() {
                 }
             })
 
+            // 다이얼로그에서 ItemClick로 값 바로 가져오기
 //--------------------------------------------------
 //            BankListAdapter.setItemClickListener(object : BankDialogAdapter.OnItemClickListener{
 //                override fun onClick(v: View, position: Int) {
@@ -79,67 +77,36 @@ class AddAccountActivity: AppCompatActivity() {
         }
     }
 
-//
-//    // 공지사항 불러오기
-//    private fun getNoticeContent() {
-//        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-//
-//        Thread(Runnable {
-//            var notice = villaNoticedb!!.VillaNoticeDao().getNotice(NoticeNo)
-//
-//            runOnUiThread {
-//                binding.villaNoticeTitleEditText.setText(notice.noticeTitle)
-//                binding.villaNoticeContentEditText.setText(notice.noticeContent)
-//            }
-//        }).start()
-//
-//
-//    }
-//
-//
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    private fun initButtonSetOnClick() {
-//        try {
-//            binding.WriteNoticeButton.setOnClickListener {
-//                val now = LocalDate.now()
-//                if (!checkForm()) {
-//                    return@setOnClickListener
-//                } else {
-//                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-//                    Thread(Runnable {
-//                        villaNoticedb!!.VillaNoticeDao().villaNoticeInsert(
-//                            VillaNotice(
-//                                null,
-//                                binding.villaNoticeTitleEditText.text.toString().trim(),
-//                                binding.villaNoticeContentEditText.text.toString().trim(),
-//                                now.toString(),
-//                                MyApplication.prefs.getString("villaAddress","").trim()
-//                            )
-//                        )
-//
-//                        runOnUiThread {
-//                        val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
-//                        startActivity(NoticeListActivity)
-//                        }
-//                    }).start()
-//                }
-//            }
-//
-//            binding.UpdateNoticeButton.setOnClickListener {
-//                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-//                Thread(Runnable {
-//                    villaNoticedb!!.VillaNoticeDao().updateNotice(
-//                            binding.villaNoticeTitleEditText.text.toString().trim(),
-//                            binding.villaNoticeContentEditText.text.toString().trim(),
-//                            NoticeNo
-//                    )
-//
-//                    runOnUiThread {
-//                        val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
-//                        startActivity(NoticeListActivity)
-//                    }
-//                }).start()
-//            }
+
+    private fun initButtonSetOnClick() {
+        try {
+            binding.AddAccountButton.setOnClickListener {
+
+                if (!checkForm()) {
+                    return@setOnClickListener
+                } else {
+                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+                    Thread(Runnable {
+                        villaNoticedb!!.VillaNoticeDao().villaAccountInsert(
+                            VillaAccount(
+                                null,
+                                binding.bankNameText.text.toString().trim(),
+                                binding.accountHolderEditText.text.toString().trim(),
+                                binding.accountNumberEditText.text.toString().trim(),
+                                "",
+                                MyApplication.prefs.getString("villaAddress","").trim()
+                            )
+                        )
+
+                        runOnUiThread {
+                        val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
+                        startActivity(AccountListActivity)
+                        }
+                    }).start()
+                }
+            }
+
+
 //
 //            binding.DeleteNoticeButton.setOnClickListener {
 //                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
@@ -154,37 +121,70 @@ class AddAccountActivity: AppCompatActivity() {
 //                    }
 //                }).start()
 //            }
-//
-//
-//
-//        } catch ( e: Exception){
-//            Log.d("noticeInsert---------------->",e.stackTrace.toString())
-//        }
-//
-//
-//    }
-//
-//    private fun checkForm(): Boolean {
-//        checkNoticeTitle()
-//
-//        return (NoticeTitleFlag)
-//
-//    }
-//
-//    private fun checkNoticeTitle() {
-//        var noticeTitle = binding.villaNoticeTitleEditText.text.toString().trim()
-//
-//        if (noticeTitle.isNullOrEmpty()) {
-//            binding.villaNoticeValid.setTextColor(-65535)
-//            binding.villaNoticeValid.isInvisible = false
-//            binding.villaNoticeValid.setText(R.string.must_insert)
-//            NoticeTitleFlag = false
-//        } else {
-//            binding.villaNoticeValid.setTextColor(R.color.black.toInt())
-//            binding.villaNoticeValid.isInvisible = true
-//            NoticeTitleFlag = true
-//        }
-//    }
+
+
+
+        } catch ( e: Exception){
+            Log.d("AccountInsert---------------->",e.stackTrace.toString())
+        }
+
+
+    }
+
+    private fun checkForm(): Boolean {
+        checkBankName()
+        checkAccountHolder()
+        checkAccountNumber()
+        return (BankNameFlag
+                && AccountHolderFlag
+                && AccountHolderFlag)
+    }
+
+    private fun checkBankName() {
+        var bankName = binding.bankNameText.text.toString().trim()
+
+        if (bankName.isNullOrEmpty()) {
+            binding.bankSelectValid.setTextColor(-65535)
+            binding.bankSelectValid.isInvisible = false
+            binding.bankSelectValid.setText(R.string.must_insert)
+            BankNameFlag = false
+        } else {
+            binding.bankSelectValid.setTextColor(R.color.black.toInt())
+            binding.bankSelectValid.isInvisible = true
+            BankNameFlag = true
+        }
+    }
+
+    private fun checkAccountHolder() {
+        var accountHolder = binding.accountHolderEditText.text.toString().trim()
+
+        if (accountHolder.isNullOrEmpty()) {
+            binding.accountHolderValid.setTextColor(-65535)
+            binding.accountHolderValid.isInvisible = false
+            binding.accountHolderValid.setText(R.string.must_insert)
+            AccountHolderFlag = false
+        } else {
+            binding.accountHolderValid.setTextColor(R.color.black.toInt())
+            binding.accountHolderValid.isInvisible = true
+            AccountHolderFlag = true
+        }
+    }
+
+    private fun checkAccountNumber() {
+        var accountNum = binding.accountNumberEditText.text.toString().trim()
+
+        if (accountNum.isNullOrEmpty()) {
+            binding.accountNumberValid.setTextColor(-65535)
+            binding.accountNumberValid.isInvisible = false
+            binding.accountNumberValid.setText(R.string.must_insert)
+            AccountHolderFlag = false
+        } else {
+            binding.accountNumberValid.setTextColor(R.color.black.toInt())
+            binding.accountNumberValid.isInvisible = true
+            AccountHolderFlag = true
+        }
+    }
+
 
 
     private fun initToolBar() {

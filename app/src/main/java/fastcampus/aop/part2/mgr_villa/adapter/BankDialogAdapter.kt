@@ -25,10 +25,11 @@ class BankDialogAdapter(val bankList: Array<String>): RecyclerView.Adapter<BankD
 
         holder.bankRadioButton.isChecked = position == checkPosition
         holder.bankName.text = bankList[position]
-//        holder.bankRadioButton.setOnClickListener {
-//            checkPosition = position
-//            notifyDataSetChanged()
-//        }
+        holder.bankRadioButton.setOnClickListener {
+            checkPosition = position
+            itemClickListener.onClick(it, position)
+            notifyDataSetChanged()
+        }
 //
 //        holder.bankName.setOnClickListener {
 //            checkPosition = position
