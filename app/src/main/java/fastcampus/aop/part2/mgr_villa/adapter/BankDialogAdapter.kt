@@ -23,7 +23,7 @@ class BankDialogAdapter(val bankList: Array<String>): RecyclerView.Adapter<BankD
 
     override fun onBindViewHolder(holder: bankViewHolder, position: Int) {
 
-//        holder.bankRadioButton.isChecked = position == checkPosition
+        holder.bankRadioButton.isChecked = position == checkPosition
         holder.bankName.text = bankList[position]
 //        holder.bankRadioButton.setOnClickListener {
 //            checkPosition = position
@@ -36,14 +36,16 @@ class BankDialogAdapter(val bankList: Array<String>): RecyclerView.Adapter<BankD
 //        }
 
         holder.itemView.setOnClickListener {
+            checkPosition = position
             itemClickListener.onClick(it, position)
+            notifyDataSetChanged()
         }
 
     }
 
     class bankViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
-//        val bankRadioButton: RadioButton = itemView.findViewById(R.id.radio_bank)
+        val bankRadioButton: RadioButton = itemView.findViewById(R.id.radio_bank)
         val bankName: TextView = itemView.findViewById(R.id.bankName)
 
     }

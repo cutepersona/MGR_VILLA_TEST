@@ -16,19 +16,19 @@ import kotlinx.android.synthetic.main.recycleview_banks.*
 import kotlinx.android.synthetic.main.recycleview_banks.view.*
 import kotlinx.coroutines.selects.select
 
-class mgrAddAccountDialog(context: Context){
+class mgrAddAccountDialog(context: Context) {
 
 
     private val dialog = Dialog(context)
     private lateinit var onClickListener: OnDialogClickListener
 
-    fun setOnClickListener(listener: OnDialogClickListener)
-    {
+    private var bank: String = ""
+
+    fun setOnClickListener(listener: OnDialogClickListener) {
         onClickListener = listener
     }
 
-    fun showDialog(BankListAdapter: BankDialogAdapter)
-    {
+    fun showDialog(BankListAdapter: BankDialogAdapter) {
         dialog.setContentView(R.layout.mgr_addaccount)
 
 //        dialog.setTitle("은행선택")
@@ -39,35 +39,38 @@ class mgrAddAccountDialog(context: Context){
         dialog.rv_banks.layoutManager = LinearLayoutManager(dialog.context)
 //        dialog.rv_banks.addItemDecoration(DividerItemDecoration(dialog.context, LinearLayoutManager.VERTICAL))
         dialog.show()
-//
-//        dialog.cancelButton.setOnClickListener {
-//            dialog.dismiss()
-//        }
-//
-//        dialog.finishButton.setOnClickListener {
-//            object : BankDialogAdapter.OnItemClickListener{
-//                override fun onClick(v: View, position: Int) {
-//                    onClickListener.onClicked(BankListAdapter.bankList[position])
-//                    dialog.dismiss()
-//                }
-//
-//            }
-//
-//        }
+
+
+        BankListAdapter.setItemClickListener(object : BankDialogAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                bank = BankListAdapter.bankList[position]
+            }
+        })
+
+
+        dialog.cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.finishButton.setOnClickListener {
+            onClickListener.onClicked(bank)
+            dialog.dismiss()
+        }
 
 
     }
-    fun DisMiss(){
+
+    fun DisMiss() {
         dialog.dismiss()
     }
 
-    interface OnDialogClickListener
-    {
+    interface OnDialogClickListener {
         fun onClicked(bank: String)
     }
 
-
-
+    private fun showToast(message: String) {
+        Toast.makeText(dialog.context, message, Toast.LENGTH_SHORT).show()
+    }
 
 
 }

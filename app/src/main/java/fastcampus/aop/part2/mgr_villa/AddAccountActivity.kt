@@ -60,14 +60,22 @@ class AddAccountActivity: AppCompatActivity() {
             val mgrBankDialog = mgrAddAccountDialog(this)
             mgrBankDialog.showDialog(BankListAdapter)
 
-            BankListAdapter.setItemClickListener(object : BankDialogAdapter.OnItemClickListener{
-                override fun onClick(v: View, position: Int) {
-                    binding.bankNameText.setText(BankListAdapter.bankList[position])
-//                    showToast(BankListAdapter.bankList[position])
-                    mgrBankDialog.DisMiss()
-                }
 
+            mgrBankDialog.setOnClickListener( object : mgrAddAccountDialog.OnDialogClickListener{
+                override fun onClicked(bank: String) {
+                    binding.bankNameText.setText(bank)
+                }
             })
+
+//--------------------------------------------------
+//            BankListAdapter.setItemClickListener(object : BankDialogAdapter.OnItemClickListener{
+//                override fun onClick(v: View, position: Int) {
+//                    binding.bankNameText.setText(BankListAdapter.bankList[position])
+////                    showToast(BankListAdapter.bankList[position])
+//                    mgrBankDialog.DisMiss()
+//                }
+//            })
+//----------------------------------
         }
     }
 

@@ -27,32 +27,32 @@
         tools:listitem="@layout/recycleview_banks"
         />
 
-<!--    <LinearLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:gravity="end"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:layout_marginHorizontal="40dp"-->
-<!--        android:orientation="horizontal">-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="40dp"
+        android:orientation="horizontal">
 
-<!--        <Button-->
-<!--            android:id="@+id/cancelButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/Cancel"-->
-<!--            android:backgroundTint="@color/main_button_background"-->
-<!--            />-->
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Cancel"
+            android:backgroundTint="@color/main_button_background"
+            />
 
-<!--        <Button-->
-<!--            android:id="@+id/finishButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginLeft="20dp"-->
-<!--            android:text="@string/Done"-->
-<!--            android:backgroundTint="@color/main_button_background"-->
-<!--            />-->
+        <Button
+            android:id="@+id/finishButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/Done"
+            android:backgroundTint="@color/main_button_background"
+            />
 
-<!--    </LinearLayout>-->
+    </LinearLayout>
 
 </LinearLayout>
 
