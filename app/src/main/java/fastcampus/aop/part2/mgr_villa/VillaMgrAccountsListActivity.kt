@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import fastcampus.aop.part2.mgr_villa.adapter.AccountsAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.NoticeAdapter
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -48,6 +49,8 @@ class VillaMgrAccountsListActivity: AppCompatActivity() {
 
             val listAccounts = villaNoticedb!!.VillaNoticeDao().getAllVillaAccounts(MyApplication.prefs.getString("villaAddress",""))
 
+            val AccountCount = villaNoticedb!!.VillaNoticeDao().isAccount(MyApplication.prefs.getString("villaAddress", ""))
+
             for(Account in listAccounts){
                 // 결과를 리싸이클러 뷰에 추가
                 val item = AccountLayout(
@@ -57,10 +60,19 @@ class VillaMgrAccountsListActivity: AppCompatActivity() {
                     ,Account.accountNumber
                 )
                 AccountListItems.add(item)
+
+
+
             }
 
             runOnUiThread {
                 AccountListAdapter.notifyDataSetChanged()
+
+                if (AccountCount > 0) {
+                    binding.mgrAccountsNull.isVisible = false
+                } else {
+                    binding.mgrAccountsNull.isVisible = true
+                }
             }
         }).start()
 
