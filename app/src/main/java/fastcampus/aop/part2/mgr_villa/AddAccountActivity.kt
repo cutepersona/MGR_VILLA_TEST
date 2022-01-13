@@ -25,9 +25,7 @@ class AddAccountActivity: AppCompatActivity() {
     private var BankNameFlag =  false
     private var AccountHolderFlag = false
     private var AccountNumberFlag = false
-    private var NoticeNo: Long = 0
-
-
+    private var AccountId: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +38,14 @@ class AddAccountActivity: AppCompatActivity() {
 
         initButtonSetOnClick()
 
+        if(intent.hasExtra("accountId")){
+            AccountId = intent.getLongExtra("accountId",0)
+            getAccountContent()
+        }
 
     }
 
+    // 은행 다이얼로그 호출
     private fun initBankDialog(bankList: Array<String>) {
         binding.bankSpinnerArea.setOnClickListener {
 
@@ -77,32 +80,71 @@ class AddAccountActivity: AppCompatActivity() {
         }
     }
 
+    // 계좌정보 불러오기
+    private fun getAccountContent() {
+        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+
+        Thread(Runnable {
+            val account = villaNoticedb!!.VillaNoticeDao().getVillaAccount(AccountId)
+
+            runOnUiThread {
+                binding.accountId.setText(account.accountId.toString())
+                binding.bankNameText.setText(account.bankName)
+                binding.accountHolderEditText.setText(account.accountHolder)
+                binding.accountNumberEditText.setText(account.accountNumber)
+            }
+        }).start()
+
+
+    }
 
     private fun initButtonSetOnClick() {
         try {
             binding.AddAccountButton.setOnClickListener {
 
+                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+
                 if (!checkForm()) {
                     return@setOnClickListener
                 } else {
-                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-                    Thread(Runnable {
-                        villaNoticedb!!.VillaNoticeDao().villaAccountInsert(
-                            VillaAccount(
-                                null,
-                                binding.bankNameText.text.toString().trim(),
-                                binding.accountHolderEditText.text.toString().trim(),
-                                binding.accountNumberEditText.text.toString().trim(),
-                                "",
-                                MyApplication.prefs.getString("villaAddress","").trim()
-                            )
-                        )
 
-                        runOnUiThread {
-                        val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
-                        startActivity(AccountListActivity)
-                        }
-                    }).start()
+                    if(AccountId.toString().isNullOrEmpty()){
+                        Thread(Runnable {
+                            villaNoticedb!!.VillaNoticeDao().villaAccountInsert(
+                                VillaAccount(
+                                    null,
+                                    binding.bankNameText.text.toString().trim(),
+                                    binding.accountHolderEditText.text.toString().trim(),
+                                    binding.accountNumberEditText.text.toString().trim(),
+                                    "",
+                                    MyApplication.prefs.getString("villaAddress","").trim()
+                                )
+                            )
+
+                            runOnUiThread {
+                                val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
+                                startActivity(AccountListActivity)
+                            }
+                        }).start()
+                    } else {
+                        Thread(Runnable {
+                            villaNoticedb!!.VillaNoticeDao().updateAccount(
+                                    binding.bankNameText.text.toString().trim(),
+                                    binding.accountHolderEditText.text.toString().trim(),
+                                    binding.accountNumberEditText.text.toString().trim(),
+                                    MyApplication.prefs.getString("villaAddress","").trim(),
+                                    AccountId
+                            )
+
+                            runOnUiThread {
+                                val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
+                                startActivity(AccountListActivity)
+                            }
+                        }).start()
+                    }
+
+
+
                 }
             }
 

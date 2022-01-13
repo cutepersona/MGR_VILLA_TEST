@@ -101,6 +101,17 @@
                         app:layout_constraintBottom_toTopOf="@+id/accountHolder"
                         android:orientation="vertical"
                         >
+
+                        <TextView
+                            android:id="@+id/accountId"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:visibility="gone"
+                            />
+
                         <TextView
                             android:id="@+id/bankSelectText"
                             android:layout_width="wrap_content"

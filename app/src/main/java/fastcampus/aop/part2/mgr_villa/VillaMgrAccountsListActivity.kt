@@ -3,21 +3,31 @@ package fastcampus.aop.part2.mgr_villa
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import fastcampus.aop.part2.mgr_villa.adapter.AccountsAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.NoticeAdapter
+import fastcampus.aop.part2.mgr_villa.adapter.TenantAdapter
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityAccountlistBinding
 import fastcampus.aop.part2.mgr_villa.model.AccountLayout
 import fastcampus.aop.part2.mgr_villa.model.NoticeLayout
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
+import kotlinx.android.synthetic.main.recycleview_accounts.view.*
+import kotlinx.android.synthetic.main.recycleview_tenants.view.*
 
-class VillaMgrAccountsListActivity: AppCompatActivity() {
+class VillaMgrAccountsListActivity : AppCompatActivity() {
 
 
-    private val binding: ActivityAccountlistBinding by lazy { ActivityAccountlistBinding.inflate(layoutInflater)}
+    private val binding: ActivityAccountlistBinding by lazy {
+        ActivityAccountlistBinding.inflate(
+            layoutInflater
+        )
+    }
 
     private var AccountListItems = arrayListOf<AccountLayout>()                   // 리싸이클러 뷰 아이템
     private val AccountListAdapter = AccountsAdapter(AccountListItems)            // 리싸이클러 뷰 어댑터
@@ -37,9 +47,52 @@ class VillaMgrAccountsListActivity: AppCompatActivity() {
             startActivity(AddAccountActivity)
         }
 
+
+        // Room 리스트 수정,삭제 클릭
+        AccountListAdapter.setSlideButtonClickListener(object :
+            AccountsAdapter.OnSlideButtonClickListener {
+            override fun onSlideButtonClick(v: View, imageView: ImageView, position: Int) {
+
+                val mgrCheck = MyApplication.prefs.getString("userType", "")
+                val villadb = VillaNoticeHelper.getInstance(applicationContext)
+
+                if (mgrCheck.equals("MGR")
+                    && !mgrCheck.equals("")
+                ) {
+                    when (imageView) {
+                        imageView.AccountUpdate -> {
+                            Thread(Runnable {
+                                runOnUiThread {
+                                    val AccountActivity = Intent(v.context, AddAccountActivity::class.java)
+                                    AccountActivity.putExtra("accountId",AccountListItems[position].accountId.toString().toLong())
+                                    startActivity(AccountActivity)
+                                }
+                            }).start()
+                        }
+                        imageView.AccountDelete -> {
+                            Thread(Runnable {
+                                villadb!!.VillaNoticeDao().deleteAccount(
+                                    MyApplication.prefs.getString("villaAddress", "").trim(),
+                                    AccountListItems[position].accountId.toString().toLong()
+                                )
+                                runOnUiThread {
+                                    initAccountsItems()
+                                }
+                            }).start()
+//                            showToast(TenantRoomListItems[position].tenantRoomId.toString())
+                        }
+
+                    }
+                }
+
+            }
+
+        })
+
+
     }
 
-    private fun initAccountsItems(){
+    private fun initAccountsItems() {
 
         AccountListItems.clear()
 
@@ -47,20 +100,21 @@ class VillaMgrAccountsListActivity: AppCompatActivity() {
 
         Thread(Runnable {
 
-            val listAccounts = villaNoticedb!!.VillaNoticeDao().getAllVillaAccounts(MyApplication.prefs.getString("villaAddress",""))
+            val listAccounts = villaNoticedb!!.VillaNoticeDao()
+                .getAllVillaAccounts(MyApplication.prefs.getString("villaAddress", ""))
 
-            val AccountCount = villaNoticedb!!.VillaNoticeDao().isAccount(MyApplication.prefs.getString("villaAddress", ""))
+            val AccountCount = villaNoticedb!!.VillaNoticeDao()
+                .isAccount(MyApplication.prefs.getString("villaAddress", ""))
 
-            for(Account in listAccounts){
+            for (Account in listAccounts) {
                 // 결과를 리싸이클러 뷰에 추가
                 val item = AccountLayout(
-                    Account.accountId
-                    ,Account.bankName
-                    ,Account.accountHolder
-                    ,Account.accountNumber
+                    Account.accountId,
+                    Account.bankName,
+                    Account.accountHolder,
+                    Account.accountNumber
                 )
                 AccountListItems.add(item)
-
 
 
             }
@@ -68,11 +122,7 @@ class VillaMgrAccountsListActivity: AppCompatActivity() {
             runOnUiThread {
                 AccountListAdapter.notifyDataSetChanged()
 
-                if (AccountCount > 0) {
-                    binding.mgrAccountsNull.isVisible = false
-                } else {
-                    binding.mgrAccountsNull.isVisible = true
-                }
+                binding.mgrAccountsNull.isVisible = AccountCount <= 0
             }
         }).start()
 
@@ -98,6 +148,10 @@ class VillaMgrAccountsListActivity: AppCompatActivity() {
         }
 
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 }

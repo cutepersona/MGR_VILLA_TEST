@@ -43,9 +43,9 @@ class NoticeListActivity: AppCompatActivity() {
         NoticeListAdapter.setItemClickListener(object : NoticeAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
 
-                val addVillaInfoActivity = Intent(v.context, VillaInfoActivity::class.java)
-                addVillaInfoActivity.putExtra("noticeNo", NoticeListItems[position].noticeNo)
-                startActivity(addVillaInfoActivity)
+                val noticeActivity = Intent(v.context, NoticeActivity::class.java)
+                noticeActivity.putExtra("noticeNo", NoticeListItems[position].noticeNo)
+                startActivity(noticeActivity)
 
             }
 

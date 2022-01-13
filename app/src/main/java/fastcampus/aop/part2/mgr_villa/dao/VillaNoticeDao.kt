@@ -135,15 +135,22 @@ interface VillaNoticeDao {
     fun deleteTenant(villaAddr: String, roomId: Long)
 
     //-----------------------------------------VillaAccount------------------------------------------
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun villaAccountInsert(villaAccount: VillaAccount)
 
     // Select
     @Query("SELECT * FROM VillaAccount WHERE villaAddr =:villaAddress ORDER BY accountId")
     fun getAllVillaAccounts(villaAddress: String) : List<VillaAccount>
 
+    @Query("SELECT * FROM VillaAccount WHERE accountId =:accountId")
+    fun getVillaAccount(accountId: Long) : VillaAccount
+
     @Query("SELECT EXISTS (SELECT * FROM VillaAccount WHERE villaAddr = :villaAddress)")
     fun isAccount(villaAddress: String): Int
+
+    // Update
+    @Query("UPDATE VillaAccount SET bankName =:bankName, accountHolder =:accountHolder, accountNumber =:accountNumber WHERE villaAddr =:villaAddress AND accountId =:accountId")
+    fun updateAccount(bankName: String, accountHolder: String, accountNumber: String, villaAddress: String, accountId: Long)
 
     // Delete
     @Query("DELETE FROM VillaAccount WHERE villaAddr =:villaAddress AND accountId =:accountId")
