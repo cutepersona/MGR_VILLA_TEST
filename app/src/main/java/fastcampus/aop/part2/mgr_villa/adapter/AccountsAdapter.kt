@@ -12,6 +12,9 @@ import fastcampus.aop.part2.mgr_villa.model.AccountLayout
 import fastcampus.aop.part2.mgr_villa.model.TenantLayout
 
 class AccountsAdapter(val accountList: ArrayList<AccountLayout>): RecyclerView.Adapter<AccountsAdapter.AccountViewHolder>() {
+
+    private var selectedPosition = -1
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsAdapter.AccountViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycleview_accounts, parent, false)
         return AccountViewHolder(view)
@@ -26,10 +29,25 @@ class AccountsAdapter(val accountList: ArrayList<AccountLayout>): RecyclerView.A
         holder.accountBankName.text = accountList[position].bankName
         holder.accountHolder.text = accountList[position].accountHolder
         holder.accountNumber.text = accountList[position].accountNumber
+        holder.favValue.text = accountList[position].favorite
 
-        holder.itemView.setOnClickListener {
-            itemClickListener.onClick(it, position)
+        if(selectedPosition == position){
+            holder.favButton.setImageResource(R.drawable.ic_circle_fav)
+        }else{
+            holder.favButton.setImageResource(R.drawable.ic_circle_nonfav)
         }
+
+        if(!accountList[position].favorite.equals("")){
+            holder.favButton.setImageResource(R.drawable.ic_circle_fav)
+        }
+        else{
+            holder.favButton.setImageResource(R.drawable.ic_circle_nonfav)
+        }
+
+
+//        holder.itemView.setOnClickListener {
+//            itemClickListener.onClick(it, position)
+//        }
 
         holder.accountUpdate.setOnClickListener {
             slideButtonClickListener.onSlideButtonClick(it, holder.accountUpdate, position)
@@ -39,6 +57,10 @@ class AccountsAdapter(val accountList: ArrayList<AccountLayout>): RecyclerView.A
             slideButtonClickListener.onSlideButtonClick(it, holder.accountDelete, position)
         }
 
+        holder.favButton.setOnClickListener {
+            selectedPosition = position
+            itemClickListener.onClick(it, holder.favButton, position)
+        }
 
     }
 
@@ -51,12 +73,14 @@ class AccountsAdapter(val accountList: ArrayList<AccountLayout>): RecyclerView.A
 
         val accountUpdate: ImageView = itemView.findViewById(R.id.AccountUpdate)
         val accountDelete: ImageView = itemView.findViewById(R.id.AccountDelete)
+        val favButton: ImageView = itemView.findViewById(R.id.favButton)
+        val favValue: TextView = itemView.findViewById(R.id.favValue)
 
     }
 
 
     interface OnItemClickListener {
-        fun onClick(v: View, position: Int)
+        fun onClick(v: View, imageView: ImageView, position: Int)
     }
 
     fun setItemClickListener(onItemClickListener: OnItemClickListener){

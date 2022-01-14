@@ -152,6 +152,13 @@ interface VillaNoticeDao {
     @Query("UPDATE VillaAccount SET bankName =:bankName, accountHolder =:accountHolder, accountNumber =:accountNumber WHERE villaAddr =:villaAddress AND accountId =:accountId")
     fun updateAccount(bankName: String, accountHolder: String, accountNumber: String, villaAddress: String, accountId: Long)
 
+    @Query("UPDATE VillaAccount SET favorite =:favorite WHERE villaAddr =:villaAddress AND accountId =:accountId")
+    fun updateFavorite(favorite: String, villaAddress: String, accountId: Long)
+
+    @Query("UPDATE VillaAccount SET favorite =:favorite WHERE villaAddr =:villaAddress")
+    fun updateNoneFavorite(favorite: String, villaAddress: String)
+
+
     // Delete
     @Query("DELETE FROM VillaAccount WHERE villaAddr =:villaAddress AND accountId =:accountId")
     fun deleteAccount(villaAddress: String, accountId: Long)

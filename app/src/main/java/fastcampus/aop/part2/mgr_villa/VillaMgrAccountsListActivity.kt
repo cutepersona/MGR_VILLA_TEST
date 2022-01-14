@@ -1,6 +1,8 @@
 package fastcampus.aop.part2.mgr_villa
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -17,6 +19,7 @@ import fastcampus.aop.part2.mgr_villa.databinding.ActivityAccountlistBinding
 import fastcampus.aop.part2.mgr_villa.model.AccountLayout
 import fastcampus.aop.part2.mgr_villa.model.NoticeLayout
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
+import kotlinx.android.synthetic.main.activity_accountlist.*
 import kotlinx.android.synthetic.main.recycleview_accounts.view.*
 import kotlinx.android.synthetic.main.recycleview_tenants.view.*
 
@@ -31,6 +34,8 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
 
     private var AccountListItems = arrayListOf<AccountLayout>()                   // 리싸이클러 뷰 아이템
     private val AccountListAdapter = AccountsAdapter(AccountListItems)            // 리싸이클러 뷰 어댑터
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +58,8 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
             AccountsAdapter.OnSlideButtonClickListener {
             override fun onSlideButtonClick(v: View, imageView: ImageView, position: Int) {
 
-                val mgrCheck = MyApplication.prefs.getString("userType", "")
                 val villadb = VillaNoticeHelper.getInstance(applicationContext)
+                val mgrCheck = MyApplication.prefs.getString("userType", "")
 
                 if (mgrCheck.equals("MGR")
                     && !mgrCheck.equals("")
@@ -89,6 +94,30 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
 
         })
 
+        AccountListAdapter.setItemClickListener( object :AccountsAdapter.OnItemClickListener{
+            override fun onClick(v: View, imageView: ImageView, position: Int) {
+
+                val villadb = VillaNoticeHelper.getInstance(applicationContext)
+                Thread(Runnable {
+                    villadb!!.VillaNoticeDao().updateNoneFavorite(
+                        "",
+                        MyApplication.prefs.getString("villaAddress", "").trim()
+                    )
+
+                    villadb!!.VillaNoticeDao().updateFavorite(
+                        "favorite",
+                        MyApplication.prefs.getString("villaAddress", "").trim(),
+                        AccountListItems[position].accountId.toString().toLong()
+                    )
+                    runOnUiThread {
+                        initAccountsItems()
+//                        imageView.setImageResource(R.drawable.ic_circle_fav)
+
+                    }
+                }).start()
+            }
+        })
+
 
     }
 
@@ -112,7 +141,8 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
                     Account.accountId,
                     Account.bankName,
                     Account.accountHolder,
-                    Account.accountNumber
+                    Account.accountNumber,
+                    Account.favorite
                 )
                 AccountListItems.add(item)
 

@@ -93,12 +93,21 @@
                 android:orientation="horizontal"
                 android:layout_weight="1">
                 <ImageView
+                    android:id="@+id/favButton"
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:layout_marginLeft="60dp"
                     android:layout_gravity="center_vertical"
-                    android:background="@drawable/ic_circle_fav"
+                    android:background="@drawable/ic_circle_nonfav"
                     />
+
+                <TextView
+                    android:id="@+id/favValue"
+                    android:layout_width="10dp"
+                    android:layout_height="100dp"
+                    android:textColor="@color/black"
+                    android:visibility="gone"/>
+
             </LinearLayout>
 
         </LinearLayout>

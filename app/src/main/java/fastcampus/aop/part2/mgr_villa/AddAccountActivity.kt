@@ -107,8 +107,7 @@ class AddAccountActivity: AppCompatActivity() {
                 if (!checkForm()) {
                     return@setOnClickListener
                 } else {
-
-                    if(AccountId.toString().isNullOrEmpty()){
+                    if(AccountId <= 1){
                         Thread(Runnable {
                             villaNoticedb!!.VillaNoticeDao().villaAccountInsert(
                                 VillaAccount(
