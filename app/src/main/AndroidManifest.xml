@@ -59,6 +59,8 @@
 
         <activity android:name=".AddAccountActivity"/>
 
+        <activity android:name=".TenantCostListActivity"/>
+
     </application>
 
 </manifest>

@@ -43,6 +43,7 @@
     <string name="mgrAccountTitle">관리비계좌보기</string>
     <string name="mgrAccountbt">관리비\n계좌보기</string>
     <string name="mgrCostCal">관리비\n계산하기</string>
+    <string name="mgrCostForRoom">가구별 관리비</string>
     <string name="mgrAccountAdd">관리비계좌등록</string>
     <string name="mgrStandardCostAdd">기준관리비등록</string>
     <string name="tonCost">톤당금액</string>

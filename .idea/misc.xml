@@ -26,6 +26,7 @@
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_changepw.xml" value="0.2046875" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_choice_cost_account.xml" value="0.22" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_choice_mgr_tenant.xml" value="0.1640625" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_costtenantlist.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_home.xml" value="0.18" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_login.xml" value="0.16" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/activity_main.xml" value="0.17760416666666667" />
@@ -49,6 +50,7 @@
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_accounts.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_address.xml" value="0.18229166666666666" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_banks.xml" value="0.22" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_costtenants.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_notices.xml" value="0.25" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_tenants.xml" value="0.22" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/test_list_item.xml" value="0.2046875" />
