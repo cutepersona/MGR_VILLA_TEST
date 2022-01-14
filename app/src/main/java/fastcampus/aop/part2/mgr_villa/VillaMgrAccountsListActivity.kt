@@ -121,6 +121,13 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
 
     }
 
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val accountListToCostDiv = Intent(this, MgrCostDivActivity::class.java)
+        startActivity(accountListToCostDiv)
+    }
+
     private fun initAccountsItems() {
 
         AccountListItems.clear()
@@ -169,13 +176,18 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
+
+        val accountListToCostDiv = Intent(this, MgrCostDivActivity::class.java)
+        startActivity(accountListToCostDiv)
+//
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+        return true
 
         return super.onOptionsItemSelected(item)
     }
