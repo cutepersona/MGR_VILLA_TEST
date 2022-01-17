@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -41,6 +42,39 @@ class TenantCostListActivity: AppCompatActivity() {
 //        initNoticeFabButtons()
 //        addItemsNotices()
 
+
+
+
+        TenantCostListAdapter.setItemClickListener(object : CostTenantAdapter.OnItemClickListener{
+            override fun onClick(v: View, position: Int) {
+
+                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+
+                Thread(Runnable {
+                    val ConstCost = villaNoticedb!!.VillaNoticeDao().isConstCost(
+                        MyApplication.prefs.getString("villaAddress","").trim()
+                    )
+
+                    runOnUiThread {
+                        if (ConstCost <= 0) {
+                            showToast("기준관리비가 등록되어 있지 않습니다.")
+                        } else {
+                            val RoolCostForMgr = Intent(v.context, TenantRoomCostForMGRActivity::class.java)
+                            RoolCostForMgr.putExtra("tenantRoomId",TenantCostListItems[position].CostTenantRoomId)
+                            startActivity(RoolCostForMgr)
+                        }
+
+                    }
+                }).start()
+
+
+
+            }
+
+        })
+
+
+
 //
 //        // Room 리스트 수정,삭제 클릭
 //        TenantRoomListAdapter.setSlideButtonClickListener(object : TenantAdapter.OnSlideButtonClickListener{
@@ -76,6 +110,13 @@ class TenantCostListActivity: AppCompatActivity() {
 //            }
 //
 //        })
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val TenantCostListToDiv = Intent(this, MgrCostDivActivity::class.java)
+        startActivity(TenantCostListToDiv)
+
     }
 
     private fun initCostTenantRooms(){
@@ -186,6 +227,9 @@ class TenantCostListActivity: AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        val TenantCostListToDiv = Intent(this, MgrCostDivActivity::class.java)
+        startActivity(TenantCostListToDiv)
 
 
 //        val id = item.itemId

@@ -43,10 +43,13 @@
     <string name="mgrAccountTitle">관리비계좌보기</string>
     <string name="mgrAccountbt">관리비\n계좌보기</string>
     <string name="mgrCostCal">관리비\n계산하기</string>
-    <string name="mgrCostForRoom">가구별 관리비</string>
+    <string name="mgrCostForRoom">공동이용료내역</string>
+    <string name="TotalRoomCost">비용 합계 : </string>
+    <string name="mgrCostYearMonth">관리비년월</string>
     <string name="mgrAccountAdd">관리비계좌등록</string>
     <string name="mgrStandardCostAdd">기준관리비등록</string>
     <string name="tonCost">톤당금액</string>
+    <string name="waterCost">수도료</string>
     <string name="cleanCost">청소비</string>
     <string name="usunCost">유선비</string>
     <string name="mgrAddAccount">수납계좌등록</string>
@@ -56,6 +59,7 @@
     <string name="AccountHolder">예금주명</string>
     <string name="AccountNumber">계좌번호</string>
     <string name="mgrAccountNone">등록된 계좌가 없습니다.</string>
+
 
     <string name="ContractDate">계약일</string>
     <string name="LeaveDate">만료일</string>

@@ -61,6 +61,8 @@
 
         <activity android:name=".TenantCostListActivity"/>
 
+        <activity android:name=".TenantRoomCostForMGRActivity"/>
+
     </application>
 
 </manifest>

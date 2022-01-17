@@ -74,10 +74,10 @@ class MgrStandardCostActivity: AppCompatActivity() {
 
             runOnUiThread {
                 if (standardCost == null) {
-                    binding.tonCostEditText.setText("0")
-                    binding.cleanCostEditText.setText("0")
-                    binding.usunCostEditText.setText("0")
-                    binding.mgrCostEditText.setText("0")
+                    binding.tonCostEditText.setText("")
+                    binding.cleanCostEditText.setText("")
+                    binding.usunCostEditText.setText("")
+                    binding.mgrCostEditText.setText("")
                 } else {
                     binding.tonCostEditText.setText(standardCost.tonCost.toString())
                     binding.cleanCostEditText.setText(standardCost.cleanCost.toString())

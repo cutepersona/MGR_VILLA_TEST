@@ -105,6 +105,10 @@ interface VillaNoticeDao {
     @Query("SELECT * FROM StandardCost WHERE villaAddr= :villaAddress")
     fun getStandardCost(villaAddress: String) : StandardCost
 
+    @Query("SELECT EXISTS (SELECT * FROM StandardCost WHERE villaAddr = :villaAddress)")
+    fun isConstCost(villaAddress: String): Int
+
+
     //-----------------------------------------VillaTenant------------------------------------------
 
     // Insert
