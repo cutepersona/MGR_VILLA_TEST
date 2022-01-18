@@ -60,7 +60,26 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
         binding.CostYearMonth.setText(currentDay.format(formatter))
 
 
-        // 톤수 입력하는 부분
+        initWriteTon()
+        initCalendar()
+
+
+    }
+
+    // 달력 이벤트
+    private fun initCalendar() {
+        binding.CostCalendar.setOnClickListener {
+            val cal = Calendar.getInstance()    //캘린더뷰 만들기
+            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                binding.CostYearMonth.setText("${year}-${String.format("%02d", month+1)}")
+            }
+            DatePickerDialog(this, R.style.DatePickerStyle , dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
+
+        }
+    }
+
+    // 톤수 입력하는 부분
+    private fun initWriteTon() {
         binding.WriteWaterTon.setOnEditorActionListener { v, actionId, event ->
             val handled = false
             if(actionId == EditorInfo.IME_ACTION_DONE){
@@ -78,17 +97,6 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
             }
             handled
         }
-
-        // 달력 이벤트
-        binding.CostCalendar.setOnClickListener {
-            val cal = Calendar.getInstance()    //캘린더뷰 만들기
-            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                binding.CostYearMonth.setText("${year}-${String.format("%02d", month+1)}")
-            }
-            DatePickerDialog(this, R.style.DatePickerStyle , dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
-
-        }
-
     }
 
 

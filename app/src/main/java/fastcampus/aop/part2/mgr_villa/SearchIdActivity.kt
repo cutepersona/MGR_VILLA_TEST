@@ -180,6 +180,7 @@ class SearchIdActivity: AppCompatActivity() {
                         )
                         startActivity(SearchCompleteIntent)
 
+
 //                    val SearchCompleteIntent = Intent(this, SearchIdCompleteActivity::class.java)
 //                    startActivity(SearchCompleteIntent)
 //                    Log.d(ContentValues.TAG, "${user?.phoneNumber.toString()}")

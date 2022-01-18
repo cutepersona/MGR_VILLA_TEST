@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import fastcampus.aop.part2.mgr_villa.dao.VillaNoticeDao
 import fastcampus.aop.part2.mgr_villa.model.*
 
-@Database(entities = arrayOf(VillaUsers::class, VillaInfo::class, VillaNotice::class, StandardCost::class, VillaTenant::class, VillaAccount::class), version = 1, exportSchema = false)
+@Database(entities = arrayOf(VillaUsers::class, VillaInfo::class, VillaNotice::class, StandardCost::class, VillaTenant::class, VillaAccount::class, VillaTenantCost::class), version = 1, exportSchema = false)
 abstract class VillaNoticeHelper: RoomDatabase() {
 
     abstract fun VillaNoticeDao(): VillaNoticeDao

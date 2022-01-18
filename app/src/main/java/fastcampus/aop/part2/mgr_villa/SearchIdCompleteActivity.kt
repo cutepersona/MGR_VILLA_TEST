@@ -30,15 +30,21 @@ class SearchIdCompleteActivity: AppCompatActivity() {
         val ab = supportActionBar!!
         ab.setDisplayHomeAsUpEnabled(true)
 
-        val userdb = VillaNoticeHelper.getInstance(applicationContext)
-
         userPhone = intent.getStringExtra("phone").toString()
 
+        Thread(Runnable {
+
+        val userdb = VillaNoticeHelper.getInstance(applicationContext)
         val user = userdb?.VillaNoticeDao()?.getUserId(userPhone)
 
-        binding.findMyId.text = user?.let { stringMasking(it) }
+            runOnUiThread {
+                binding.findMyId.text = user?.let { stringMasking(it) }
+                user?.let { searchIdDoLoginOnClick(it) }
+            }
 
-        user?.let { searchIdDoLoginOnClick(it) }
+        }).start()
+
+
     }
 
     // 메일주소 일부 마스킹 처리
