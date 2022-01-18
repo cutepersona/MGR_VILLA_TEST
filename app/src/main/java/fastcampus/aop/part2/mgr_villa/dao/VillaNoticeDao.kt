@@ -122,6 +122,9 @@ interface VillaNoticeDao {
     @Query("SELECT villaTenantCount FROM VillaInfo WHERE villaAddress =:villaAddr")
     fun checkTenantCount(villaAddr: String) : Int
 
+    @Query("SELECT roomNumber FROM VillaTenant WHERE  roomId =:roomId")
+    fun getTenantRoom(roomId: Long) : String
+
     // Update
     @Query("UPDATE VillaTenant SET roomNumber= :newRoomNum WHERE villaAddr = :villaAddr AND roomNumber = :beforeRoomNum")
     fun villaRoomNumberUpdate(newRoomNum: String, villaAddr: String, beforeRoomNum: String)
@@ -151,6 +154,10 @@ interface VillaNoticeDao {
 
     @Query("SELECT EXISTS (SELECT * FROM VillaAccount WHERE villaAddr = :villaAddress)")
     fun isAccount(villaAddress: String): Int
+
+    @Query("SELECT * FROM VillaAccount WHERE favorite ='favorite'")
+    fun getFavoriteAccount() : VillaAccount
+
 
     // Update
     @Query("UPDATE VillaAccount SET bankName =:bankName, accountHolder =:accountHolder, accountNumber =:accountNumber WHERE villaAddr =:villaAddress AND accountId =:accountId")

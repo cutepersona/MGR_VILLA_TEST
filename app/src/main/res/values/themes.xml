@@ -14,4 +14,16 @@
         <!-- Customize your theme here. -->
 
     </style>
+
+    <style name="DatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/main_button_background</item>
+        <!-- dialog의 배경 변경 -->
+        <item name="background">@color/main_button_background</item>
+        <!-- 선택한 날짜를 표시할 색상 -->
+        <item name="colorControlActivated">@color/main_button_background</item>
+        <item name="colorControlHighlight">@color/main_button_background</item>
+        <!-- 취소/확인버튼 색상 -->
+        <item name="android:textColor">@color/main_button_background</item>
+    </style>
+
 </resources>
