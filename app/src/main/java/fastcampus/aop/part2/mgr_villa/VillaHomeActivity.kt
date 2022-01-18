@@ -12,6 +12,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import fastcampus.aop.part2.mgr_villa.adapter.PagerHomeAdapter
+import fastcampus.aop.part2.mgr_villa.customdialog.LogOutDialog
+import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityHomeBinding
 import fastcampus.aop.part2.mgr_villa.fragment.AddFragment
@@ -52,6 +54,7 @@ class VillaHomeActivity : AppCompatActivity() {
 
     }
 
+
     override fun onBackPressed() {
 //        super.onBackPressed()
 
@@ -78,15 +81,21 @@ class VillaHomeActivity : AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
-        return super.onOptionsItemSelected(item)
+        val logOutDialog = LogOutDialog(this)
+        logOutDialog.showDialog()
+
+
+        return true
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
     // initFragment
@@ -115,14 +124,14 @@ class VillaHomeActivity : AppCompatActivity() {
                 userEmail
             )
 
-            val villaInfo = userdb!!.VillaNoticeDao().getVillaInfo(userEmail)
-            detailAddress = villaInfo.roomNumber
-            address = villaInfo.villaAddress
+            val villaInfo = userdb?.VillaNoticeDao()?.getVillaInfo(userEmail)
+            detailAddress = villaInfo?.roomNumber ?: ""
+            address = villaInfo?.villaAddress ?: ""
 
             MyApplication.prefs.setString("villaAddress", address.trim())
 
             runOnUiThread {
-                if (user == null || villaInfo.villaAddress.isNullOrEmpty()) {
+                if (user == null || villaInfo ==null ) {
                     showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
                     return@runOnUiThread
                 } else {

@@ -20,6 +20,12 @@ class MgrCostDivActivity: AppCompatActivity() {
     }
 
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val CostDivToHome = Intent(this, VillaHomeActivity::class.java)
+        startActivity(CostDivToHome)
+    }
+
 
     private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.MgrCostDivToolbar)
@@ -31,15 +37,21 @@ class MgrCostDivActivity: AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
-        return super.onOptionsItemSelected(item)
+        val CostDivToHome = Intent(this, VillaHomeActivity::class.java)
+        startActivity(CostDivToHome)
+
+        return true
+//
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
     private fun initButtonSetOnClick() {

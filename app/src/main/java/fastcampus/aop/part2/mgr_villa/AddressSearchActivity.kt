@@ -69,7 +69,9 @@ class AddressSearchActivity : AppCompatActivity() {
 
                 val addVillaInfoActivity = Intent(v.context, VillaInfoActivity::class.java)
                 addVillaInfoActivity.putExtra("address", addrListItems[position].address_name)
-                addVillaInfoActivity.putExtra("villa_name", addrListItems[position].villa_name)
+                if (!addrListItems[position].villa_name.isNullOrEmpty()){
+                    addVillaInfoActivity.putExtra("villa_name", addrListItems[position].villa_name)
+                }
                 addVillaInfoActivity.putExtra("email", binding.emailHidden.text.toString().trim())
                 startActivity(addVillaInfoActivity)
 
@@ -128,7 +130,7 @@ class AddressSearchActivity : AppCompatActivity() {
                     addItemsAddrs(response.body())
 
 //                    kakao.value = response.body()
-//                    showToast("${kakao.value!!.documents[0].road_address_name}")
+//                    showToast("${kakao.value!!.documents[1].road_address_name}")
 //                    showToast("${kakao.value!!.documents[0].address_name}")
                 }
 
@@ -171,9 +173,9 @@ class AddressSearchActivity : AppCompatActivity() {
 
             for(document in searchResult!!.documents){
                 // 결과를 리싸이클러 뷰에 추가
-                var item = AddrLayout(document.road_address_name
-                    ,document.address_name
-                    ,document.place_name
+                var item = AddrLayout(document.road_address.address_name
+                    ,document.address.address_name
+                    ,""
                 )
                 addrListItems.add(item)
             }

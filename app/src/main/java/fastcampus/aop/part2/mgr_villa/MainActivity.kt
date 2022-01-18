@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
         var shake = AnimationUtils.loadAnimation(this, R.anim.shake)
         mainLogo.startAnimation(shake)
 
-
         autoLogin()
 
         binding.signUp.setOnClickListener {
@@ -71,6 +70,7 @@ class MainActivity : AppCompatActivity() {
     private fun autoLogin(){
         if (MyApplication.prefs.getString("email","") != ""
             && MyApplication.prefs.getString("pw","") != ""
+            && MyApplication.prefs.getString("villaAddress","") != ""
         ){
             val mgrHomeActivity =
                 Intent(this, VillaHomeActivity::class.java)

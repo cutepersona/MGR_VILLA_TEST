@@ -241,7 +241,7 @@ class TenantCostListActivity: AppCompatActivity() {
 //        }
         return true
 
-        return super.onOptionsItemSelected(item)
+//        return super.onOptionsItemSelected(item)
     }
 
     private fun showToast(message: String) {

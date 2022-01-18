@@ -45,6 +45,13 @@ class AddAccountActivity: AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val AddAccountToList = Intent(this, VillaMgrAccountsListActivity::class.java)
+        startActivity(AddAccountToList)
+
+    }
+
     // 은행 다이얼로그 호출
     private fun initBankDialog(bankList: Array<String>) {
         binding.bankSpinnerArea.setOnClickListener {
@@ -238,15 +245,19 @@ class AddAccountActivity: AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
+        val AddAccountToList = Intent(this, VillaMgrAccountsListActivity::class.java)
+        startActivity(AddAccountToList)
 
-        return super.onOptionsItemSelected(item)
+        return true
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
 

@@ -23,7 +23,9 @@ class KakaoApiAdapter(val itemList: ArrayList<AddrLayout>): RecyclerView.Adapter
     override fun onBindViewHolder(holder: AddrViewHolder, position: Int) {
         holder.road_address_name.text = itemList[position].road_address_name
         holder.address_name.text = itemList[position].address_name
-        holder.villa_name.text = itemList[position].villa_name
+        if (!itemList[position].villa_name.isNullOrEmpty()) {
+            holder.villa_name.text = itemList[position].villa_name
+        }
 
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)

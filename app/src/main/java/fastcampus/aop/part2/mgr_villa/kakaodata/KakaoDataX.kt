@@ -1,6 +1,6 @@
 package fastcampus.aop.part2.mgr_villa.kakaodata
 
-data class KakaoData(
+data class KakaoDataX(
     val documents: List<DocumentXX>,
-    val meta: Meta
+    val meta: MetaXX
 )

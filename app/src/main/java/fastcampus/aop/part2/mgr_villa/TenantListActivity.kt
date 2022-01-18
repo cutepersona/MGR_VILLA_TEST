@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -49,7 +50,13 @@ class TenantListActivity: AppCompatActivity() {
                     && !mgrCheck.equals("")){
                     when(imageView) {
                         imageView.tenantUpdate -> {
-                            showToast(imageView.toString())
+                            Thread(Runnable {
+                                runOnUiThread {
+                                    val tenantUpdate = Intent(v.context, TenantInOutVillaActivity::class.java)
+                                    tenantUpdate.putExtra("roomId",TenantRoomListItems[position].tenantRoomId.toString().toLong())
+                                    startActivity(tenantUpdate)
+                                }
+                            }).start()
                         }
                         imageView.tenantDelete -> {
                             // 호 삭제
@@ -74,6 +81,13 @@ class TenantListActivity: AppCompatActivity() {
             }
 
         })
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val TenantCostListToDiv = Intent(this, MgrCostDivActivity::class.java)
+        startActivity(TenantCostListToDiv)
+
     }
 
     private fun initTenantRooms(){
@@ -210,15 +224,20 @@ class TenantListActivity: AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
-        return super.onOptionsItemSelected(item)
+        val TenantCostListToDiv = Intent(this, MgrCostDivActivity::class.java)
+        startActivity(TenantCostListToDiv)
+//
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+        return true
+
+//        return super.onOptionsItemSelected(item)
     }
 
     private fun showToast(message: String) {

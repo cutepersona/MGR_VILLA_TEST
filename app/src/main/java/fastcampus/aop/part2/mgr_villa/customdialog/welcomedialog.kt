@@ -28,6 +28,7 @@ class welcomedialog(context: Context) : AppCompatActivity() {
     fun start(content: String){
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dlg.setContentView(R.layout.ok_popup)
+        dlg.setCanceledOnTouchOutside(false)
         dlg.setCancelable(false)
 
         desc.text = content

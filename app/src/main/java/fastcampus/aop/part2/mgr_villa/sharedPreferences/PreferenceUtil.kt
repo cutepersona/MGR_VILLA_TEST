@@ -15,4 +15,9 @@ class PreferenceUtil(context: Context) {
         prefs.edit().putString(key, setVal).apply()
     }
 
+    fun clear(){
+        prefs.edit().clear().commit()
+    }
+
+
 }
