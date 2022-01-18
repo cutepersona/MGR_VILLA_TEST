@@ -19,6 +19,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityRoomcostformgrBinding
 import fastcampus.aop.part2.mgr_villa.model.VillaAccount
+import fastcampus.aop.part2.mgr_villa.model.VillaTenantCost
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -26,6 +27,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.math.roundToInt
 
 class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
@@ -42,6 +44,8 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
     private var waterValue: Float = 0F
     private var totalValue: Int = 0
 
+    private var tonUpdateFlag: Boolean = false
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,18 +56,76 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
         }
 
         initToolBar()
-        initConstCost()
-
         // 오늘 날짜
         val currentDay = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM")
         binding.CostYearMonth.setText(currentDay.format(formatter))
 
+        initConstCost()
 
         initWriteTon()
         initCalendar()
+        initInsertMgrCost()
+
+    }
+
+    // 관리비 등록하기
+    private fun initInsertMgrCost() {
 
 
+        binding.WriteRoomCostButton.setOnClickListener {
+            Thread(Runnable {
+                if (binding.CostUid.text.isNullOrEmpty()){
+                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+
+                    val ConstCost = villaNoticedb!!.VillaNoticeDao().tenantCostInsert(
+                        VillaTenantCost(
+                            null
+                            ,binding.CostRoomNumber.text.toString().trim()
+                            ,binding.TotalCostValue.text.toString().replace(",","").toInt()
+                            ,binding.CostYearMonth.text.substring(0,4)
+                            ,binding.CostYearMonth.text.substring(5,7)
+                            ,binding.WriteWaterTon.text.toString().replace(",","").toFloat()
+                            ,binding.ConstTonCost.text.toString().replace(",","").toInt()
+                            ,binding.waterCost.text.toString().replace(",","").toInt()
+                            ,binding.ConstCleanCost.text.toString().replace(",","").toInt()
+                            ,binding.ConstUsunCost.text.toString().replace(",","").toInt()
+                            ,binding.ConstMgrCost.text.toString().replace(",","").toInt()
+                            ,""
+                            ,MyApplication.prefs.getString("villaAddress","").trim()
+                        )
+                    )
+
+                    runOnUiThread {
+                        showToast(binding.CostRoomNumber.text.toString().trim()+" 의 " + binding.CostYearMonth.text.substring(0,4) + "년 " + binding.CostYearMonth.text.substring(5,7) +"월 관리비가 등록되었습니다.")
+                    }
+
+                } else {
+                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+
+                    val ConstCost = villaNoticedb!!.VillaNoticeDao().updateTenantCostForId(
+                        binding.TotalCostValue.text.toString().replace(",","").toInt()
+                        ,binding.WriteWaterTon.text.toString().replace(",","").toFloat()
+                        ,binding.ConstTonCost.text.toString().replace(",","").toInt()
+                        ,binding.waterCost.text.toString().replace(",","").toInt()
+                        ,binding.ConstCleanCost.text.toString().replace(",","").toInt()
+                        ,binding.ConstUsunCost.text.toString().replace(",","").toInt()
+                        ,binding.ConstMgrCost.text.toString().replace(",","").toInt()
+                         ,binding.CostUid.text.toString().toLong()
+                        )
+                    runOnUiThread {
+                        if (!tonUpdateFlag){
+                            showToast("톤 수 수정후 완료 버튼을 클릭해주세요.")
+                        } else {
+                            showToast(binding.CostRoomNumber.text.toString().trim()+" 의 " + binding.CostYearMonth.text.substring(0,4) + "년 " + binding.CostYearMonth.text.substring(5,7) +"월 관리비가 수정되었습니다.")
+                        }
+                    }
+                }
+
+
+
+            }).start()
+        }
     }
 
     // 달력 이벤트
@@ -92,8 +154,8 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                 totalValue = waterValue.toInt() + binding.ConstCleanCost.text.toString().replace(",","").toInt() + binding.ConstUsunCost.text.toString().replace(",","").toInt() +binding.ConstMgrCost.text.toString().replace(",","").toInt()
                 binding.TotalCostValue.setText(totalValue.toString())
 
-
 //                handled = true
+                tonUpdateFlag = true
             }
             handled
         }
@@ -103,9 +165,8 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
     // 기준 관리비 셋팅
     private fun initConstCost() {
 
+        // 초기 톤수 셋팅 1.0 값
         binding.WriteWaterTon.setText(1.toFloat().toString())
-
-
 
 
         binding.ConstTonCost.addTextChangedListener(object : TextWatcher {
@@ -181,28 +242,53 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
             val favoriteAccount = villaNoticedb!!.VillaNoticeDao().getFavoriteAccount()
 
+            val isTenantCost = villaNoticedb!!.VillaNoticeDao().getTenantCost(
+                MyApplication.prefs.getString("villaAddress","").trim(),binding.CostYearMonth.text.substring(0,4),binding.CostYearMonth.text.substring(5,7),roomNumber
+            )
+
             runOnUiThread {
+
+                if (isTenantCost==null){
+
+                    binding.ConstTonCost.setText(ConstCost.tonCost.toString())
+                    binding.ConstCleanCost.setText(ConstCost.cleanCost.toString())
+                    binding.ConstUsunCost.setText(ConstCost.usunCost.toString())
+                    binding.ConstMgrCost.setText(ConstCost.mgrCost.toString())
+
+
+                    waterValue = binding.WriteWaterTon.text.toString().toFloat() * binding.ConstTonCost.text.toString().replace(",","").toFloat()
+                    binding.waterCost.setText(waterValue.toInt().toString())
+
+                    val total = waterValue.toInt() + ConstCost.cleanCost + ConstCost.usunCost + ConstCost.mgrCost
+
+                    binding.TotalCostValue.setText(total.toString())
+
+                    binding.CostRoomNumber.setText(roomNumber)
+
+                    binding.CostBankName.setText(favoriteAccount.bankName)
+                    binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
+                    binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
+
+                } else {
+                    binding.CostUid.setText(isTenantCost.costId.toString())
+                    binding.CostRoomNumber.setText(isTenantCost.roomNumber)
+                    binding.CostYearMonth.setText(isTenantCost.costYear + "-" + isTenantCost.costMonth)
+                    binding.TotalCostValue.setText(isTenantCost.totalCost.toString())
+                    binding.WriteWaterTon.setText(((isTenantCost.useTon*10).roundToInt() / 10f).toString())
+                    binding.ConstTonCost.setText(isTenantCost.costTon.toString())
+                    binding.waterCost.setText(isTenantCost.totalUseTon.toString())
+                    binding.ConstCleanCost.setText(isTenantCost.costClean.toString())
+                    binding.ConstUsunCost.setText(isTenantCost.costUsun.toString())
+                    binding.ConstMgrCost.setText(isTenantCost.costMgr.toString())
+
+                    binding.CostBankName.setText(favoriteAccount.bankName)
+                    binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
+                    binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
+                }
+
 
 //                waterValue = binding.WriteWaterTon.toString().toFloat() * ConstCost.tonCost.toFloat()
 
-                binding.ConstTonCost.setText(ConstCost.tonCost.toString())
-                binding.ConstCleanCost.setText(ConstCost.cleanCost.toString())
-                binding.ConstUsunCost.setText(ConstCost.usunCost.toString())
-                binding.ConstMgrCost.setText(ConstCost.mgrCost.toString())
-
-
-                waterValue = binding.WriteWaterTon.text.toString().toFloat() * binding.ConstTonCost.text.toString().replace(",","").toFloat()
-                binding.waterCost.setText(waterValue.toInt().toString())
-
-                val total = waterValue.toInt() + ConstCost.cleanCost + ConstCost.usunCost + ConstCost.mgrCost
-
-                binding.TotalCostValue.setText(total.toString())
-
-                binding.CostRoomNumber.setText(roomNumber)
-
-                binding.CostBankName.setText(favoriteAccount.bankName)
-                binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
-                binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
             }
         }).start()
 

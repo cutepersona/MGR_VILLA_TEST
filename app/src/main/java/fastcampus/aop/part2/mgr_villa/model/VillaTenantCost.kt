@@ -21,6 +21,7 @@ data class VillaTenantCost (
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "costId") var costId: Long?,
     @ColumnInfo(name = "roomNumber") var roomNumber: String,
+    @ColumnInfo(name = "totalCost") var totalCost: Int,
     @ColumnInfo(name = "costYear") var costYear: String,
     @ColumnInfo(name = "costMonth") var costMonth: String,
     @ColumnInfo(name = "useTon") var useTon: Float,

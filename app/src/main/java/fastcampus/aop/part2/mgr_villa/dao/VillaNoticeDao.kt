@@ -178,16 +178,22 @@ interface VillaNoticeDao {
 
     //-----------------------------------------VillaTenantCost------------------------------------------
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun tenantCostInsert(villaTenantCost: VillaTenantCost)
+
     // Select
     @Query("SELECT EXISTS (SELECT * FROM VillaTenantCost WHERE villaAddr = :villaAddress AND costYear =:year AND costMonth =:month AND roomNumber =:roomNum)")
     fun isTenantCost(villaAddress: String, year: String, month: String, roomNum: String): Int
 
     @Query("SELECT * FROM VillaTenantCost WHERE villaAddr = :villaAddress AND costYear =:year AND costMonth =:month AND roomNumber =:roomNum")
-    fun getTenantCost(villaAddress: String, year: String, month: String, roomNum: String) : VillaTenantCost
+    fun getTenantCost(villaAddress: String, year: String, month: String, roomNum: String) : VillaTenantCost?
 
     //Update
     @Query("UPDATE VillaTenantCost SET useTon =:useTon, costTon =:costTon, totalUseTon =:totalUseTon, costClean=:costClean, costUsun =:costUsun, costMgr =:costMgr WHERE villaAddr = :villaAddress AND costYear =:year AND costMonth =:month AND roomNumber =:roomNum")
     fun updateTenantCost(useTon: Float, costTon: Int, totalUseTon: Int, costClean: Int, costUsun: Int, costMgr: Int, villaAddress: String, year: String, month: String, roomNum: String)
+
+    @Query("UPDATE VillaTenantCost SET totalCost =:totalCost, useTon =:useTon, costTon =:costTon, totalUseTon =:totalUseTon, costClean=:costClean, costUsun =:costUsun, costMgr =:costMgr WHERE costId =:costId")
+    fun updateTenantCostForId(totalCost: Int,useTon: Float, costTon: Int, totalUseTon: Int, costClean: Int, costUsun: Int, costMgr: Int, costId: Long)
 
     @Query("UPDATE VillaTenantCost SET costStatus =:costStatus WHERE villaAddr = :villaAddress AND costYear =:year AND costMonth =:month AND roomNumber =:roomNum")
     fun updateCostStatus(costStatus: String, villaAddress: String, year: String, month: String, roomNum: String)
