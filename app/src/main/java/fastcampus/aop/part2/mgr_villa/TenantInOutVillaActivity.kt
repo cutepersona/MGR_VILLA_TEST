@@ -9,8 +9,14 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import fastcampus.aop.part2.mgr_villa.adapter.BankDialogAdapter
+import fastcampus.aop.part2.mgr_villa.adapter.RequestTenantDialogAdapter
+import fastcampus.aop.part2.mgr_villa.customdialog.RequestTenantDialog
+import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityTenantinoutBinding
+import fastcampus.aop.part2.mgr_villa.model.RequestTenantLayout
+import fastcampus.aop.part2.mgr_villa.model.TenantLayout
 import fastcampus.aop.part2.mgr_villa.model.VillaTenantCost
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import java.time.LocalDateTime
@@ -27,13 +33,8 @@ class TenantInOutVillaActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initToolBar()
-        initTenantSelect()
+        initRequestTenantDialog()
         initContractCalendar()
-
-        initToday()
-
-        initMgrIn()
-        initTenenatIntoVilla()
 
 
         if (intent.hasExtra("roomId")){
@@ -43,7 +44,93 @@ class TenantInOutVillaActivity : AppCompatActivity() {
             binding.tenantIORoomNumber.setText(intent.getStringExtra("roomNumber"))
         }
 
+        if (!binding.TenantIORoomId.text.isNullOrEmpty()){
+            initTenantInfo()
+        } else {
+            initToday()
+        }
 
+        initMgrIn()
+        initTenenatIntoVilla()
+
+    }
+
+    // 입주요청 다이얼로그 호출
+    private fun initRequestTenantDialog() {
+        binding.tenantIOSelectTenantArea.setOnClickListener {
+
+//
+//            Thread(Runnable {
+//                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                val mgrUser = villaNoticedb!!.VillaNoticeDao().intoTenant(
+//                    binding.tenantIOEmail.text.toString().trim()
+//                    ,binding.tenantIOContractDate.text.toString().trim()
+//                    ,binding.tenantIOLeaveDate.text.toString().trim()
+//                    ,MyApplication.prefs.getString("villaAddress","").trim()
+//                    ,binding.TenantIORoomId.text.toString().toLong()
+//                )
+//
+//                runOnUiThread {
+//
+//                    showToast("전입이 완료되었습니다.")
+//                    val toTenantList = Intent(this, TenantListActivity::class.java)
+//                    startActivity(toTenantList)
+//                }
+//            }).start()
+
+//            val RequestTenantListAdapter = RequestTenantDialogAdapter(RequestTenantList)            // 리싸이클러 뷰 어댑터
+
+            val requestDialog = RequestTenantDialog(this)
+//            requestDialog.showDialog(RequestTenantListAdapter)
+
+
+            requestDialog.setOnClickListener( object : RequestTenantDialog.OnDialogClickListener{
+                override fun onClicked(
+                    tenantEmail: String,
+                    tenantName: String,
+                    tenantPhone: String
+                ) {
+                    showToast(tenantEmail + "/ " + tenantName + "/ " + tenantPhone)
+                }
+            })
+
+            // 다이얼로그에서 ItemClick로 값 바로 가져오기
+//--------------------------------------------------
+//            BankListAdapter.setItemClickListener(object : BankDialogAdapter.OnItemClickListener{
+//                override fun onClick(v: View, position: Int) {
+//                    binding.bankNameText.setText(BankListAdapter.bankList[position])
+////                    showToast(BankListAdapter.bankList[position])
+//                    mgrBankDialog.DisMiss()
+//                }
+//            })
+//----------------------------------
+        }
+    }
+
+    // 전입정보 가져오기
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initTenantInfo(){
+
+        val villadb = VillaNoticeHelper.getInstance(applicationContext)
+
+        Thread(Runnable {
+
+            val tenantRooms =  villadb?.VillaNoticeDao()?.getTenantInfo(binding.TenantIORoomId.text.toString().toLong())
+            val tenantInfo = villadb?.VillaNoticeDao()?.getUser(tenantRooms?.tenantEmail.toString())
+
+            runOnUiThread {
+                if (tenantRooms != null
+                    && tenantInfo != null
+                ){
+                    binding.tenantIOEmail.setText(tenantRooms.tenantEmail)
+                    binding.tenantIOContractDate.setText(tenantRooms.tenantContractDate)
+                    binding.tenantIOLeaveDate.setText(tenantRooms.tenantLeaveDate)
+                    binding.tenantIOTenantName.setText(tenantInfo.userName)
+                    binding.tenantIOTenantPhone.setText(tenantInfo.phoneNumber)
+                }
+            }
+        }).start()
     }
 
     // 전입하기
@@ -61,11 +148,6 @@ class TenantInOutVillaActivity : AppCompatActivity() {
                 )
 
                 runOnUiThread {
-//                        showToast(binding.tenantIOEmail.text.toString().trim())
-//                    showToast(binding.tenantIOContractDate.text.toString().trim())
-//                    showToast(binding.tenantIOLeaveDate.text.toString().trim())
-//                    showToast(MyApplication.prefs.getString("villaAddress","").trim())
-//                    showToast(binding.TenantIORoomId.text.toString())
 
                     showToast("전입이 완료되었습니다.")
                     val toTenantList = Intent(this, TenantListActivity::class.java)
@@ -91,6 +173,7 @@ class TenantInOutVillaActivity : AppCompatActivity() {
                         binding.tenantIOTenantName.setText(mgrUser.userName)
                         binding.tenantIOContractDate.setText("-")
                         binding.tenantIOLeaveDate.setText("-")
+                        binding.tenantIOTenantPhone.setText(mgrUser.phoneNumber)
                     }
             }).start()
 

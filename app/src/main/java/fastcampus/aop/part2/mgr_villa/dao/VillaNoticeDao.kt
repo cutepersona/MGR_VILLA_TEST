@@ -131,6 +131,9 @@ interface VillaNoticeDao {
     @Query("SELECT roomNumber FROM VillaTenant WHERE  roomId =:roomId")
     fun getTenantRoom(roomId: Long) : String
 
+    @Query("SELECT * FROM VillaTenant WHERE  roomId =:roomId")
+    fun getTenantInfo(roomId: Long) : VillaTenant?
+
     // Update
     @Query("UPDATE VillaTenant SET roomNumber= :newRoomNum WHERE villaAddr = :villaAddr AND roomNumber = :beforeRoomNum")
     fun villaRoomNumberUpdate(newRoomNum: String, villaAddr: String, beforeRoomNum: String)

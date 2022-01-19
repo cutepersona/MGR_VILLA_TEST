@@ -192,6 +192,7 @@
                             />
 
                         <View
+                            android:id="@+id/tenantIOTenantNameBottom"
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:background="@drawable/gradient"
@@ -199,6 +200,40 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="@+id/tenantIOTenantName"
                             />
+
+                        <TextView
+                            android:id="@+id/tenantIOPhoneText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/tenantIOPhone"
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIOTenantNameBottom"
+                            tools:ignore="MissingConstraints"
+                            tools:layout_editor_absoluteX="0dp" />
+
+                        <TextView
+                            android:id="@+id/tenantIOTenantPhone"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:hint="@string/tenantIONameHint"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:textSize="20sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIOPhoneText"
+                            android:gravity="center_vertical"
+                            />
+
+                        <View
+                            android:id="@+id/tenantIOTenantPhoneBottom"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@drawable/gradient"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@+id/tenantIOTenantPhone"
+                            />
+
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
