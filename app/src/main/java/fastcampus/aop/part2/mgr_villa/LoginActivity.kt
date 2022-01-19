@@ -87,11 +87,13 @@ class LoginActivity : AppCompatActivity() {
                                 addrSearchActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
                                 startActivity(addrSearchActivity)
                             }
-                            if (villaInfo < 1 && user.userType.equals("TENANT")){
-                                val addrSearchActivity =
-                                    Intent(this, AddressSearchActivity::class.java)
-                                addrSearchActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
-                                startActivity(addrSearchActivity)
+                            if (user.userType.equals("TENANT")){
+
+
+                                val addrSearchTenantActivity =
+                                    Intent(this, AddressSearchForTenantActivity::class.java)
+                                addrSearchTenantActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+                                startActivity(addrSearchTenantActivity)
                             }
 
                         }

@@ -67,6 +67,8 @@
 
         <activity android:name=".RequestTenantActivity"/>
 
+        <activity android:name=".AddressSearchForTenantActivity"/>
+
     </application>
 
 </manifest>
