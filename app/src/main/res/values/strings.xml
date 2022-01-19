@@ -74,6 +74,7 @@
     <string name="tenantOut">퇴거 하기</string>
     <string name="tenantRequestNull">전입 요청이 없습니다.</string>
     <string name="tenantRequestAddr">전입할 주소를 검색해주세요.</string>
+    <string name="tenantRequestQuestion">선택한 곳으로 전입하시겠습니까?</string>
 
     <string name="user_email">이메일</string>
     <string name="user_name">이름</string>

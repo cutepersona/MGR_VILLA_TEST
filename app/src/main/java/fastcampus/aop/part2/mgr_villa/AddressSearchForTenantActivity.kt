@@ -82,6 +82,7 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
                             showToast("해당 주소지가 등록되어 있지 않습니다. 관리자에게 문의바랍니다.")
                         } else {
                             val ToRequestAddr = Intent(v.context, TenantListForRequestActivity::class.java)
+                            ToRequestAddr.putExtra("requestAddress",addrTenantListItems[position].address_name)
                             startActivity(ToRequestAddr)
                         }
                     }

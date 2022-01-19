@@ -48,15 +48,6 @@ class TenantRequestAdapter(val tenantList: ArrayList<TenantRequestLayout>): Recy
 
     private lateinit var itemClickListener : OnItemClickListener
 
-    interface OnSlideButtonClickListener {
-        fun onSlideButtonClick(v: View, imageView: ImageView, position: Int)
-    }
-
-    fun setSlideButtonClickListener(onSlideButtonClickListener: OnSlideButtonClickListener){
-        this.slideButtonClickListener = onSlideButtonClickListener
-    }
-
-    private lateinit var slideButtonClickListener : OnSlideButtonClickListener
 
 
 }

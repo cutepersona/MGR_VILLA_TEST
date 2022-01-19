@@ -149,6 +149,10 @@ interface VillaNoticeDao {
     @Query("UPDATE VillaTenant SET tenantEmail = :tenantEmail, tenantContractDate = :contractDate, tenantLeaveDate = :leaveDate, tenantStatus = 'IntoDone' WHERE villaAddr = :villaAddr AND roomId = :roomId")
     fun intoTenant(tenantEmail: String, contractDate: String, leaveDate: String, villaAddr: String, roomId: Long)
 
+    // 입주요청
+    @Query("UPDATE VillaTenant SET tenantStatus = 'Request' WHERE villaAddr = :villaAddr AND roomId = :roomId")
+    fun requestTenant(villaAddr: String, roomId: Long)
+
     // Delete
     @Query("DELETE FROM VillaTenant WHERE villaAddr =:villaAddr AND roomId =:roomId")
     fun deleteTenant(villaAddr: String, roomId: Long)
