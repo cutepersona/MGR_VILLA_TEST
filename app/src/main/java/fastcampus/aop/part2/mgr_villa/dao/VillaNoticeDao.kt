@@ -71,8 +71,6 @@ interface VillaNoticeDao {
     @Query("SELECT * FROM VillaUsers WHERE mailAddress = :email AND passWord = :pw")
     fun userLogin(email: String, pw: String): VillaUsers
 
-
-
     //-----------------------------------------VillaInfo------------------------------------------
 
     // Insert
@@ -95,6 +93,13 @@ interface VillaNoticeDao {
 
     @Query("SELECT * FROM VillaInfo WHERE mailAddress = :email")
     fun getVillaInfo(email:String) : VillaInfo
+
+    // 관리자 전입 시 정보 불러오기
+    @Query("SELECT * FROM VillaUsers " +
+            "INNER JOIN VillaInfo ON VillaUsers.mailAddress = VillaInfo.mailAddress" +
+            " WHERE VillaInfo.villaAddress = :address AND VillaUsers.userType = 'MGR'")
+    fun getMgrUser(address:String) : VillaUsers
+
 
     //-----------------------------------------VillaCost------------------------------------------
 
@@ -135,8 +140,8 @@ interface VillaNoticeDao {
     fun leaveTenant(villaAddr: String, roomNumber: String)
 
     // 입주시키기
-    @Query("UPDATE VillaTenant SET tenantEmail = :tenantEmail, tenantContractDate = :contractDate, tenantLeaveDate = :leaveDate WHERE villaAddr = :villaAddr AND roomNumber = :roomNumber")
-    fun intoTenant(tenantEmail: String, contractDate: String, leaveDate: String, villaAddr: String, roomNumber: String)
+    @Query("UPDATE VillaTenant SET tenantEmail = :tenantEmail, tenantContractDate = :contractDate, tenantLeaveDate = :leaveDate, tenantStatus = 'IntoDone' WHERE villaAddr = :villaAddr AND roomId = :roomId")
+    fun intoTenant(tenantEmail: String, contractDate: String, leaveDate: String, villaAddr: String, roomId: Long)
 
     // Delete
     @Query("DELETE FROM VillaTenant WHERE villaAddr =:villaAddr AND roomId =:roomId")

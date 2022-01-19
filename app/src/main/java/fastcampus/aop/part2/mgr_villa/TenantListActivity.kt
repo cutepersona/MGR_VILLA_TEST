@@ -53,7 +53,8 @@ class TenantListActivity: AppCompatActivity() {
                             Thread(Runnable {
                                 runOnUiThread {
                                     val tenantUpdate = Intent(v.context, TenantInOutVillaActivity::class.java)
-                                    tenantUpdate.putExtra("roomId",TenantRoomListItems[position].tenantRoomId.toString().toLong())
+                                    tenantUpdate.putExtra("roomId",TenantRoomListItems[position].tenantRoomId.toString())
+                                    tenantUpdate.putExtra("roomNumber",TenantRoomListItems[position].tenantRoomNumber)
                                     startActivity(tenantUpdate)
                                 }
                             }).start()
