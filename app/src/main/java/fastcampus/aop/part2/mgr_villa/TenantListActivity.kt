@@ -85,8 +85,8 @@ class TenantListActivity: AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val TenantCostListToDiv = Intent(this, MgrCostDivActivity::class.java)
-        startActivity(TenantCostListToDiv)
+        val ToHome = Intent(this, VillaHomeActivity::class.java)
+        startActivity(ToHome)
 
     }
 
@@ -225,8 +225,8 @@ class TenantListActivity: AppCompatActivity() {
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        val TenantCostListToDiv = Intent(this, MgrCostDivActivity::class.java)
-        startActivity(TenantCostListToDiv)
+        val ToHome = Intent(this, VillaHomeActivity::class.java)
+        startActivity(ToHome)
 //
 //        val id = item.itemId
 //        when (id) {

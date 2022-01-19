@@ -5,38 +5,28 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import fastcampus.aop.part2.mgr_villa.databinding.ActivityTenantinoutBinding
+import fastcampus.aop.part2.mgr_villa.databinding.ActivityRequesttenantlistBinding
 
-class TenantInOutVillaActivity : AppCompatActivity() {
+class RequestTenantActivity : AppCompatActivity() {
 
-    val binding: ActivityTenantinoutBinding by lazy { ActivityTenantinoutBinding.inflate(layoutInflater) }
+    private val binding : ActivityRequesttenantlistBinding by lazy {ActivityRequesttenantlistBinding.inflate(layoutInflater)}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initToolBar()
-        initTenantSelect()
 
-    }
-
-    // 세입자 요청 선택하기
-    private fun initTenantSelect() {
-        binding.tenantIOSelectTenantArea.setOnClickListener {
-            val requestTenantList = Intent(this,RequestTenantActivity::class.java)
-            startActivity(requestTenantList)
-
-        }
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val ToTenantList = Intent(this, TenantListActivity::class.java)
-        startActivity(ToTenantList)
+        val ToTenantInOut = Intent(this, TenantInOutVillaActivity::class.java)
+        startActivity(ToTenantInOut)
     }
 
     private fun initToolBar() {
-        val toolbar = findViewById<Toolbar>(R.id.TenantInOutToolbar)
+        val toolbar = findViewById<Toolbar>(R.id.RequestTenantListToolbar)
         setSupportActionBar(toolbar)
 
         val ab = supportActionBar!!
@@ -46,8 +36,8 @@ class TenantInOutVillaActivity : AppCompatActivity() {
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        val ToTenantList = Intent(this, TenantListActivity::class.java)
-        startActivity(ToTenantList)
+        val ToTenantInOut = Intent(this, TenantInOutVillaActivity::class.java)
+        startActivity(ToTenantInOut)
 //
 //        val id = item.itemId
 //        when (id) {

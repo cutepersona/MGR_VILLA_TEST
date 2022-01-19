@@ -64,6 +64,9 @@
         <activity android:name=".TenantRoomCostForMGRActivity"/>
 
         <activity android:name=".TenantInOutVillaActivity"/>
+
+        <activity android:name=".RequestTenantActivity"/>
+
     </application>
 
 </manifest>

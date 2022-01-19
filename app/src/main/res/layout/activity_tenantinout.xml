@@ -99,77 +99,179 @@
                         android:textStyle="bold"
                         tools:ignore="MissingConstraints" />
 
-                    <EditText
-                        android:id="@+id/tonCostEditText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/tonCost"
-                        android:inputType="number"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/TenantIORoomNumberText" />
-
                     <TextView
-                        android:id="@+id/tenantIOEmailText"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tenantIORoomNumber"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="@string/tenantIOEmail"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@+id/tonCostEditText"
-                        tools:ignore="MissingConstraints" />
-
-                    <EditText
-                        android:id="@+id/tenantIOEmailEditText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tenantIOEmailText" />
-
-                    <TextView
-                        android:id="@+id/tenantIONameText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/tenantIOName"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@+id/tenantIOEmailEditText"
-                        tools:ignore="MissingConstraints"
-                        tools:layout_editor_absoluteX="0dp" />
-
-                    <EditText
-                        android:id="@+id/usunCostEditText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/tenantIONameHint"
-                        android:inputType="number"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tenantIONameText"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantIORoomNumberText"
+                        android:textSize="30sp"
+                        android:textStyle="bold"
                         android:enabled="false"
                         />
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/tenantIOSelectTenantArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tenantIORoomNumber"
+                        >
+                        <TextView
+                            android:id="@+id/tenantIOEmailText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="@string/tenantIOEmail"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/tenantIOSelectTenantArea"
+                             />
+
+                        <TextView
+                            android:id="@+id/tenantIOEmail"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIOEmailText" />
+
+                        <ImageView
+                            android:id="@+id/tenantIODropDown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:src="@drawable/ic_arrow_drop_down"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIOEmailText"
+                            />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@drawable/gradient"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@+id/tenantIODropDown"
+                            />
+
+                        <TextView
+                            android:id="@+id/tenantIONameText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="@string/tenantIOName"
+                            android:textStyle="bold"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIOEmail"
+                            tools:ignore="MissingConstraints"
+                            tools:layout_editor_absoluteX="0dp" />
+
+                        <TextView
+                            android:id="@+id/tenantIOTenantName"
+                            android:layout_width="0dp"
+                            android:layout_height="35dp"
+                            android:hint="@string/tenantIONameHint"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIONameText"
+                            android:gravity="center_vertical"
+                            android:enabled="false"
+                            />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@drawable/gradient"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintBottom_toBottomOf="@+id/tenantIOTenantName"
+                            />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
                     <TextView
-                        android:id="@+id/tenantIOContractDate"
+                        android:id="@+id/tenantIOContractDateText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="30dp"
                         android:text="@string/ContractDate"
                         android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@+id/usunCostEditText"
-                        tools:ignore="MissingConstraints" />
-
-                    <EditText
-                        android:id="@+id/tenantIOContractDateEditText"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/mgrCost"
-                        android:inputType="number"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tenantIOSelectTenantArea"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tenantIOContractDate" />
+                         />
+
+                    <TextView
+                        android:id="@+id/tenantIOContractDate"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/ContractDate"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tenantIOContractDateText"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="20dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/ContractDateCalendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@+id/tenantIOContractDate"
+                        android:src="@drawable/ic_calendar_month"
+                        app:layout_constraintTop_toTopOf="@+id/tenantIOContractDate"
+                        app:layout_constraintBottom_toBottomOf="@+id/tenantIOContractDate"
+                        android:layout_marginLeft="6dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tenantIOLeaveDateText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/LeaveDate"
+                        android:textStyle="bold"
+                        app:layout_constraintTop_toTopOf="@+id/tenantIOContractDateText"
+                        app:layout_constraintStart_toEndOf="@+id/ContractDateCalendar"
+                        android:layout_marginLeft="40dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/tenantIOLeaveDate"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:text="@string/LeaveDate"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="@+id/tenantIOLeaveDateText"
+                        app:layout_constraintTop_toBottomOf="@+id/tenantIOContractDateText"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="20dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/LeaveDateCalendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@+id/tenantIOLeaveDate"
+                        android:src="@drawable/ic_calendar_month"
+                        app:layout_constraintTop_toTopOf="@+id/tenantIOLeaveDate"
+                        app:layout_constraintBottom_toBottomOf="@+id/tenantIOLeaveDate"
+                        android:layout_marginLeft="6dp"
+                        />
+
+                    <Button
+                        android:id="@+id/mgrTenantIn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textSize="25sp"
+                        android:layout_marginTop="100dp"
+                        android:text="관리자 전입"
+                        android:backgroundTint="@color/main_button_background"
+                        app:layout_constraintTop_toBottomOf="@+id/LeaveDateCalendar"
+                        />
 
 
 
