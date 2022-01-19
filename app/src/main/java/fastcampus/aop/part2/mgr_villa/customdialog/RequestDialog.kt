@@ -18,7 +18,7 @@ class RequestDialog(context: Context) :AppCompatActivity() {
 
     private val dialog = Dialog(context)
     private lateinit var onClickListener: OnDialogClickListener
-
+    private var context: Context = context
 
     private var requestResult: String = ""
 
@@ -26,28 +26,26 @@ class RequestDialog(context: Context) :AppCompatActivity() {
         onClickListener = listener
     }
 
-    fun showDialog(TenantRequestAdapter:TenantRequestAdapter, requestAddress:String, roomId: Long, roomNumber:String) {
+    fun showDialog(roomNumber:String, roomId:Long) {
         dialog.setContentView(R.layout.tenant_request)
         dialog.setCanceledOnTouchOutside(false)
         dialog.requestTile.setText(roomNumber + "으로 전입요청 하시겠습니까?")
         dialog.show()
 
         dialog.cancelButton.setOnClickListener {
-            requestResult = "Cancel"
-            onClickListener.onClicked(requestResult)
             dialog.dismiss()
         }
 
         dialog.finishButton.setOnClickListener {
             requestResult = "Request"
-            onClickListener.onClicked(requestResult)
+            onClickListener.onClicked(context,requestResult, roomId)
             dialog.dismiss()
         }
 
     }
 
     interface OnDialogClickListener {
-        fun onClicked(requestResult:String)
+        fun onClicked(context: Context, requestResult:String, roomId: Long)
     }
 
     private fun showToast(message: String) {

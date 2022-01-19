@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -13,6 +14,7 @@ import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityTenantrequestlistBinding
 import fastcampus.aop.part2.mgr_villa.model.*
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
 class TenantListForRequestActivity: AppCompatActivity() {
 
@@ -43,16 +45,30 @@ class TenantListForRequestActivity: AppCompatActivity() {
 //        initNoticeFabButtons()
 //        addItemsNotices()
 
-        var roomNum: String = ""
-        var roomId:Long = 0
-
         val RequestDialog = RequestDialog(this)
 
         RequestDialog.setOnClickListener(object : RequestDialog.OnDialogClickListener{
-            override fun onClicked(requestResult: String) {
-                showToast(requestResult)
-            }
+            override fun onClicked(context: Context,requestResult: String, roomId: Long) {
+                if (!requestResult.isEmpty()){
+                    Thread(Runnable {
+                        val villadb = VillaNoticeHelper.getInstance(applicationContext)
 
+                        villadb!!.VillaNoticeDao().requestTenant(
+                            MyApplication.prefs.getString("email","")
+                            ,requestAddress
+                            ,roomId
+                        )
+
+                        val villaInfo = villadb?.VillaNoticeDao()?.getTenantInfo(roomId)
+
+                        runOnUiThread {
+                                showToast(villaInfo?.roomNumber.toString() + "로의 전입을 요청하였습니다.")
+                                val toLogin = Intent(context, LoginActivity::class.java )
+                                startActivity(toLogin)
+                        }
+                    }).start()
+                }
+            }
         })
 
         TenantRequestListAdapter.setItemClickListener(object : TenantRequestAdapter.OnItemClickListener{
@@ -64,8 +80,11 @@ class TenantListForRequestActivity: AppCompatActivity() {
                     val requestTenantInfo =  villadb!!.VillaNoticeDao().getTenantInfo(TenantRequestListItems[position].tenantRoomId.toString().toLong())
 
                     runOnUiThread {
-                        RequestDialog.showDialog(TenantRequestListAdapter,requestAddress, TenantRequestListItems[position].tenantRoomId.toString().toLong(), requestTenantInfo!!.roomNumber)
-
+                        if (!requestTenantInfo?.tenantEmail.isNullOrEmpty()){
+                            showToast("이미 거주 중에 있어 입주요청 할 수 없습니다.")
+                        } else {
+                            RequestDialog.showDialog(requestTenantInfo!!.roomNumber, TenantRequestListItems[position].tenantRoomId.toString().toLong())
+                        }
                     }
                 }).start()
             }
