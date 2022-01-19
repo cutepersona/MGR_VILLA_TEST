@@ -91,6 +91,9 @@ interface VillaNoticeDao {
     @Query("SELECT EXISTS (SELECT * FROM villaInfo WHERE mailAddress = :mailAddress)")
     fun isVilla(mailAddress: String): Int
 
+    @Query("SELECT EXISTS (SELECT * FROM villaInfo WHERE villaAddress = :villaAddress)")
+    fun isRequestVilla(villaAddress: String): Int
+
     @Query("SELECT * FROM VillaInfo WHERE mailAddress = :email")
     fun getVillaInfo(email:String) : VillaInfo
 

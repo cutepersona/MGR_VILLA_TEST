@@ -68,6 +68,25 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
         // 리스트 주소 클릭
         addrListAdapter.setItemClickListener(object : KakaoApiTenantAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
+
+                Thread(Runnable {
+
+                    val userdb = VillaNoticeHelper.getInstance(applicationContext)
+
+                    val isRequestVilla = userdb!!.VillaNoticeDao().isRequestVilla(
+                        addrTenantListItems[position].address_name
+                    )
+
+                    runOnUiThread {
+                        if(isRequestVilla < 1){
+                            showToast("해당 주소지가 등록되어 있지 않습니다. 관리자에게 문의바랍니다.")
+                        } else {
+                            val ToRequestAddr = Intent(v.context, TenantListForRequestActivity::class.java)
+                            startActivity(ToRequestAddr)
+                        }
+                    }
+                }).start()
+
 //                val addVillaInfoActivity = Intent(v.context, VillaInfoActivity::class.java)
 //                addVillaInfoActivity.putExtra("address", addrListItems[position].address_name)
 //                if (!addrListItems[position].villa_name.isNullOrEmpty()){
@@ -86,8 +105,7 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
 
     }
 
-    // 유저정보 가져오기
-    private fun initUsers() {
+    private fun initRequestTenant() {
         Thread(Runnable {
 
             val userdb = VillaNoticeHelper.getInstance(applicationContext)
@@ -97,7 +115,7 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
             )
 
             runOnUiThread {
-                    MyApplication.prefs.setString("userType",userInfo.userType)
+
             }
         }).start()
     }
