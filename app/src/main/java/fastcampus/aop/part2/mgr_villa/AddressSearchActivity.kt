@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.MutableLiveData
 import fastcampus.aop.part2.mgr_villa.Object.KakaoApiRetrofitClient
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityAddrSearchBinding
 import fastcampus.aop.part2.mgr_villa.kakaodata.KakaoApi
 import fastcampus.aop.part2.mgr_villa.kakaodata.KakaoApi.Companion.API_KEY
@@ -22,6 +23,7 @@ import fastcampus.aop.part2.mgr_villa.kakaodata.KakaoApi.Companion.BASE_URL
 import fastcampus.aop.part2.mgr_villa.kakaodata.KakaoData
 import fastcampus.aop.part2.mgr_villa.kakaodata.KakaoKeywordData
 import fastcampus.aop.part2.mgr_villa.model.AddrLayout
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,8 +52,7 @@ class AddressSearchActivity : AppCompatActivity() {
         if(intent.hasExtra("email")){
             binding.emailHidden.setText(intent.getStringExtra("email"))
         }
-
-
+//        initUsers()
         binding.addrSearchButton.setOnClickListener {
             if (binding.AddressEditText.text.toString().contains("동")
                 ||binding.AddressEditText.text.toString().contains("길")){
@@ -66,7 +67,6 @@ class AddressSearchActivity : AppCompatActivity() {
         // 리스트 주소 클릭
         addrListAdapter.setItemClickListener(object : KakaoApiAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
-
                 val addVillaInfoActivity = Intent(v.context, VillaInfoActivity::class.java)
                 addVillaInfoActivity.putExtra("address", addrListItems[position].address_name)
                 if (!addrListItems[position].villa_name.isNullOrEmpty()){
@@ -83,6 +83,22 @@ class AddressSearchActivity : AppCompatActivity() {
         initAddrSearchEditText()
 
 
+    }
+
+    // 유저정보 가져오기
+    private fun initUsers() {
+        Thread(Runnable {
+
+            val userdb = VillaNoticeHelper.getInstance(applicationContext)
+
+            val userInfo = userdb!!.VillaNoticeDao().getUser(
+                MyApplication.prefs.getString("email","")
+            )
+
+            runOnUiThread {
+                    MyApplication.prefs.setString("userType",userInfo.userType)
+            }
+        }).start()
     }
 
     private fun initToolBar() {
