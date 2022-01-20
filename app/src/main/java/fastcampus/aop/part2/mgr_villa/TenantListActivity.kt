@@ -177,7 +177,8 @@ class TenantListActivity: AppCompatActivity() {
                         "",
                         "",
                         "",
-                         MyApplication.prefs.getString("villaAddress","").trim()
+                         MyApplication.prefs.getString("villaAddress","").trim(),
+                        MyApplication.prefs.getString("roadAddress", "").trim()
                     )
                 )
 

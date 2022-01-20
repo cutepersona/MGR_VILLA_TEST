@@ -116,6 +116,8 @@ class VillaHomeActivity : AppCompatActivity() {
             val tenantInfo = userdb?.VillaNoticeDao()?.getTenantFromEmail(userEmail)
 
             runOnUiThread {
+
+                if (user?.userType.equals("MGR")){
                     if (tenantInfo != null) {
                         val bundle = Bundle()
                         bundle.putString("roomNumber",tenantInfo?.roomNumber)
@@ -141,6 +143,35 @@ class VillaHomeActivity : AppCompatActivity() {
                         transaction.add(R.id.recycleViewConstraint, mgrFrag)
                         transaction.commit()
                     }
+                } else {
+                    if (tenantInfo != null) {
+                        val bundle = Bundle()
+                        bundle.putString("roomNumber",tenantInfo?.roomNumber)
+                        bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
+                        bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
+
+                        val mgrFrag = MgrHomeFragment()
+                        mgrFrag.arguments = bundle
+
+                        val transaction = supportFragmentManager.beginTransaction()
+                        transaction.add(R.id.recycleViewConstraint, mgrFrag)
+                        transaction.commit()
+                    } else {
+                        val bundle = Bundle()
+                        bundle.putString("roomNumber","")
+                        bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
+                        bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
+
+                        val mgrFrag = MgrHomeFragment()
+                        mgrFrag.arguments = bundle
+
+                        val transaction = supportFragmentManager.beginTransaction()
+                        transaction.add(R.id.recycleViewConstraint, mgrFrag)
+                        transaction.commit()
+                    }
+                }
+
+
             }
         }).start()
 
@@ -153,32 +184,66 @@ class VillaHomeActivity : AppCompatActivity() {
         val userdb = VillaNoticeHelper.getInstance(applicationContext)
 //        val villadb = VillaInfoHelper.getInstance(applicationContext)
 
-        Thread(Runnable {
-            val user = userdb?.VillaNoticeDao()?.getUser(
-                email
-            )
+        if (MyApplication.prefs.getString("userType","").equals("TENANT")){
+            Thread(Runnable {
+                val user = userdb?.VillaNoticeDao()?.getUser(
+                    email
+                )
 
-            val villaInfo = userdb?.VillaNoticeDao()?.getVillaInfo(email)
-            val tenantInfo = userdb?.VillaNoticeDao()?.getTenantFromEmail(email)
+                val villaInfo = userdb?.VillaNoticeDao()?.getVillaInfo(email)
+                val tenantInfo = userdb?.VillaNoticeDao()?.getTenantFromEmail(email)
 
-            MyApplication.prefs.setString("villaAddress", villaInfo?.villaAddress.toString())
-            MyApplication.prefs.setString("roadAddress", villaInfo?.roadAddress.toString())
+                MyApplication.prefs.setString("villaAddress", tenantInfo?.villaAddr.toString())
+                MyApplication.prefs.setString("roadAddress", tenantInfo?.roadAddress.toString())
 //            MyApplication.prefs.setString("roomNumber", tenantInfo?.roomNumber.toString())
 
 
-            runOnUiThread {
-                if (user == null || villaInfo == null) {
-                    showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
-                    return@runOnUiThread
-                } else {
-                    roomNumber = tenantInfo?.roomNumber.toString()
-                    address = MyApplication.prefs.getString("villaAddress", "")
-                    roadAddress = MyApplication.prefs.getString("roadAddress", "")
-                    binding.hUserName.setText(user.userName)
-
+                runOnUiThread {
+                    if (user == null) {
+                        showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+                        return@runOnUiThread
+                    } else {
+//                        roomNumber = tenantInfo?.roomNumber.toString()
+//                        address = MyApplication.prefs.getString("villaAddress", "")
+//                        roadAddress = MyApplication.prefs.getString("roadAddress", "")
+                        binding.hUserName.setText(user.userName)
+                    }
                 }
-            }
-        }).start()
+            }).start()
+        } else {
+            Thread(Runnable {
+                val user = userdb?.VillaNoticeDao()?.getUser(
+                    email
+                )
+
+                val villaInfo = userdb?.VillaNoticeDao()?.getVillaInfo(email)
+                val tenantInfo = userdb?.VillaNoticeDao()?.getTenantFromEmail(email)
+
+                MyApplication.prefs.setString("villaAddress", villaInfo?.villaAddress.toString())
+                MyApplication.prefs.setString("roadAddress", villaInfo?.roadAddress.toString())
+//            MyApplication.prefs.setString("roomNumber", tenantInfo?.roomNumber.toString())
+
+
+                runOnUiThread {
+                    if (user == null || villaInfo == null) {
+                        showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+                        return@runOnUiThread
+                    } else {
+//                        roomNumber = tenantInfo?.roomNumber.toString()
+//                        address = MyApplication.prefs.getString("villaAddress", "")
+//                        roadAddress = MyApplication.prefs.getString("roadAddress", "")
+                        binding.hUserName.setText(user.userName)
+
+                    }
+                }
+            }).start()
+        }
+
+
+
+
+
+
 
 
     }

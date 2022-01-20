@@ -108,7 +108,10 @@ class LoginActivity : AppCompatActivity() {
                             }
                             // 입주요청이 완료된 세입자
                             if (tenantRequestCheck > 0 && tenantStatusCheck.equals("IntoDone")){
-                                showToast("환영합니다.")
+                                val mgrHomeActivity =
+                                    Intent(this, VillaHomeActivity::class.java)
+                                mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+                                startActivity(mgrHomeActivity)
                             }
 
                         }
