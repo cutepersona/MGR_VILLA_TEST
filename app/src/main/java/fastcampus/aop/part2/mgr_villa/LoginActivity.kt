@@ -63,13 +63,21 @@ class LoginActivity : AppCompatActivity() {
 
                 val villaInfo = userdb!!.VillaNoticeDao().isVilla(binding.userEmailEditText.text.toString())
 
+
+                var tenantRequestCheck: Int = 0
+                var tenantStatusCheck: String = ""
+
+                if (user?.userType.equals("TENANT")){
+                    tenantRequestCheck = userdb!!.VillaNoticeDao().isVillaTenantCheck(binding.userEmailEditText.text.toString())
+                    tenantStatusCheck = userdb!!.VillaNoticeDao().tenantStatusCheck(binding.userEmailEditText.text.toString())
+                }
+
                 runOnUiThread {
                     if (user == null) {
                         showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
                     }
                     else {
                         MyApplication.prefs.setString("userType",user.userType)
-
                         if (villaInfo >= 1) {
                             // TODO 홈화면으로 이동해야함.
                             if (user.userType.equals("MGR")){
@@ -79,19 +87,28 @@ class LoginActivity : AppCompatActivity() {
                                 startActivity(mgrHomeActivity)
                             }
 
-
                         }else{
+                            // 빌라 정보가 없고 관리자인 경우 빌라정보 등록
                             if (villaInfo < 1 && user.userType.equals("MGR")) {
                                 val addrSearchActivity =
                                     Intent(this, AddressSearchActivity::class.java)
                                 addrSearchActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
                                 startActivity(addrSearchActivity)
                             }
-                            if (villaInfo < 1 && user.userType.equals("TENANT")){
+                            // 입주요청하지 않고 세입자인 경우 입주요청화면 이동
+                            if (tenantRequestCheck < 1 && user.userType.equals("TENANT")){
                                 val addrSearchTenantActivity =
                                     Intent(this, AddressSearchForTenantActivity::class.java)
                                 addrSearchTenantActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
                                 startActivity(addrSearchTenantActivity)
+                            }
+                            // 입주요청은 했으나 아직 입주완료되지 않은 경우
+                            if (tenantRequestCheck > 0 && tenantStatusCheck.equals("Request")){
+                                showToast("입주대기 중입니다. 관리자에게 문의바랍니다.")
+                            }
+                            // 입주요청이 완료된 세입자
+                            if (tenantRequestCheck > 0 && tenantStatusCheck.equals("IntoDone")){
+                                showToast("환영합니다.")
                             }
 
                         }

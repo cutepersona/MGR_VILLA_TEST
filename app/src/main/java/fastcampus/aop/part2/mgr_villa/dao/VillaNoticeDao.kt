@@ -137,13 +137,26 @@ interface VillaNoticeDao {
     @Query("SELECT * FROM VillaTenant WHERE  roomId =:roomId")
     fun getTenantInfo(roomId: Long) : VillaTenant?
 
+    // 세입자가 전입요청을 했는지 확인
+    @Query("SELECT EXISTS (SELECT * FROM VillaTenant WHERE  tenantEmail =:tenantEmail)")
+    fun isVillaTenantCheck(tenantEmail: String) : Int
+
+    // 세입자의 전입상태를 확인
+    @Query("SELECT tenantStatus FROM VillaTenant WHERE  tenantEmail =:tenantEmail")
+    fun tenantStatusCheck(tenantEmail: String) : String
+
+    // 관리자가 전입해있는지 확인
+    @Query("SELECT EXISTS (SELECT * FROM VillaTenant WHERE  tenantEmail =:tenantEmail)")
+    fun isIntoMgrCheck(tenantEmail: String) : Int
+
+
     // Update
     @Query("UPDATE VillaTenant SET roomNumber= :newRoomNum WHERE villaAddr = :villaAddr AND roomNumber = :beforeRoomNum")
     fun villaRoomNumberUpdate(newRoomNum: String, villaAddr: String, beforeRoomNum: String)
 
     // 퇴거하기
-    @Query("UPDATE VillaTenant SET tenantEmail = '', tenantContractDate = '', tenantLeaveDate = '' WHERE villaAddr = :villaAddr AND roomNumber = :roomNumber")
-    fun leaveTenant(villaAddr: String, roomNumber: String)
+    @Query("UPDATE VillaTenant SET tenantEmail = '', tenantContractDate = '', tenantLeaveDate = '', tenantStatus = '' WHERE villaAddr = :villaAddr AND roomId = :roomId")
+    fun leaveTenant(villaAddr: String, roomId: Long)
 
     // 입주시키기
     @Query("UPDATE VillaTenant SET tenantEmail = :tenantEmail, tenantContractDate = :contractDate, tenantLeaveDate = :leaveDate, tenantStatus = 'IntoDone' WHERE villaAddr = :villaAddr AND roomId = :roomId")

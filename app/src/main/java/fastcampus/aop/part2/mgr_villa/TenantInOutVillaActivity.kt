@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import fastcampus.aop.part2.mgr_villa.adapter.BankDialogAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.RequestTenantDialogAdapter
 import fastcampus.aop.part2.mgr_villa.customdialog.RequestTenantDialog
@@ -51,9 +52,13 @@ class TenantInOutVillaActivity : AppCompatActivity() {
         }
 
         initMgrIn()
-        initTenenatIntoVilla()
+        initTenantIntoVilla()
+        initTenantOutVilla()
+        mgrInCheck()
 
     }
+
+
 
     // 입주요청 다이얼로그 호출
     private fun initRequestTenantDialog() {
@@ -134,8 +139,14 @@ class TenantInOutVillaActivity : AppCompatActivity() {
     }
 
     // 전입하기
-    private fun initTenenatIntoVilla() {
+    private fun initTenantIntoVilla() {
         binding.RequestTenantIntoVillaButton.setOnClickListener {
+
+            if (!checkForm()){
+                showToast("입력 영역을 확인해 주세요.")
+                return@setOnClickListener
+            }
+
             Thread(Runnable {
                 val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
 
@@ -156,6 +167,46 @@ class TenantInOutVillaActivity : AppCompatActivity() {
             }).start()
         }
     }
+
+    // 퇴거하기
+    private fun initTenantOutVilla() {
+        binding.RequestTenantOutVillaButton.setOnClickListener {
+            Thread(Runnable {
+                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+
+                villaNoticedb!!.VillaNoticeDao().leaveTenant(
+                   MyApplication.prefs.getString("villaAddress","").trim()
+                   ,binding.TenantIORoomId.text.toString().toLong()
+                )
+
+                runOnUiThread {
+                    showToast("퇴거 완료되었습니다.")
+                    val toTenantList = Intent(this, TenantListActivity::class.java)
+                    startActivity(toTenantList)
+                }
+            }).start()
+        }
+    }
+
+    // 관리자 전입 체크
+    private fun mgrInCheck() {
+        Thread(Runnable {
+            val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+
+            val mgrUser = villaNoticedb!!.VillaNoticeDao().isIntoMgrCheck(
+                MyApplication.prefs.getString("villaAddress","").trim()
+            )
+
+            runOnUiThread {
+                if (mgrUser > 0) {
+                    binding.mgrTenantIn.isVisible = false
+                } else {
+                    binding.mgrTenantIn.isVisible = true
+                }
+            }
+        }).start()
+    }
+
 
     // 관리자 전입 요청
     private fun initMgrIn() {
@@ -178,6 +229,20 @@ class TenantInOutVillaActivity : AppCompatActivity() {
             }).start()
 
         }
+    }
+
+    // 양식 체크
+    private fun checkForm() : Boolean{
+        if (binding.tenantIOEmail.text.isNullOrEmpty()
+            || binding.tenantIOTenantName.text.isNullOrEmpty()
+            || binding.tenantIOTenantPhone.text.isNullOrEmpty()
+            || binding.tenantIOContractDate.text.isNullOrEmpty()
+            || binding.tenantIOLeaveDate.text.isNullOrEmpty()
+        ){
+            return false
+        }
+
+        return true
     }
 
     // 계약일 달력 이벤트
