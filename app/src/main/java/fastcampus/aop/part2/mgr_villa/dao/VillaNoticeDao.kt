@@ -190,6 +190,9 @@ interface VillaNoticeDao {
     @Query("SELECT * FROM VillaAccount WHERE favorite ='favorite'")
     fun getFavoriteAccount() : VillaAccount
 
+    @Query("SELECT EXISTS (SELECT * FROM VillaAccount WHERE favorite ='favorite')")
+    fun isFavoriteAccount() : Int
+
 
     // Update
     @Query("UPDATE VillaAccount SET bankName =:bankName, accountHolder =:accountHolder, accountNumber =:accountNumber WHERE villaAddr =:villaAddress AND accountId =:accountId")

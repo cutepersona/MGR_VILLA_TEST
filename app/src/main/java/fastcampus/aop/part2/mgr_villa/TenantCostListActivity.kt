@@ -48,68 +48,15 @@ class TenantCostListActivity: AppCompatActivity() {
         TenantCostListAdapter.setItemClickListener(object : CostTenantAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
 
-                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-
-                Thread(Runnable {
-                    val ConstCost = villaNoticedb!!.VillaNoticeDao().isConstCost(
-                        MyApplication.prefs.getString("villaAddress","").trim()
-                    )
-
-                    runOnUiThread {
-                        if (ConstCost <= 0) {
-                            showToast("기준관리비가 등록되어 있지 않습니다.")
-                        } else {
                             val RoolCostForMgr = Intent(v.context, TenantRoomCostForMGRActivity::class.java)
                             RoolCostForMgr.putExtra("tenantRoomId",TenantCostListItems[position].CostTenantRoomId)
                             startActivity(RoolCostForMgr)
-                        }
-
-                    }
-                }).start()
-
-
 
             }
 
         })
 
 
-
-//
-//        // Room 리스트 수정,삭제 클릭
-//        TenantRoomListAdapter.setSlideButtonClickListener(object : TenantAdapter.OnSlideButtonClickListener{
-//            override fun onSlideButtonClick(v: View, imageView: ImageView, position: Int) {
-//
-//                val mgrCheck = MyApplication.prefs.getString("userType","")
-//                if (mgrCheck.equals("MGR")
-//                    && !mgrCheck.equals("")){
-//                    when(imageView) {
-//                        imageView.tenantUpdate -> {
-//                            showToast(imageView.toString())
-//                        }
-//                        imageView.tenantDelete -> {
-//                            // 호 삭제
-//                            val villadb = VillaNoticeHelper.getInstance(applicationContext)
-//
-//                            Thread(Runnable {
-//
-//                                villadb!!.VillaNoticeDao().deleteTenant(
-//                                    MyApplication.prefs.getString("villaAddress","").trim()
-//                                    ,TenantRoomListItems[position].tenantRoomId.toString().toLong()
-//                                )
-//                                runOnUiThread {
-//                                    initTenantRooms()
-//                                }
-//                            }).start()
-////                            showToast(TenantRoomListItems[position].tenantRoomId.toString())
-//                        }
-//
-//                    }
-//                }
-//
-//            }
-//
-//        })
     }
 
     override fun onBackPressed() {
