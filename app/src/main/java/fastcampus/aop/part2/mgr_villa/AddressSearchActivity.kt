@@ -69,6 +69,7 @@ class AddressSearchActivity : AppCompatActivity() {
             override fun onClick(v: View, position: Int) {
                 val addVillaInfoActivity = Intent(v.context, VillaInfoActivity::class.java)
                 addVillaInfoActivity.putExtra("address", addrListItems[position].address_name)
+                addVillaInfoActivity.putExtra("roadAddress", addrListItems[position].road_address_name)
                 if (!addrListItems[position].villa_name.isNullOrEmpty()){
                     addVillaInfoActivity.putExtra("villa_name", addrListItems[position].villa_name)
                 }

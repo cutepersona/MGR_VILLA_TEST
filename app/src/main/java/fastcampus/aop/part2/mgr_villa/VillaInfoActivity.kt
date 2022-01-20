@@ -40,6 +40,10 @@ class VillaInfoActivity : AppCompatActivity() {
         if (intent.hasExtra("address")) {
             binding.villaAddressEditText.setText(intent.getStringExtra("address").toString())
         }
+
+        if (intent.hasExtra("roadAddress")) {
+            binding.roadAddressEditText.setText(intent.getStringExtra("roadAddress").toString())
+        }
         if (intent.hasExtra("villa_name")) {
             if (intent.getStringExtra("villa_name").toString().isNullOrEmpty()){
                 binding.villaNameEditText.setText("")
@@ -86,6 +90,7 @@ class VillaInfoActivity : AppCompatActivity() {
                     villadb!!.VillaNoticeDao()?.insert(
                         VillaInfo(
                             binding.villaAddressEditText.text.toString().trim(),
+                            binding.roadAddressEditText.text.toString().trim(),
                             binding.villaNameEditText.text.toString().trim(),
                             "",
                             binding.villaTenantCountEditText.text.toString(),

@@ -16,15 +16,25 @@ class MgrHomeFragment:Fragment(){
 
     private lateinit var binding: MgrHomeFragmentBinding
 
-    private var villaDetailAddress: String = ""
+    private var roomNumber: String = ""
+    private var roadAddress: String = ""
     private var address: String = ""
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        address = (context as VillaHomeActivity).getAddress()
-        if(address.isNullOrEmpty()){
-            address = MyApplication.prefs.getString("villaAddress","")
-        }
+//        roomNumber = (context as VillaHomeActivity).getRoomNumber()
+//        roadAddress = (context as VillaHomeActivity).getRoadAddress()
+//        address = (context as VillaHomeActivity).getAddress()
+
+//        if(address.isNullOrEmpty()){
+//            address = MyApplication.prefs.getString("villaAddress","")
+//        }
+//        if(roadAddress.isNullOrEmpty()){
+//            roadAddress = MyApplication.prefs.getString("roadAddress","")
+//        }
+//        if(roomNumber.isNullOrEmpty()){
+//            roomNumber = MyApplication.prefs.getString("roomNumber","")
+//        }
     }
 
     override fun onCreateView(
@@ -38,9 +48,9 @@ class MgrHomeFragment:Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.hAddress.text = address
-        binding.hRoomNumber.text = villaDetailAddress
-
+        binding.hAddress.text = arguments?.getString("address")
+        binding.hRoomNumber.text = arguments?.getString("roomNumber")
+        binding.hRoadAddress.text = arguments?.getString("roadAddress")
         initFragOnClick()
 
     }

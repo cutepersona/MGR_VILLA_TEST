@@ -137,6 +137,9 @@ interface VillaNoticeDao {
     @Query("SELECT * FROM VillaTenant WHERE  roomId =:roomId")
     fun getTenantInfo(roomId: Long) : VillaTenant?
 
+    @Query("SELECT * FROM VillaTenant WHERE  tenantEmail =:email")
+    fun getTenantFromEmail(email: String) : VillaTenant?
+
     // 세입자가 전입요청을 했는지 확인
     @Query("SELECT EXISTS (SELECT * FROM VillaTenant WHERE  tenantEmail =:tenantEmail)")
     fun isVillaTenantCheck(tenantEmail: String) : Int

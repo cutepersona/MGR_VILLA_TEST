@@ -20,6 +20,7 @@ data class VillaInfo(
 
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "villaAddress")val villaAddress: String,
+    @ColumnInfo(name = "roadAddress")val roadAddress: String,
     @ColumnInfo(name = "villaName") val villaName: String?,
     @ColumnInfo(name = "villaAlias") val villaAlias: String?,
     @ColumnInfo(name = "villaTenantCount") val villaTenantCount: String,
