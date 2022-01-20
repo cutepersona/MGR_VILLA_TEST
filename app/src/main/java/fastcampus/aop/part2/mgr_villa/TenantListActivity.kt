@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
@@ -9,6 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import fastcampus.aop.part2.mgr_villa.adapter.TenantAdapter
+import fastcampus.aop.part2.mgr_villa.customdialog.RequestDialog
+import fastcampus.aop.part2.mgr_villa.customdialog.TenantDeleteDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityTenantlistBinding
 import fastcampus.aop.part2.mgr_villa.model.*
@@ -41,6 +44,8 @@ class TenantListActivity: AppCompatActivity() {
 //        addItemsNotices()
 
 
+        val TenantDeleteDialog = TenantDeleteDialog(this)
+
         // Room 리스트 수정,삭제 클릭
         TenantRoomListAdapter.setSlideButtonClickListener(object : TenantAdapter.OnSlideButtonClickListener{
             override fun onSlideButtonClick(v: View, imageView: ImageView, position: Int) {
@@ -60,20 +65,8 @@ class TenantListActivity: AppCompatActivity() {
                             }).start()
                         }
                         imageView.tenantDelete -> {
-                            // 호 삭제
-                            val villadb = VillaNoticeHelper.getInstance(applicationContext)
+                            TenantDeleteDialog.showDialog(TenantRoomListItems[position].tenantRoomNumber, TenantRoomListItems[position].tenantRoomId.toString().toLong())
 
-                            Thread(Runnable {
-
-                                villadb!!.VillaNoticeDao().deleteTenant(
-                                    MyApplication.prefs.getString("villaAddress","").trim()
-                                    ,TenantRoomListItems[position].tenantRoomId.toString().toLong()
-                                )
-                                runOnUiThread {
-                                    initTenantRooms()
-                                }
-                            }).start()
-//                            showToast(TenantRoomListItems[position].tenantRoomId.toString())
                         }
 
                     }
@@ -82,6 +75,26 @@ class TenantListActivity: AppCompatActivity() {
             }
 
         })
+
+        TenantDeleteDialog.setOnClickListener(object : TenantDeleteDialog.OnDialogClickListener{
+            override fun onClicked(context: Context, requestDelete: String, roomId: Long) {
+                if (!requestDelete.isEmpty()){
+                            // 호 삭제
+                            val villadb = VillaNoticeHelper.getInstance(applicationContext)
+
+                            Thread(Runnable {
+                                villadb!!.VillaNoticeDao().deleteTenant(
+                                    MyApplication.prefs.getString("villaAddress","").trim()
+                                    ,roomId
+                                )
+                                runOnUiThread {
+                                    initTenantRooms()
+                                }
+                            }).start()
+                }
+            }
+        })
+
     }
 
     override fun onBackPressed() {

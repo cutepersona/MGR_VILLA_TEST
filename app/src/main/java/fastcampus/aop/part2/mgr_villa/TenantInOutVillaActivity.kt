@@ -1,6 +1,7 @@
 package fastcampus.aop.part2.mgr_villa
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -10,15 +11,10 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
-import fastcampus.aop.part2.mgr_villa.adapter.BankDialogAdapter
-import fastcampus.aop.part2.mgr_villa.adapter.RequestTenantDialogAdapter
 import fastcampus.aop.part2.mgr_villa.customdialog.RequestTenantDialog
-import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
+import fastcampus.aop.part2.mgr_villa.customdialog.TenantOutDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityTenantinoutBinding
-import fastcampus.aop.part2.mgr_villa.model.RequestTenantLayout
-import fastcampus.aop.part2.mgr_villa.model.TenantLayout
-import fastcampus.aop.part2.mgr_villa.model.VillaTenantCost
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -28,13 +24,15 @@ class TenantInOutVillaActivity : AppCompatActivity() {
 
     val binding: ActivityTenantinoutBinding by lazy { ActivityTenantinoutBinding.inflate(layoutInflater) }
 
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initToolBar()
-        initRequestTenantDialog()
+//        initRequestTenantDialog()
         initContractCalendar()
 
 
@@ -53,8 +51,31 @@ class TenantInOutVillaActivity : AppCompatActivity() {
 
         initMgrIn()
         initTenantIntoVilla()
-        initTenantOutVilla()
+
         mgrInCheck()
+
+        val TenantOutDialog = TenantOutDialog(this)
+        initTenantOutVilla(TenantOutDialog)
+        TenantOutDialog.setOnClickListener(object : TenantOutDialog.OnDialogClickListener{
+            override fun onClicked(context: Context, requestDelete: String, roomId: Long) {
+                if (!requestDelete.isEmpty()){
+                    Thread(Runnable {
+                        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+
+                        villaNoticedb!!.VillaNoticeDao().leaveTenant(
+                            MyApplication.prefs.getString("villaAddress","").trim()
+                            ,binding.TenantIORoomId.text.toString().toLong()
+                        )
+
+                        runOnUiThread {
+                            val toTenantList = Intent(context, TenantListActivity::class.java)
+                            startActivity(toTenantList)
+                        }
+                    }).start()
+                }
+            }
+        })
+
 
     }
 
@@ -169,22 +190,22 @@ class TenantInOutVillaActivity : AppCompatActivity() {
     }
 
     // 퇴거하기
-    private fun initTenantOutVilla() {
+    private fun initTenantOutVilla(TenantOutDialog: TenantOutDialog) {
         binding.RequestTenantOutVillaButton.setOnClickListener {
-            Thread(Runnable {
-                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-
-                villaNoticedb!!.VillaNoticeDao().leaveTenant(
-                   MyApplication.prefs.getString("villaAddress","").trim()
-                   ,binding.TenantIORoomId.text.toString().toLong()
-                )
-
-                runOnUiThread {
-                    showToast("퇴거 완료되었습니다.")
-                    val toTenantList = Intent(this, TenantListActivity::class.java)
-                    startActivity(toTenantList)
-                }
-            }).start()
+//            Thread(Runnable {
+//                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                villaNoticedb!!.VillaNoticeDao().leaveTenant(
+//                   MyApplication.prefs.getString("villaAddress","").trim()
+//                   ,binding.TenantIORoomId.text.toString().toLong()
+//                )
+//
+//                runOnUiThread {
+                    TenantOutDialog.showDialog(binding.tenantIORoomNumber.text.toString(), binding.TenantIORoomId.text.toString().toLong())
+//                    val toTenantList = Intent(this, TenantListActivity::class.java)
+//                    startActivity(toTenantList)
+//                }
+//            }).start()
         }
     }
 

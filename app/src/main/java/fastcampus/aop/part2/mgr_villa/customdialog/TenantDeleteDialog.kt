@@ -1,0 +1,56 @@
+package fastcampus.aop.part2.mgr_villa.customdialog
+
+import android.app.Dialog
+import android.content.Context
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import fastcampus.aop.part2.mgr_villa.R
+import fastcampus.aop.part2.mgr_villa.adapter.BankDialogAdapter
+import fastcampus.aop.part2.mgr_villa.adapter.TenantRequestAdapter
+import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
+import fastcampus.aop.part2.mgr_villa.model.TenantRequestLayout
+import kotlinx.android.synthetic.main.mgr_check.cancelButton
+import kotlinx.android.synthetic.main.mgr_check.finishButton
+import kotlinx.android.synthetic.main.tenant_request.*
+
+class TenantDeleteDialog(context: Context) :AppCompatActivity() {
+
+    private val dialog = Dialog(context)
+    private lateinit var onClickListener: OnDialogClickListener
+    private var context: Context = context
+
+    private var requestDelete: String = ""
+
+    fun setOnClickListener(listener: OnDialogClickListener) {
+        onClickListener = listener
+    }
+
+    fun showDialog(roomNumber:String, roomId:Long) {
+        dialog.setContentView(R.layout.tenant_request)
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.requestTile.setText(roomNumber + "을 삭제 하시겠습니까? \n (세입자 정보도 삭제됩니다.)")
+        dialog.show()
+
+        dialog.cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.finishButton.setOnClickListener {
+            requestDelete = "D"
+            onClickListener.onClicked(context,requestDelete, roomId)
+            dialog.dismiss()
+        }
+
+    }
+
+    interface OnDialogClickListener {
+        fun onClicked(context: Context, requestResult:String, roomId: Long)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(dialog.context, message, Toast.LENGTH_SHORT).show()
+    }
+
+
+}
