@@ -174,8 +174,6 @@ class VillaHomeActivity : AppCompatActivity() {
 
             }
         }).start()
-
-
     }
 
     // 로그인 정보 가져오기
