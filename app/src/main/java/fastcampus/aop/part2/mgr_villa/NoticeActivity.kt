@@ -39,18 +39,33 @@ class NoticeActivity: AppCompatActivity() {
 
         initButtonSetOnClick()
 
-        if(!intent.hasExtra("noticeNo")){
-            binding.WriteNoticeButton.isVisible = true
+        if (MyApplication.prefs.getString("userType","").equals("TENANT")){
+            binding.WriteNoticeButton.isVisible = false
             binding.UpdateNoticeButton.isVisible = false
             binding.DeleteNoticeButton.isVisible = false
-        } else {
-            binding.WriteNoticeButton.isVisible = false
-            binding.UpdateNoticeButton.isVisible = true
-            binding.DeleteNoticeButton.isVisible = true
+            binding.villaNoticeTitleEditText.isFocusableInTouchMode = false
+            binding.villaNoticeContentEditText.isFocusableInTouchMode = false
 
             NoticeNo = intent.getLongExtra("noticeNo",0)
             getNoticeContent()
+        } else {
+            if(!intent.hasExtra("noticeNo")){
+                binding.WriteNoticeButton.isVisible = true
+                binding.UpdateNoticeButton.isVisible = false
+                binding.DeleteNoticeButton.isVisible = false
+            } else {
+                binding.WriteNoticeButton.isVisible = false
+                binding.UpdateNoticeButton.isVisible = true
+                binding.DeleteNoticeButton.isVisible = true
+
+                NoticeNo = intent.getLongExtra("noticeNo",0)
+                getNoticeContent()
+            }
         }
+
+
+
+
 
 
     }

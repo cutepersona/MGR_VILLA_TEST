@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.NoticeAdapter
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -36,10 +37,15 @@ class NoticeListActivity: AppCompatActivity() {
 
         binding.rvNotices.adapter = NoticeListAdapter
 
+        if (MyApplication.prefs.getString("userType","").equals("TENANT")){
+            binding.noticeFabMain.isVisible = false
+            binding.noticeFabWrite.isVisible = false
+        }
+
         initNoticeFabButtons()
         addItemsNotices()
 
-        // 리스트 주소 클릭
+        // 공지항목 클릭
         NoticeListAdapter.setItemClickListener(object : NoticeAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
 
@@ -52,6 +58,13 @@ class NoticeListActivity: AppCompatActivity() {
         })
 
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val toHome = Intent(this, VillaHomeActivity::class.java)
+        startActivity(toHome)
+    }
+
 
     // fab버튼 기능 초기화
     private fun initNoticeFabButtons(){
@@ -115,14 +128,18 @@ class NoticeListActivity: AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
+        val toHome = Intent(this, VillaHomeActivity::class.java)
+        startActivity(toHome)
+//
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+        return true
         return super.onOptionsItemSelected(item)
     }
 

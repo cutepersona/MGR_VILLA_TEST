@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import fastcampus.aop.part2.mgr_villa.*
 import fastcampus.aop.part2.mgr_villa.databinding.MgrHomeFragmentBinding
@@ -51,6 +52,11 @@ class MgrHomeFragment:Fragment(){
         binding.hAddress.text = arguments?.getString("address")
         binding.hRoomNumber.text = arguments?.getString("roomNumber")
         binding.hRoadAddress.text = arguments?.getString("roadAddress")
+
+        if (MyApplication.prefs.getString("userType","").equals("TENANT")){
+            binding.villaTenantCountFragmentArea.isVisible = false
+        }
+
         initFragOnClick()
 
     }
