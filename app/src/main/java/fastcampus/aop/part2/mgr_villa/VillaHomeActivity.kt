@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import fastcampus.aop.part2.mgr_villa.adapter.PagerHomeAdapter
 import fastcampus.aop.part2.mgr_villa.customdialog.LogOutDialog
 import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
@@ -22,6 +23,7 @@ import fastcampus.aop.part2.mgr_villa.fragment.OkFragment
 import fastcampus.aop.part2.mgr_villa.fragment.VillaTenantFragment
 import fastcampus.aop.part2.mgr_villa.model.VillaNotice
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
+import kotlinx.android.synthetic.main.activity_home.*
 
 class VillaHomeActivity : AppCompatActivity() {
 
@@ -32,9 +34,12 @@ class VillaHomeActivity : AppCompatActivity() {
     private val binding: ActivityHomeBinding by lazy { ActivityHomeBinding.inflate(layoutInflater) }
 
     private var userEmail: String = ""
-    private var roomNumber: String =""
-    private var roadAddress: String = ""
-    private var address: String = ""
+//    private var roomNumber: String =""
+//    private var roadAddress: String = ""
+//    private var address: String = ""
+    private val bnv_Home: BottomNavigationView by lazy{
+        findViewById(R.id.bnv_Home)
+    }
 
     var backKeyPressedTime: Long = 0
 
@@ -53,11 +58,52 @@ class VillaHomeActivity : AppCompatActivity() {
         }
 
 //        showToast(roomNumber + "\n" + roadAddress + "\n" + address)
-
+        initHomeBottomNavigationBar()
         initHomeFragment()
 
 //        setBindingFragment()
 
+    }
+
+    // 하단 네비게이션 바
+    private fun initHomeBottomNavigationBar() {
+
+        supportFragmentManager.beginTransaction().add(R.id.fl_container, MgrHomeFragment()).commit()
+
+        bnv_Home.setOnNavigationItemSelectedListener {
+            replaceFragment(
+                when(it.itemId){
+                    R.id.nv_Home -> MgrHomeFragment()
+                    else -> MgrHomeFragment()
+                }
+            )
+            true
+        }
+
+
+//        bnv_Home.run {  setOn {
+//            when(it.itemId){
+//                R.id.nv_Home -> {
+//
+//                    showToast("HOME")
+////                    val nvToHomeFragment = MgrHomeFragment()
+////                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, nvToHomeFragment).commit()
+//                }
+//                R.id.nv_All -> {
+//                    showToast("전체")
+//                }
+//
+//            }
+//            selectedItemId = R.id.nv_Home
+//        }
+//
+//        }
+
+
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(fl_container.id, fragment).commit()
     }
 
 
@@ -263,3 +309,5 @@ class VillaHomeActivity : AppCompatActivity() {
     }
 
 }
+
+

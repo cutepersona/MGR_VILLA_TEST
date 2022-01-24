@@ -58,6 +58,12 @@ class MgrHomeFragment:Fragment(){
         }
 
         initFragOnClick()
+        initTenantInfo()
+
+    }
+
+    // 현 입주현황 체크
+    private fun initTenantInfo() {
 
     }
 
