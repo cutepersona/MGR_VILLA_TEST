@@ -12,10 +12,15 @@ import androidx.fragment.app.Fragment
 import fastcampus.aop.part2.mgr_villa.*
 import fastcampus.aop.part2.mgr_villa.databinding.MgrHomeFragmentBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
+import kotlinx.android.synthetic.main.mgr_home_fragment.*
 
-class MgrHomeFragment:Fragment(){
+class MgrHomeFragment() :Fragment(){
 
     private lateinit var binding: MgrHomeFragmentBinding
+
+    private val tenantFragment = VillaTenantFragment()
+    private val noticeFragment = VillaNoticeFragment()
+    private val costFragment = VillaCostFragment()
 
     private var roomNumber: String = ""
     private var roadAddress: String = ""
@@ -36,6 +41,8 @@ class MgrHomeFragment:Fragment(){
 //        if(roomNumber.isNullOrEmpty()){
 //            roomNumber = MyApplication.prefs.getString("roomNumber","")
 //        }
+
+
     }
 
     override fun onCreateView(
@@ -44,6 +51,21 @@ class MgrHomeFragment:Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         binding = MgrHomeFragmentBinding.inflate(inflater, container, false)
+
+//        (activity as VillaHomeActivity).createSubFragment()
+
+//        val bundle = Bundle()
+//        bundle.putString("currentTenantCount", arguments?.getString("currentTenantCount"))
+//
+//        tenantFragment.arguments = bundle
+//
+
+        val subFragment = childFragmentManager.beginTransaction()
+        subFragment.add(R.id.villaTenantCountFragmentArea, tenantFragment)
+        subFragment.add(R.id.villaNoticeFragmentArea, noticeFragment)
+        subFragment.add(R.id.villaMgrCostFragmentArea, costFragment)
+        subFragment.commit()
+
         return binding.root
     }
 
@@ -53,17 +75,27 @@ class MgrHomeFragment:Fragment(){
         binding.hRoomNumber.text = arguments?.getString("roomNumber")
         binding.hRoadAddress.text = arguments?.getString("roadAddress")
 
+        val bundle = Bundle()
+        bundle.putString("currentTenantCount", arguments?.getString("currentTenantCount"))
+        bundle.putString("totalTenantCount", arguments?.getString("totalTenantCount"))
+
+        tenantFragment.arguments = bundle
+
+//             showToast(arguments?.getString("currentTenantCount").toString())
+
+
+        val tenantTransaction = childFragmentManager.beginTransaction()
+        tenantTransaction.replace(R.id.villaTenantCountFragmentArea, tenantFragment)
+        tenantTransaction.commit()
+
+
         if (MyApplication.prefs.getString("userType","").equals("TENANT")){
             binding.villaTenantCountFragmentArea.isVisible = false
         }
 
         initFragOnClick()
-        initTenantInfo()
-
-    }
-
-    // 현 입주현황 체크
-    private fun initTenantInfo() {
+//        (activity as VillaHomeActivity).changeText("test")
+//        (activity as VillaHomeActivity).createSubFragment()
 
     }
 

@@ -92,15 +92,15 @@
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintVertical_weight="0.5">
 
-                <fragment
-                    android:id="@+id/villaTenantCountFragment"
-                    android:name="fastcampus.aop.part2.mgr_villa.fragment.VillaTenantFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    />
+<!--                <fragment-->
+<!--                    android:id="@+id/villaTenantCountFragment"-->
+<!--                    android:name="fastcampus.aop.part2.mgr_villa.fragment.VillaTenantFragment"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -117,15 +117,15 @@
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintVertical_weight="0.5">
 
-                <fragment
-                    android:id="@+id/villaNoticeFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:name="fastcampus.aop.part2.mgr_villa.fragment.VillaNoticeFragment"
-                    />
+<!--                <fragment-->
+<!--                    android:id="@+id/villaNoticeFragment"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    android:name="fastcampus.aop.part2.mgr_villa.fragment.VillaNoticeFragment"-->
+<!--                    />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -141,15 +141,15 @@
                 app:layout_constraintVertical_chainStyle="packed"
                 app:layout_constraintVertical_weight="0.5">
 
-                <fragment
-                    android:id="@+id/villaMgrCostFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:name="fastcampus.aop.part2.mgr_villa.fragment.VillaCostFragment"
-                    />
+<!--                <fragment-->
+<!--                    android:id="@+id/villaMgrCostFragment"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent"-->
+<!--                    android:name="fastcampus.aop.part2.mgr_villa.fragment.VillaCostFragment"-->
+<!--                    />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

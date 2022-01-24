@@ -1,27 +1,16 @@
 package fastcampus.aop.part2.mgr_villa
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import fastcampus.aop.part2.mgr_villa.adapter.PagerHomeAdapter
 import fastcampus.aop.part2.mgr_villa.customdialog.LogOutDialog
-import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityHomeBinding
-import fastcampus.aop.part2.mgr_villa.fragment.AddFragment
-import fastcampus.aop.part2.mgr_villa.fragment.MgrHomeFragment
-import fastcampus.aop.part2.mgr_villa.fragment.OkFragment
-import fastcampus.aop.part2.mgr_villa.fragment.VillaTenantFragment
-import fastcampus.aop.part2.mgr_villa.model.VillaNotice
+import fastcampus.aop.part2.mgr_villa.fragment.*
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.android.synthetic.main.activity_home.*
 
@@ -58,8 +47,9 @@ class VillaHomeActivity : AppCompatActivity() {
         }
 
 //        showToast(roomNumber + "\n" + roadAddress + "\n" + address)
-        initHomeBottomNavigationBar()
+
         initHomeFragment()
+        initHomeBottomNavigationBar()
 
 //        setBindingFragment()
 
@@ -68,15 +58,23 @@ class VillaHomeActivity : AppCompatActivity() {
     // 하단 네비게이션 바
     private fun initHomeBottomNavigationBar() {
 
-        supportFragmentManager.beginTransaction().add(R.id.fl_container, MgrHomeFragment()).commit()
+//        supportFragmentManager.beginTransaction().add(R.id.fl_container, MgrHomeFragment()
+//        ).commit()
+
+//        val toHomeActivity = Intent(this, VillaHomeActivity::class.java)
 
         bnv_Home.setOnNavigationItemSelectedListener {
-            replaceFragment(
-                when(it.itemId){
-                    R.id.nv_Home -> MgrHomeFragment()
-                    else -> MgrHomeFragment()
-                }
-            )
+            when(it.itemId){
+//                R.id.nv_Home ->
+//                    startActivity(toHomeActivity)
+            }
+
+//            replaceFragment(
+//                when(it.itemId){
+//                    R.id.nv_Home -> MgrHomeFragment()
+//                    else -> MgrHomeFragment()
+//                }
+//            )
             true
         }
 
@@ -155,35 +153,60 @@ class VillaHomeActivity : AppCompatActivity() {
         Thread(Runnable {
             val userdb = VillaNoticeHelper.getInstance(applicationContext)
 
+            var currentTenantCount: Int? = 0
+
             val user = userdb?.VillaNoticeDao()?.getUser(
                 userEmail
             )
 
             val tenantInfo = userdb?.VillaNoticeDao()?.getTenantFromEmail(userEmail)
 
-            runOnUiThread {
+            currentTenantCount = userdb?.VillaNoticeDao()?.getCurrentTenantCount(
+                MyApplication.prefs.getString("villaAddress","").trim()
+            )
 
+            val villaInfo = userdb?.VillaNoticeDao()?.getVillaInfo(
+                MyApplication.prefs.getString("email","").trim()
+            )
+
+            runOnUiThread {
                 if (user?.userType.equals("MGR")){
                     if (tenantInfo != null) {
                         val bundle = Bundle()
                         bundle.putString("roomNumber",tenantInfo?.roomNumber)
                         bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
                         bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
+//                        showToast(checkTenantCount.toString())
+                        bundle.putString("currentTenantCount", currentTenantCount.toString())
+                        bundle.putString("totalTenantCount", villaInfo?.villaTenantCount.toString())
 
+                        // 집 주소 및 전입호수 전달
                         val mgrFrag = MgrHomeFragment()
                         mgrFrag.arguments = bundle
+
+//                        // 입주자 수 정보 전달.
+//                        val homeTenantFrag = VillaTenantFragment()
+//                        homeTenantFrag.arguments = bundle
 
                         val transaction = supportFragmentManager.beginTransaction()
                         transaction.add(R.id.recycleViewConstraint, mgrFrag)
                         transaction.commit()
                     } else {
                         val bundle = Bundle()
+//                        val tenantFragmentBundle = Bundle()
                         bundle.putString("roomNumber","")
                         bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
                         bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
+//                        tenantFragmentBundle.putString("currentTenantCount", checkTenantCount.toString())
+                        bundle.putString("totalTenantCount", villaInfo?.villaTenantCount.toString())
 
+                        // 집 주소 및 전입호수 전달
                         val mgrFrag = MgrHomeFragment()
                         mgrFrag.arguments = bundle
+
+//                        // 입주자 수 정보 전달.
+//                        val homeTenantFrag = VillaTenantFragment()
+//                        homeTenantFrag.arguments = bundle
 
                         val transaction = supportFragmentManager.beginTransaction()
                         transaction.add(R.id.recycleViewConstraint, mgrFrag)
@@ -196,6 +219,7 @@ class VillaHomeActivity : AppCompatActivity() {
                         bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
                         bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
 
+                        // 집 주소 및 전입호수 전달
                         val mgrFrag = MgrHomeFragment()
                         mgrFrag.arguments = bundle
 
@@ -221,6 +245,39 @@ class VillaHomeActivity : AppCompatActivity() {
             }
         }).start()
     }
+
+    // HomeFragment에서 하위 Fragment생성
+    fun createSubFragment(){
+
+        Thread(Runnable {
+            val userdb = VillaNoticeHelper.getInstance(applicationContext)
+
+            var checkTenantCount: Int? = 0
+
+            checkTenantCount = userdb?.VillaNoticeDao()?.checkTenantCount(
+                MyApplication.prefs.getString("villaAddress","").trim()
+            )
+
+            val villaInfo = userdb?.VillaNoticeDao()?.getVillaInfo(
+                MyApplication.prefs.getString("email","").trim()
+            )
+
+            runOnUiThread {
+                val bundle = Bundle()
+                bundle.putString("currentTenantCount", checkTenantCount.toString())
+                bundle.putString("totalTenantCount", villaInfo?.villaTenantCount.toString())
+
+            }
+        }).start()
+
+//        val transaction = supportFragmentManager.beginTransaction()
+
+    }
+//
+//    fun changeText(string:String){
+//        tenantFragment.setText(string)
+//    }
+
 
     // 로그인 정보 가져오기
     private fun initLoginData(email: String) {
@@ -283,13 +340,6 @@ class VillaHomeActivity : AppCompatActivity() {
             }).start()
         }
 
-
-
-
-
-
-
-
     }
 //
 //    fun getAddress():String{
@@ -303,6 +353,7 @@ class VillaHomeActivity : AppCompatActivity() {
 //    fun getRoomNumber():String{
 //        return roomNumber
 //    }
+
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

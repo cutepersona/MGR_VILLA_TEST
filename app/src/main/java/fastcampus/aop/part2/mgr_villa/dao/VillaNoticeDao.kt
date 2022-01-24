@@ -131,6 +131,9 @@ interface VillaNoticeDao {
     @Query("SELECT villaTenantCount FROM VillaInfo WHERE villaAddress =:villaAddr")
     fun checkTenantCount(villaAddr: String) : Int
 
+    @Query("SELECT COUNT(*) FROM VillaTenant WHERE villaAddr =:villaAddr AND tenantEmail <> ''")
+    fun getCurrentTenantCount(villaAddr: String) : Int
+
     @Query("SELECT roomNumber FROM VillaTenant WHERE  roomId =:roomId")
     fun getTenantRoom(roomId: Long) : String
 
