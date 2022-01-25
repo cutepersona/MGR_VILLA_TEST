@@ -73,6 +73,7 @@
 
         <activity android:name=".TenantRoomCostForTenantActivity"/>
 
+        <activity android:name=".MyInfoActivity"/>
     </application>
 
 </manifest>

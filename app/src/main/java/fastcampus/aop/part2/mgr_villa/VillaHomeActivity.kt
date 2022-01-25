@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
@@ -63,41 +64,18 @@ class VillaHomeActivity : AppCompatActivity() {
 //        supportFragmentManager.beginTransaction().add(R.id.fl_container, MgrHomeFragment()
 //        ).commit()
 
-//        val toHomeActivity = Intent(this, VillaHomeActivity::class.java)
+        val toMyInfoActivity = Intent(this, MyInfoActivity::class.java)
 
         bnv_Home.setOnNavigationItemSelectedListener {
             when(it.itemId){
 //                R.id.nv_Home ->
 //                    startActivity(toHomeActivity)
+                R.id.nv_All ->
+                    startActivity(toMyInfoActivity)
             }
 
-//            replaceFragment(
-//                when(it.itemId){
-//                    R.id.nv_Home -> MgrHomeFragment()
-//                    else -> MgrHomeFragment()
-//                }
-//            )
             true
         }
-
-
-//        bnv_Home.run {  setOn {
-//            when(it.itemId){
-//                R.id.nv_Home -> {
-//
-//                    showToast("HOME")
-////                    val nvToHomeFragment = MgrHomeFragment()
-////                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, nvToHomeFragment).commit()
-//                }
-//                R.id.nv_All -> {
-//                    showToast("전체")
-//                }
-//
-//            }
-//            selectedItemId = R.id.nv_Home
-//        }
-//
-//        }
 
 
     }

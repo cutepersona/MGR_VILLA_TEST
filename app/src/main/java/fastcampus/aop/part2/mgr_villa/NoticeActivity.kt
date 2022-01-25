@@ -62,13 +62,15 @@ class NoticeActivity: AppCompatActivity() {
                 getNoticeContent()
             }
         }
+    }
 
-
-
-
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val toNoticeList = Intent(this, NoticeListActivity::class.java)
+        startActivity(toNoticeList)
 
     }
+
 
     // 공지사항 불러오기
     private fun getNoticeContent() {
@@ -187,14 +189,18 @@ class NoticeActivity: AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
+        val toNoticeList = Intent(this, NoticeListActivity::class.java)
+        startActivity(toNoticeList)
+//
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+        return true
         return super.onOptionsItemSelected(item)
     }
 

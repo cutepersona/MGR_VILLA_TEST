@@ -87,6 +87,9 @@
     <string name="necessary_privacy_policy">[필수]개인정보처리방침</string>
     <string name="confirm_privacy_policy">[개인정보처리방침 확인]</string>
 
+    <string name="myInfoTitle">전체정보</string>
+
+
     <string name="user_email_hint">이메일을 입력해주세요</string>
     <string name="user_name_hint">이름을 입력해주세요</string>
     <string name="user_password_hint">비밀번호를 입력해주세요(최소6자리)</string>
