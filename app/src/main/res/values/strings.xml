@@ -88,6 +88,12 @@
     <string name="confirm_privacy_policy">[개인정보처리방침 확인]</string>
 
     <string name="myInfoTitle">전체정보</string>
+    <string name="myInfo">내 정보</string>
+    <string name="CustomerCenter">고객센터</string>
+    <string name="TermsAndPolicies">약관 및 정책</string>
+    <string name="privacy_policy">개인정보보호정책</string>
+    <string name="etc">기타</string>
+    <string name="version">버전정보</string>
 
 
     <string name="user_email_hint">이메일을 입력해주세요</string>
