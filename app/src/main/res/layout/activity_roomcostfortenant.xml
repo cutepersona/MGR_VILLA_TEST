@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/TenantCostToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/main_button_background"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/abc_vector_test">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/toolbar_hg_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.15" />
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/toolbar_hg_90"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:layout_constraintGuide_percent="0.85" />
+
+                    <TextView
+                        android:id="@+id/toolBarTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mgrCostForRoom"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginRight="50dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.Toolbar>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/signInputArea"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
+
+            <ScrollView
+                android:id="@+id/TenantCostScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:fillViewport="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/TenantCostArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/TenantCostUid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:visibility="gone"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantCostYearMonth"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mgrCostYearMonth"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:textSize="25dp"
+                        android:layout_marginTop="40dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/TenantCostRoomNumber"
+                         />
+
+                    <ImageView
+                        android:id="@+id/TenantCostCalendar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@+id/TenantCostYearMonth"
+                        android:src="@drawable/ic_calendar_month"
+                        app:layout_constraintTop_toTopOf="@+id/TenantCostYearMonth"
+                        app:layout_constraintBottom_toBottomOf="@+id/TenantCostYearMonth"
+                        android:layout_marginLeft="6dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantCostRoomNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/roomNumber"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/TenantCostCalendar"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/TenantCostCalendar"
+                        app:layout_constraintBottom_toBottomOf="@+id/TenantCostCalendar"
+                        android:textSize="30dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantTotalCostText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/TotalRoomCost"
+                        android:textStyle="bold"
+                        android:textSize="25sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="30dp"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantCostRoomNumber"
+                        app:layout_constraintEnd_toStartOf="@+id/TenantTotalCostValue"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantTotalCostValue"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/TotalRoomCost"
+                        android:textStyle="bold"
+                        android:textSize="40sp"
+                        android:textColor="#F44336"
+                        app:layout_constraintTop_toTopOf="@+id/TenantTotalCostText"
+                        app:layout_constraintBottom_toBottomOf="@+id/TenantTotalCostText"
+                        app:layout_constraintStart_toEndOf="@+id/TenantTotalCostText"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantCostBankName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/selectBank"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:layout_marginLeft="20dp"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantTotalCostValue"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="40dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantCostAccountHolder"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/AccountHolder"
+                        android:textSize="25sp"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantCostBankName"
+                        app:layout_constraintStart_toStartOf="@+id/TenantCostBankName"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantCostAccountNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/AccountNumber"
+                        android:textStyle="bold"
+                        android:textSize="25sp"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantCostAccountHolder"
+                        app:layout_constraintStart_toStartOf="@+id/TenantCostAccountHolder"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/TenantWaterCostText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/waterCost"
+                        android:textStyle="bold"
+                        android:textSize="25sp"
+                        android:layout_marginLeft="20dp"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantCostAccountNumber"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="40dp"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/TenantWriteWaterTon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toEndOf="@+id/TenantWaterCostText"
+                        app:layout_constraintTop_toTopOf="@+id/TenantWaterCostText"
+                        app:layout_constraintBottom_toBottomOf="@+id/TenantWaterCostText"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantTotalCostValue"
+                        android:text="1.0"
+                        android:textStyle="bold"
+                        android:textSize="35sp"
+                        android:layout_marginLeft="30dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantMultiply"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="X"
+                        android:textStyle="bold"
+                        android:textSize="25sp"
+                        android:layout_marginLeft="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/TenantWriteWaterTon"
+                        app:layout_constraintTop_toTopOf="@+id/TenantWriteWaterTon"
+                        app:layout_constraintBottom_toBottomOf="@+id/TenantWriteWaterTon"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantConstTonCost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tonCost"
+                        android:textStyle="bold"
+                        android:layout_margin="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/TenantMultiply"
+                        app:layout_constraintTop_toTopOf="@+id/TenantMultiply"
+                        android:textSize="25sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/TenantMultiply"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantEqual"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="="
+                        android:textStyle="bold"
+                        android:textSize="30sp"
+                        android:layout_marginLeft="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantWriteWaterTon"
+                        app:layout_constraintStart_toStartOf="@+id/TenantWriteWaterTon"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantWaterCost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/waterCost"
+                        android:textStyle="bold"
+                        android:layout_margin="10dp"
+                        app:layout_constraintStart_toEndOf="@+id/TenantEqual"
+                        app:layout_constraintTop_toTopOf="@+id/TenantEqual"
+                        android:textSize="25sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/TenantEqual"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantCleanCostText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cleanCost"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="@+id/TenantWaterCostText"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantWaterCost"
+                        android:textSize="25sp"
+                        android:layout_marginTop="25dp"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/TenantConstCleanCost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cleanCost"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/TenantCleanCostText"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantWaterCost"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textSize="25sp"
+                        android:layout_marginTop="25dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantUsunCostText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/usunCost"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="@+id/TenantCleanCostText"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantCleanCostText"
+                        android:textSize="25sp"
+                        android:layout_marginTop="25dp"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/TenantConstUsunCost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/usunCost"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/TenantUsunCostText"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantConstCleanCost"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textSize="25sp"
+                        android:layout_marginTop="25dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/TenantMgrCostText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mgrCost"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="@+id/TenantUsunCostText"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantUsunCostText"
+                        android:textSize="25sp"
+                        android:layout_marginTop="25dp"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/TenantConstMgrCost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/mgrCost"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/TenantMgrCostText"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantConstUsunCost"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textSize="25sp"
+                        android:layout_marginTop="25dp"
+                        />
+
+
+                    <View
+                        android:id="@+id/CostEmptyArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantMgrCostText"
+                        />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </ScrollView>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

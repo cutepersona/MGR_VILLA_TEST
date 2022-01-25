@@ -114,6 +114,9 @@ class MgrHomeFragment() :Fragment(){
             if (MyApplication.prefs.getString("userType","").equals("MGR")){
                 val mgrCostDivActivity = Intent(context, MgrCostDivActivity::class.java)
                 startActivity(mgrCostDivActivity)
+            } else {
+                val ToTenantCost = Intent(context, TenantRoomCostForTenantActivity::class.java)
+                startActivity(ToTenantCost)
             }
         }
 

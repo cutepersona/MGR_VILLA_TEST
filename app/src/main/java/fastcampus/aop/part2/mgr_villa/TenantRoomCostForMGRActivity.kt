@@ -456,6 +456,13 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val TenantCostList = Intent(this, TenantCostListActivity::class.java)
+        startActivity(TenantCostList)
+
+    }
+
     private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.MgrCostToolbar)
         setSupportActionBar(toolbar)
