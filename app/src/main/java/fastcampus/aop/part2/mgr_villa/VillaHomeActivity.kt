@@ -48,6 +48,8 @@ class VillaHomeActivity : AppCompatActivity() {
 
 //        showToast(roomNumber + "\n" + roadAddress + "\n" + address)
 
+//        showToast(MyApplication.prefs.getString("villaAddress","").trim())
+
         initHomeFragment()
         initHomeBottomNavigationBar()
 
@@ -151,6 +153,7 @@ class VillaHomeActivity : AppCompatActivity() {
     // initFragment
     private fun initHomeFragment(){
         Thread(Runnable {
+            Thread.sleep(100L)              // 현재 세입자 정보를 바로 못가져와서 Sleep 줌
             val userdb = VillaNoticeHelper.getInstance(applicationContext)
 
             var currentTenantCount: Int? = 0
@@ -166,7 +169,7 @@ class VillaHomeActivity : AppCompatActivity() {
             )
 
             val villaInfo = userdb?.VillaNoticeDao()?.getVillaInfo(
-                MyApplication.prefs.getString("email","").trim()
+                userEmail
             )
 
             runOnUiThread {
@@ -176,7 +179,9 @@ class VillaHomeActivity : AppCompatActivity() {
                         bundle.putString("roomNumber",tenantInfo?.roomNumber)
                         bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
                         bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
-//                        showToast(checkTenantCount.toString())
+
+//                        showToast(currentTenantCount.toString())
+
                         bundle.putString("currentTenantCount", currentTenantCount.toString())
                         bundle.putString("totalTenantCount", villaInfo?.villaTenantCount.toString())
 
@@ -197,7 +202,7 @@ class VillaHomeActivity : AppCompatActivity() {
                         bundle.putString("roomNumber","")
                         bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
                         bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
-//                        tenantFragmentBundle.putString("currentTenantCount", checkTenantCount.toString())
+                        bundle.putString("currentTenantCount", currentTenantCount.toString())
                         bundle.putString("totalTenantCount", villaInfo?.villaTenantCount.toString())
 
                         // 집 주소 및 전입호수 전달
