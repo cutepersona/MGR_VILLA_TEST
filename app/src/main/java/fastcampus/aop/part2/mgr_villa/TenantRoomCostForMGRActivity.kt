@@ -1,6 +1,7 @@
 package fastcampus.aop.part2.mgr_villa
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Build
@@ -8,9 +9,13 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.DatePicker
+import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -253,16 +258,69 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
     }
 
     // 달력 초기화
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initCalendar() {
         binding.CostCalendar.setOnClickListener {
 
-            val cal = Calendar.getInstance()    //캘린더뷰 만들기
-            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
-                binding.CostYearMonth.setText("${year}-${String.format("%02d", month+1)}")
+            val dialog = AlertDialog.Builder(this).create()
+            val edialog : LayoutInflater = LayoutInflater.from(this)
+            val mView : View = edialog.inflate(R.layout.dialog_yearmonthpicker, null)
+
+            val year : NumberPicker = mView.findViewById(R.id.CostTenantYear)
+            val month : NumberPicker = mView.findViewById(R.id.CostTenantMonth)
+            val cancel : Button = mView.findViewById(R.id.CostTenantCancelButton)
+            val ok : Button = mView.findViewById(R.id.CostTenantOkButton)
+
+            //  순환 안되게 막기
+            year.wrapSelectorWheel = false
+            month.wrapSelectorWheel = false
+
+            //  editText 설정 해제
+            year.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
+            month.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
+
+            // 최소값 설정
+            year.minValue = 2017
+            month.minValue = 1
+
+            // 최대값 설정
+            val current = LocalDateTime.now()
+            val yearFormatter = DateTimeFormatter.ofPattern("yyyy")
+            val yearFormatted = current.format(yearFormatter)
+
+            val monthFormatter = DateTimeFormatter.ofPattern("MM")
+            val monthFormatted = current.format(monthFormatter)
+
+            year.maxValue = yearFormatted.toInt()
+            month.maxValue = 12
+
+            year.value = yearFormatted.toInt()
+            month.value = monthFormatted.toInt()
+
+            //  취소 버튼 클릭 시
+            cancel.setOnClickListener {
+                dialog.dismiss()
+                dialog.cancel()
             }
 
-            val datePickerDialog = DatePickerDialog(this, R.style.DatePickerStyle , dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
-            datePickerDialog.show()
+            //  완료 버튼 클릭 시
+            ok.setOnClickListener {
+                binding.CostYearMonth.setText(year.value.toString() + "-" + String.format("%02d",month.value))
+                dialog.dismiss()
+                dialog.cancel()
+            }
+
+            dialog.setView(mView)
+            dialog.create()
+            dialog.show()
+//
+//            val cal = Calendar.getInstance()    //캘린더뷰 만들기
+//            val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+//                binding.CostYearMonth.setText("${year}-${String.format("%02d", month+1)}")
+//            }
+//
+//            val datePickerDialog = DatePickerDialog(this, R.style.DatePickerStyle , dateSetListener, cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH))
+//            datePickerDialog.show()
         }
 
     }

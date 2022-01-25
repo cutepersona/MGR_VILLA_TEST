@@ -115,8 +115,10 @@ class MgrHomeFragment() :Fragment(){
                 val mgrCostDivActivity = Intent(context, MgrCostDivActivity::class.java)
                 startActivity(mgrCostDivActivity)
             } else {
-                val ToTenantCost = Intent(context, TenantRoomCostForTenantActivity::class.java)
-                startActivity(ToTenantCost)
+                val toTenantCost = Intent(context, TenantRoomCostForTenantActivity::class.java)
+                toTenantCost.putExtra("address", binding.hAddress.text)
+                toTenantCost.putExtra("roomNumber", binding.hRoomNumber.text)
+                startActivity(toTenantCost)
             }
         }
 
