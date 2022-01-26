@@ -74,6 +74,8 @@
         <activity android:name=".TenantRoomCostForTenantActivity"/>
 
         <activity android:name=".MyInfoActivity"/>
+
+        <activity android:name=".PrivacyPolicyActivity"/>
     </application>
 
 </manifest>

@@ -27,7 +27,15 @@ class MyInfoActivity : AppCompatActivity() {
         initToolBar()
         initMyInfo()
         initHomeBottomNavigationBar()
+        initPrivacyPolicy()
+    }
 
+    // 개인정보 보호정책
+    private fun initPrivacyPolicy() {
+        binding.MyInfoPrivacy.setOnClickListener {
+            val ToPirvacyPolicy = Intent(this, PrivacyPolicyActivity::class.java)
+            startActivity(ToPirvacyPolicy)
+        }
     }
 
     // 내 기본정보 가져오기

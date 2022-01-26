@@ -194,8 +194,6 @@ class SignUpActivity : AppCompatActivity() {
     private val emailValidation = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\$"
     private val nameValidation = "^[a-zA-Zㄱ-ㅣ가-힣]*$"
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_signup)
@@ -230,7 +228,10 @@ class SignUpActivity : AppCompatActivity() {
         allUseTermsCheck()
 
         privPolicyCheck()
-
+        binding.privacyPolicy.setOnClickListener {
+            val toPrivacyPolicy = Intent(this, PrivacyPolicyActivity::class.java)
+            startActivity(toPrivacyPolicy)
+        }
 
 
     }
