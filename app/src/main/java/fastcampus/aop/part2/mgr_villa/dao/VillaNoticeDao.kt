@@ -53,6 +53,10 @@ interface VillaNoticeDao {
     @Query("UPDATE VillaUsers SET passWord = :pw WHERE mailAddress = :mail")
     fun updatePW(mail: String, pw: String)
 
+    // Update
+    @Query("UPDATE VillaUsers SET phoneNumber = :phoneNum WHERE mailAddress = :mail")
+    fun updatePhoneNum(phoneNum: String, mail: String)
+
 
     // Select
     @Query("SELECT * FROM VillaUsers")

@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
 
 class SearchPwActivity : AppCompatActivity() {
 
-    private val auth = Firebase.auth
+    private lateinit var auth: FirebaseAuth
 
 
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
@@ -50,11 +50,8 @@ class SearchPwActivity : AppCompatActivity() {
                 // 2 - Auto-retrieval. On some devices Google Play services can automatically
                 //     detect the incoming verification SMS and perform verification without
                 //     user action.
-                showToast("90초 이내에 인증을 완료해 주세요.")
 
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    signInWithPhoneAuthCredential(credential)
-//                }, 1000)
+                showToast("90초 이내에 인증을 완료해 주세요.")
 
                 signInWithPhoneAuthCredential(credential)
             }
@@ -81,7 +78,7 @@ class SearchPwActivity : AppCompatActivity() {
                 // The SMS verification code has been sent to the provided phone number, we
                 // now need to ask the user to enter the code and then construct a credential
                 // by combining the code with a verification ID.
-//                Log.d(ContentValues.TAG, "onCodeSent:$verificationId")
+                Log.d(ContentValues.TAG, "onCodeSent:$verificationId")
 
 
                 showToast("90초 이내에 인증을 완료해 주세요.")
@@ -94,7 +91,6 @@ class SearchPwActivity : AppCompatActivity() {
         }
     }
 
-    private val firebaseAuthSettings = auth.firebaseAuthSettings
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,34 +98,16 @@ class SearchPwActivity : AppCompatActivity() {
 
         initToolBar()
 
+        auth = Firebase.auth
+        auth.setLanguageCode("kr")
+
         initEmailEditTextCheck()
         initPhoneNumberTextCheck()
         phoneSnsAuthCheck()
         initSearchPwOnClick()
-
-    }
-
-    private fun initToolBar() {
-        val toolbar = findViewById<Toolbar>(R.id.searchPwToolbar)
-        setSupportActionBar(toolbar)
-
-        val ab = supportActionBar!!
-        ab.setDisplayHomeAsUpEnabled(true)
     }
 
 
-    // 툴바 백버튼
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
 
     // email 체크
     private fun initEmailEditTextCheck() {
@@ -170,7 +148,7 @@ class SearchPwActivity : AppCompatActivity() {
 
     private fun phoneSnsAuthCheck() {
         binding.phoneSnsAuth.setOnClickListener {
-            var userPhone = binding.userPhoneNumberEditText.text.trim().toString()
+            val userPhone = binding.userPhoneNumberEditText.text.trim().toString()
 
             if (userPhone.isNullOrEmpty()) {
                 showToast("핸드폰 번호를 입력해 주세요.")
@@ -227,9 +205,6 @@ class SearchPwActivity : AppCompatActivity() {
         }
     }
 
-
-
-
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential)
             .addOnCompleteListener(this) { task ->
@@ -258,6 +233,7 @@ class SearchPwActivity : AppCompatActivity() {
                 } else {
                     // Sign in failed, display a message and update the UI
 //                    authCheckFlag = false
+                    showToast("인증번호를 확인해 주세요.")
                     Log.w(ContentValues.TAG, "signInWithCredential:failure", task.exception)
                     if (task.exception is FirebaseAuthInvalidCredentialsException) {
                         // The verification code entered was invalid
@@ -310,6 +286,27 @@ class SearchPwActivity : AppCompatActivity() {
 
     }
 
+    private fun initToolBar() {
+        val toolbar = findViewById<Toolbar>(R.id.searchPwToolbar)
+        setSupportActionBar(toolbar)
+
+        val ab = supportActionBar!!
+        ab.setDisplayHomeAsUpEnabled(true)
+    }
+
+
+    // 툴바 백버튼
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        when (id) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
 
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

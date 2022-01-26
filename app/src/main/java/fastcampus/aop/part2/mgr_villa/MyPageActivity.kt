@@ -44,7 +44,9 @@ class MyPageActivity : AppCompatActivity() {
     // 전화번호 변경하기
     private fun initChangePhoneNumber(){
         binding.MyPageChangePhoneNumber.setOnClickListener {
-
+            val toMyPageChangePhoneNum = Intent(this, MyPageChangePhoneNumActivity::class.java)
+            toMyPageChangePhoneNum.putExtra("email", binding.MyPageUserEmail.text.toString().trim())
+            startActivity(toMyPageChangePhoneNum)
         }
     }
 
