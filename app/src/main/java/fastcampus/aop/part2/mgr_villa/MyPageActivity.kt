@@ -28,7 +28,24 @@ class MyPageActivity : AppCompatActivity() {
         initToolBar()
         initMyInfo()
         initSignOut()
+        initChangPw()
+        initChangePhoneNumber()
+    }
 
+    // 비밀번호 변경하기
+    private fun initChangPw() {
+        binding.MyPageChangePassword.setOnClickListener {
+            val toMyPageChangePw = Intent(this, MyPageChangePwActivity::class.java)
+            toMyPageChangePw.putExtra("email", binding.MyPageUserEmail.text.toString().trim())
+            startActivity(toMyPageChangePw)
+        }
+    }
+
+    // 전화번호 변경하기
+    private fun initChangePhoneNumber(){
+        binding.MyPageChangePhoneNumber.setOnClickListener {
+
+        }
     }
 
     // 회원 탈퇴 하기

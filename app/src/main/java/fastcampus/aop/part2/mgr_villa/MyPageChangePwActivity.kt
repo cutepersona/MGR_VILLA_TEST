@@ -14,25 +14,22 @@ import androidx.databinding.DataBindingUtil
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityChangepwBinding
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityLoginBinding
+import fastcampus.aop.part2.mgr_villa.databinding.ActivityMypagechangepwBinding
 
-class ChangePwActivity : AppCompatActivity() {
+class MyPageChangePwActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityChangepwBinding
-
+    private val binding: ActivityMypagechangepwBinding by lazy { ActivityMypagechangepwBinding.inflate(layoutInflater) }
     private var email: String = ""
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_changepw)
 
         if (intent.hasExtra("email")) {
             email = intent.getStringExtra("email").toString()
-        }
+        } 
 
-
-//        setContentView(binding.root)
 
         initToolBar()
 
@@ -43,11 +40,10 @@ class ChangePwActivity : AppCompatActivity() {
 
     private fun initChangePw() {
         binding.DoChangePw.setOnClickListener {
-
             if (changPassWord()) {
                 showToast("비밀번호가 변경되었습니다.")
-                val LoginIntent = Intent(this, LoginActivity::class.java)
-                startActivity(LoginIntent)
+                val toMyPage = Intent(this, MyPageActivity::class.java)
+                startActivity(toMyPage)
             } else {
                 showToast("비밀번호가 변경되지 않았습니다.")
             }
@@ -57,11 +53,10 @@ class ChangePwActivity : AppCompatActivity() {
 
     private fun changPassWord(): Boolean {
         return if (!email.isEmpty()) {
-
             val userdb = VillaNoticeHelper.getInstance(applicationContext)
 
             Thread(Runnable {
-            userdb!!.VillaNoticeDao().updatePW(email, binding.userPasswordEditText1.text.toString())
+                userdb!!.VillaNoticeDao().updatePW(email, binding.MyPageUserPasswordEditText1.text.toString())
             }).start()
             true
         } else {
@@ -69,9 +64,16 @@ class ChangePwActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val toMyPage = Intent(this, MyPageActivity::class.java)
+        startActivity(toMyPage)
+
+    }
+
     // 툴바 초기화
     private fun initToolBar() {
-        val toolbar = findViewById<Toolbar>(R.id.DoChangePwToolbar)
+        val toolbar = findViewById<Toolbar>(R.id.MyPageChangePwToolbar)
         setSupportActionBar(toolbar)
 
         val ab = supportActionBar!!
@@ -80,20 +82,15 @@ class ChangePwActivity : AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
+        val toMyPage = Intent(this, MyPageActivity::class.java)
+        startActivity(toMyPage)
 
-        return super.onOptionsItemSelected(item)
+        return true
     }
 
     // 변경 비밀번호 확인
     private fun initPasswordTextCheck() {
-        binding.userPasswordEditText1.addTextChangedListener(object : TextWatcher {
+        binding.MyPageUserPasswordEditText1.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -109,7 +106,7 @@ class ChangePwActivity : AppCompatActivity() {
 
     // 변경 비밀번호 확인
     private fun initPasswordTextCheck1() {
-        binding.userPasswordEditText2.addTextChangedListener(object : TextWatcher {
+        binding.MyPageUserPasswordEditText2.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
@@ -125,21 +122,21 @@ class ChangePwActivity : AppCompatActivity() {
 
     private fun checkPW() {
 
-        var userPw = binding.userPasswordEditText1.text.toString().trim()
+        var userPw = binding.MyPageUserPasswordEditText1.text.toString().trim()
 //        val p = Pattern.compile(nameValidation)
 
         if (userPw.isNullOrEmpty()) {
-            binding.userPWValid1.setTextColor(-65535)
-            binding.userPWValid1.isInvisible = false
-            binding.userPWValid1.setText(R.string.must_insert)
+            binding.MyPageUserPWValid1.setTextColor(-65535)
+            binding.MyPageUserPWValid1.isInvisible = false
+            binding.MyPageUserPWValid1.setText(R.string.must_insert)
         } else {
             if (userPw.length >= 6) {
-                binding.userPasswordEditText1.setTextColor(R.color.black.toInt())
-                binding.userPWValid1.isInvisible = true
+                binding.MyPageUserPasswordEditText1.setTextColor(R.color.black.toInt())
+                binding.MyPageUserPWValid1.isInvisible = true
             } else {
-                binding.userPWValid1.setTextColor(-65536)
-                binding.userPWValid1.setText(R.string.not_enough_num)
-                binding.userPWValid1.isInvisible = false
+                binding.MyPageUserPWValid1.setTextColor(-65536)
+                binding.MyPageUserPWValid1.setText(R.string.not_enough_num)
+                binding.MyPageUserPWValid1.isInvisible = false
             }
         }
     }
@@ -147,25 +144,25 @@ class ChangePwActivity : AppCompatActivity() {
     // 변경 비밀번호 재확인
     private fun checkPWrewind() {
 
-        var userPw = binding.userPasswordEditText2.text.toString().trim()
+        var userPw = binding.MyPageUserPasswordEditText2.text.toString().trim()
 
         if (userPw.isNullOrEmpty()) {
-            binding.userPWValid3.setTextColor(-65535)
-            binding.userPWValid3.isInvisible = false
-            binding.userPWValid3.setText(R.string.must_insert)
+            binding.MyPageUserPWValid3.setTextColor(-65535)
+            binding.MyPageUserPWValid3.isInvisible = false
+            binding.MyPageUserPWValid3.setText(R.string.must_insert)
         } else {
-            if (!binding.userPasswordEditText1.getText().toString()
-                    .equals(binding.userPasswordEditText2.getText().toString())
+            if (!binding.MyPageUserPasswordEditText1.getText().toString()
+                    .equals(binding.MyPageUserPasswordEditText2.getText().toString())
             ) {
-                binding.userPWValid3.setTextColor(-65536)
-                binding.userPWValid3.setText(R.string.not_match_password)
-                binding.userPWValid3.isInvisible = false
+                binding.MyPageUserPWValid3.setTextColor(-65536)
+                binding.MyPageUserPWValid3.setText(R.string.not_match_password)
+                binding.MyPageUserPWValid3.isInvisible = false
             } else if (userPw.length >= 6
-                && binding.userPasswordEditText1.getText().toString()
-                    .equals(binding.userPasswordEditText2.getText().toString())
+                && binding.MyPageUserPasswordEditText1.getText().toString()
+                    .equals(binding.MyPageUserPasswordEditText2.getText().toString())
             ) {
-                binding.userPasswordEditText2.setTextColor(R.color.black.toInt())
-                binding.userPWValid3.isInvisible = true
+                binding.MyPageUserPasswordEditText2.setTextColor(R.color.black.toInt())
+                binding.MyPageUserPWValid3.isInvisible = true
             }
         }
     }
