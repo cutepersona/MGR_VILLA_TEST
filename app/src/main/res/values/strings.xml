@@ -3,10 +3,13 @@
     <string name="login_email">계정으로 로그인 하기</string>
     <string name="DoLogin">로그인 하기</string>
     <string name="login">로그인</string>
+    <string name="ID">아이디</string>
     <string name="searchID">아이디 찾기</string>
     <string name="searchPW">비밀번호 찾기</string>
     <string name="changePW">비밀번호 변경</string>
+    <string name="changePhoneNumber">전화번호 변경</string>
     <string name="signUp">회원가입</string>
+    <string name="signOut">탈퇴하기</string>
     <string name="userType">가입유형</string>
     <string name="tenant">세입자</string>
     <string name="mgr">관리자</string>
@@ -89,6 +92,7 @@
 
     <string name="myInfoTitle">전체정보</string>
     <string name="myInfo">내 정보</string>
+    <string name="myIdInfo">계정정보</string>
     <string name="CustomerCenter">고객센터</string>
     <string name="TermsAndPolicies">약관 및 정책</string>
     <string name="privacy_policy">개인정보보호정책</string>
@@ -116,6 +120,7 @@
     <string name="match_password">비밀번호가 일치합니다.</string>
     <string name="not_match_password">비밀번호가 일치하지 않습니다.</string>
     <string name="welcome_mgr_app">환영합니다. \n mgr_villa 회원가입이 완료되었습니다.</string>
+    <string name="SignOut_mgr_app">탈퇴하시겠습니까? \n [모든 정보가 삭제 됩니다!](복구 불가능)</string>
 
     <string name="naver_client_id">NJrt6Ht1CE5xqoouwaIq</string>
     <string name="naver_client_secret">Jc4B24yJvN</string>

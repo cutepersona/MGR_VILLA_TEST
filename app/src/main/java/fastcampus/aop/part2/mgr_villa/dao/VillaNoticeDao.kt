@@ -46,6 +46,9 @@ interface VillaNoticeDao {
     @Delete
     fun delete(villaUsers: VillaUsers)
 
+    @Query("DELETE FROM VillaUsers WHERE mailAddress =:mailAddress")
+    fun deleteUser(mailAddress: String)
+
     // Update
     @Query("UPDATE VillaUsers SET passWord = :pw WHERE mailAddress = :mail")
     fun updatePW(mail: String, pw: String)
@@ -131,7 +134,7 @@ interface VillaNoticeDao {
     @Query("SELECT villaTenantCount FROM VillaInfo WHERE villaAddress =:villaAddr")
     fun checkTenantCount(villaAddr: String) : Int
 
-    @Query("SELECT COUNT(*) FROM VillaTenant WHERE villaAddr =:villaAddr AND tenantEmail <> ''")
+    @Query("SELECT COUNT(*) FROM VillaTenant WHERE villaAddr =:villaAddr AND tenantStatus = 'IntoDone' ")
     fun getCurrentTenantCount(villaAddr: String) : Int
 
     @Query("SELECT roomNumber FROM VillaTenant WHERE  roomId =:roomId")
@@ -160,9 +163,13 @@ interface VillaNoticeDao {
     @Query("UPDATE VillaTenant SET roomNumber= :newRoomNum WHERE villaAddr = :villaAddr AND roomNumber = :beforeRoomNum")
     fun villaRoomNumberUpdate(newRoomNum: String, villaAddr: String, beforeRoomNum: String)
 
-    // 퇴거하기
+    // 관리자 퇴거하기
     @Query("UPDATE VillaTenant SET tenantEmail = '', tenantContractDate = '', tenantLeaveDate = '', tenantStatus = '' WHERE villaAddr = :villaAddr AND roomId = :roomId")
     fun leaveTenant(villaAddr: String, roomId: Long)
+
+    // 세입자 삭제하기
+    @Query("UPDATE VillaTenant SET tenantEmail = '', tenantContractDate = '', tenantLeaveDate = '', tenantStatus = '' WHERE villaAddr = :villaAddr AND tenantEmail = :email")
+    fun signOutTenant(villaAddr: String, email: String)
 
     // 입주시키기
     @Query("UPDATE VillaTenant SET tenantEmail = :tenantEmail, tenantContractDate = :contractDate, tenantLeaveDate = :leaveDate, tenantStatus = 'IntoDone' WHERE villaAddr = :villaAddr AND roomId = :roomId")

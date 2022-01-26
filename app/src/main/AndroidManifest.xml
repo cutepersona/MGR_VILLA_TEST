@@ -76,6 +76,8 @@
         <activity android:name=".MyInfoActivity"/>
 
         <activity android:name=".PrivacyPolicyActivity"/>
+
+        <activity android:name=".MyPageActivity"/>
     </application>
 
 </manifest>

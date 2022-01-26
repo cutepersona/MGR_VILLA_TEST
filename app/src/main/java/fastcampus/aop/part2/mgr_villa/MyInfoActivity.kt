@@ -28,13 +28,19 @@ class MyInfoActivity : AppCompatActivity() {
         initMyInfo()
         initHomeBottomNavigationBar()
         initPrivacyPolicy()
+
+        binding.MyInfoArea.setOnClickListener {
+            val toMyPage = Intent(this, MyPageActivity::class.java)
+            startActivity(toMyPage)
+        }
+
     }
 
     // 개인정보 보호정책
     private fun initPrivacyPolicy() {
         binding.MyInfoPrivacy.setOnClickListener {
-            val ToPirvacyPolicy = Intent(this, PrivacyPolicyActivity::class.java)
-            startActivity(ToPirvacyPolicy)
+            val toPirvacyPolicy = Intent(this, PrivacyPolicyActivity::class.java)
+            startActivity(toPirvacyPolicy)
         }
     }
 
