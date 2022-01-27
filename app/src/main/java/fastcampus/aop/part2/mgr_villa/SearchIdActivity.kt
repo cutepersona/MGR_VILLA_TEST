@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -78,6 +79,28 @@ class SearchIdActivity: AppCompatActivity() {
         }
     }
 
+    var second = 0
+    var minute = 0
+
+    val countDown  = object : CountDownTimer(1000 * 90, 1000) {
+        @SuppressLint("SetTextI18n")
+        override fun onTick(p0: Long) {
+            second = ((p0 / 1000) % 60).toInt()
+            minute = ((p0 / 1000) / 60).toInt()
+
+            // countDownInterval 마다 호출 (여기선 1000ms)
+            runOnUiThread {
+                binding.SearchPwAuthCredentialTimer.text = "$minute:${String.format("%02d",second)}"
+            }
+
+        }
+
+        override fun onFinish() {
+            // 타이머가 종료되면 호출
+            binding.SearchPwAuthCredentialTimer.text = "1:30"
+        }
+    }
+
 
     private val binding:ActivitySearchidBinding by lazy { ActivitySearchidBinding.inflate(layoutInflater) }
 
@@ -87,6 +110,8 @@ class SearchIdActivity: AppCompatActivity() {
 
         initToolBar()
 
+        countDown.cancel()
+
         auth = Firebase.auth
         auth.setLanguageCode("kr")
 
@@ -94,21 +119,44 @@ class SearchIdActivity: AppCompatActivity() {
 
         binding.searchIdDone.setOnClickListener {
 
-            // todo 임시 주석 처리  test후 해제
-            var authNumber = binding.userAuthCompleteEditText.text.toString()
-            val phoneCredential =
-                PhoneAuthProvider.getCredential(
-                    storedVerificationId,
-                    authNumber
-                )
+            val userPhone = binding.userPhoneNumberEditText.text.trim().toString()
+            val authNum = binding.userAuthCompleteEditText.text.trim().toString()
 
-            signInWithPhoneAuthCredential(phoneCredential)
+            if (authNum.isEmpty()) {
+                showToast("인증 번호를 입력해 주세요.")
+                return@setOnClickListener
+            }
+            if (userPhone.isEmpty()){
+                showToast("휴대폰 번호를 입력해 주세요.")
+                return@setOnClickListener
+            }
 
+            val authNumber = binding.userAuthCompleteEditText.text.toString()
+            if (authNumber.isNotEmpty()){
+
+                val phoneCredential =
+                    PhoneAuthProvider.getCredential(
+                        storedVerificationId,
+                        authNumber
+                    )
+
+                signInWithPhoneAuthCredential(phoneCredential)
+            } else {
+                showToast("아직 인증되지 않았습니다.")
+                return@setOnClickListener
+            }
         }
 
         phoneSnsAuthCheck()
 
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        countDown.cancel()
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
     }
 
     private fun initToolBar(){
@@ -121,15 +169,20 @@ class SearchIdActivity: AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
+        countDown.cancel()
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
 
-        return super.onOptionsItemSelected(item)
+        return true
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
     private fun initPhoneNumberTextCheck() {
@@ -206,6 +259,7 @@ class SearchIdActivity: AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            countDown.start()
 //            firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(userPhone, "123456")
 
             val options = PhoneAuthOptions.newBuilder(auth)

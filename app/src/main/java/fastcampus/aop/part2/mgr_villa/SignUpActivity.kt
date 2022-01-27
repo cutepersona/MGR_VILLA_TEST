@@ -416,12 +416,18 @@ class SignUpActivity : AppCompatActivity() {
             }
 
             val authNumber = userAuthCompleteEditText.text.toString()
-            val phoneCredential =
-                PhoneAuthProvider.getCredential(
-                    storedVerificationId,
-                    authNumber
-                )
-            signInWithPhoneAuthCredential(phoneCredential)
+            if (authNumber.isNotEmpty()){
+
+                val phoneCredential =
+                    PhoneAuthProvider.getCredential(
+                        storedVerificationId,
+                        authNumber
+                    )
+                signInWithPhoneAuthCredential(phoneCredential)
+            } else {
+                showToast("아직 인증되지 않았습니다.")
+                return@setOnClickListener
+            }
 
             if (!checkForm()) {
 

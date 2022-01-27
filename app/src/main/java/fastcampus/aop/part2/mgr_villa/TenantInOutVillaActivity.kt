@@ -153,10 +153,32 @@ class TenantInOutVillaActivity : AppCompatActivity() {
                     binding.tenantIOContractDate.setText(tenantRooms.tenantContractDate)
                     binding.tenantIOLeaveDate.setText(tenantRooms.tenantLeaveDate)
                     binding.tenantIOTenantName.setText(tenantInfo.userName)
-                    binding.tenantIOTenantPhone.setText(tenantInfo.phoneNumber)
+                    binding.tenantIOTenantPhone.setText(initPhoneRegax(tenantInfo.phoneNumber))
                 }
             }
         }).start()
+    }
+
+    // 전화번호 정규식 적용하기
+    private fun initPhoneRegax(phoneNumber: String): String {
+        var regaxPhoneNum: String = ""
+
+        val reg = Regex("^\\d{3}-\\d{3,4}-\\d{4}\$")
+
+        if (phoneNumber.length == 11) {
+            if (reg.matches(phoneNumber)) {
+                val first = phoneNumber.slice(IntRange(0, 2))
+                val second = phoneNumber.slice(IntRange(3, 6))
+                val last = phoneNumber.slice(IntRange(7, 10))
+                regaxPhoneNum = "$first-$second-$last"
+            }
+        } else {
+            val first = phoneNumber.slice(IntRange(0, 1))
+            val second = phoneNumber.slice(IntRange(2, 5))
+            val last = phoneNumber.slice(IntRange(6, 9))
+            regaxPhoneNum = "$first-$second-$last"
+        }
+        return regaxPhoneNum
     }
 
     // 전입하기
