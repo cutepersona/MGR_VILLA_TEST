@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         findViewById(R.id.MainText)
     }
 
+    var backKeyPressedTime: Long = 0
 
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +66,20 @@ class MainActivity : AppCompatActivity() {
             startActivity(searchPwIntent)
         }
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
+        if (System.currentTimeMillis() > backKeyPressedTime + 2500) {
+            backKeyPressedTime = System.currentTimeMillis()
+
+            return
+        }
+
+        if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
+            finishAffinity()
+        }
     }
 
     private fun autoLogin(){

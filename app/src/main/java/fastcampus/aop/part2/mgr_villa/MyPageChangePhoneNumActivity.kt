@@ -100,21 +100,19 @@ class MyPageChangePhoneNumActivity : AppCompatActivity() {
     val countDown  = object : CountDownTimer(1000 * 90, 1000) {
         @SuppressLint("SetTextI18n")
         override fun onTick(p0: Long) {
-            second = ((p0 % 1000) / 60).toInt()
+            second = ((p0 / 1000) % 60).toInt()
             minute = ((p0 / 1000) / 60).toInt()
 
             // countDownInterval 마다 호출 (여기선 1000ms)
             runOnUiThread {
-                binding.MyPageAuthCredentialTimer.setText("${minute.toString() + ":" + second.toString()}")
+                binding.MyPageAuthCredentialTimer.text = "$minute:${String.format("%02d",second)}"
             }
 
         }
 
         override fun onFinish() {
             // 타이머가 종료되면 호출
-            showToast("타이머 종료")
             binding.MyPageAuthCredentialTimer.text = "1:30"
-
         }
     }
 
@@ -131,6 +129,7 @@ class MyPageChangePhoneNumActivity : AppCompatActivity() {
         }
 
         countDown.cancel()
+        binding.MyPageAuthCredentialTimer.isEnabled = false
         initToolBar()
         phoneSnsAuthCheck()
         initPhoneNumTextCheck()
@@ -147,7 +146,7 @@ class MyPageChangePhoneNumActivity : AppCompatActivity() {
             }
 
             countDown.start()
-
+            binding.MyPageAuthCredentialTimer.isEnabled = true
 
 //            showToast("phoneSnsAuthCheck")
 
@@ -185,6 +184,13 @@ class MyPageChangePhoneNumActivity : AppCompatActivity() {
 
     private fun initChangePhoneNum() {
         binding.DoChangePhoneNum.setOnClickListener {
+            val userPhone = binding.MyPageUserPhoneNumberEditText.text.trim().toString()
+
+            if (userPhone.isEmpty()) {
+                showToast("핸드폰 번호를 입력해 주세요.")
+                return@setOnClickListener
+            }
+
 
             val authNumber = binding.MyPagePhoneNumSnsAuthEditText.text.toString()
             if (authNumber.isNotEmpty()){
@@ -195,9 +201,6 @@ class MyPageChangePhoneNumActivity : AppCompatActivity() {
                     )
 
                 signInWithPhoneAuthCredential(phoneCredential)
-
-                //todo 전화번호 변경 부분 체크 필요
-                // 타이머 체크 필요
 
                 if (changePhoneNum()) {
                     showToast("전화번호가 변경되었습니다.")
