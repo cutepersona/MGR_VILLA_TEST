@@ -1,22 +1,17 @@
 package fastcampus.aop.part2.mgr_villa
 
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import androidx.databinding.DataBindingUtil
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityMainBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
+import com.kakao.sdk.common.util.Utility
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,38 +30,63 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
-//        setContentView(R.layout.activity_main)
+
+
+        val keyHash = Utility.getKeyHash(this)
+        Log.d("Hash------------->", keyHash)
 
 
 
-//        this.supportActionBar?.hide()
-
-//        Log.d("onCreate", "-----> animation start")
-        var shake = AnimationUtils.loadAnimation(this, R.anim.shake)
+        val shake = AnimationUtils.loadAnimation(this, R.anim.shake)
         mainLogo.startAnimation(shake)
 
         autoLogin()
 
+        initSignUp()
+        initLogin()
+        initSearchId()
+        initSearchPW()
+
+
+
+
+
+
+    }
+
+
+
+
+    // 회원가입버튼 클릭
+    private fun initSignUp() {
         binding.signUp.setOnClickListener {
             val choiceUserTypeIntent = Intent(this, ChoiceMgrTenantActivity::class.java)
             startActivity(choiceUserTypeIntent)
         }
+    }
 
+    // 로그인 버튼 클릭
+    private fun initLogin() {
         binding.Login.setOnClickListener {
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
         }
+    }
 
+    // 아이디 찾기 버튼 클릭
+    private fun initSearchId() {
         binding.searchId.setOnClickListener {
             val searchIdIntent = Intent(this, SearchIdActivity::class.java)
             startActivity(searchIdIntent)
         }
+    }
 
+    // 비밀번호 찾기 버튼 클릭
+    private fun initSearchPW() {
         binding.searchPw.setOnClickListener {
             val searchPwIntent = Intent(this, SearchPwActivity::class.java)
             startActivity(searchPwIntent)
         }
-
     }
 
     override fun onBackPressed() {

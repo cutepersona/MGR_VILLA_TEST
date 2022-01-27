@@ -165,6 +165,17 @@
         app:layout_constraintTop_toBottomOf="@+id/ButtonLayout"
         app:layout_constraintVertical_weight="2">
 
+        <ImageButton
+            android:id="@+id/MainKakaoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/kakao_login_medium_narrow"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

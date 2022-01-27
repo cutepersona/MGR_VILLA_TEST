@@ -93,6 +93,10 @@ dependencies {
     // gif Glide
     implementation 'com.github.bumptech.glide:glide:4.9.0'
 
+    // 카카오
+    implementation "com.kakao.sdk:v2-user:2.8.5" // 카카오 로그인
+    implementation "com.kakao.sdk:v2-talk:2.8.5" // 친구, 메시지(카카오톡)
+
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
