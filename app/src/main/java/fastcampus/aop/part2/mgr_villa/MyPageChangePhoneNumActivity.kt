@@ -146,7 +146,6 @@ class MyPageChangePhoneNumActivity : AppCompatActivity() {
             }
 
             countDown.start()
-            binding.MyPageAuthCredentialTimer.isEnabled = true
 
 //            showToast("phoneSnsAuthCheck")
 

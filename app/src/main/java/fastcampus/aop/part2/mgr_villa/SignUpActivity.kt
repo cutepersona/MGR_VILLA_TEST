@@ -1,37 +1,30 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.annotation.SuppressLint
 import android.content.*
 import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
-import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
 import android.widget.*
-import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.MimeTypeFilter.matches
 import androidx.core.view.isInvisible
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import fastcampus.aop.part2.mgr_villa.customdialog.welcomedialog
+import fastcampus.aop.part2.mgr_villa.customdialog.WelcomeDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivitySignupBinding
-import fastcampus.aop.part2.mgr_villa.fragment.OkFragment
 import fastcampus.aop.part2.mgr_villa.model.VillaUsers
-import fastcampus.aop.part2.mgr_villa.model.enumUserType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
@@ -45,6 +38,8 @@ class SignUpActivity : AppCompatActivity() {
     private var storedVerificationId = ""
     private var authCheckFlag: Boolean = false
 
+
+    private val binding: ActivitySignupBinding by lazy { ActivitySignupBinding.inflate(layoutInflater) }
 
     private val collbacks by lazy {
         object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -91,7 +86,7 @@ class SignUpActivity : AppCompatActivity() {
                 // by combining the code with a verification ID.
                 Log.d(TAG, "onCodeSent:$verificationId")
 
-                AuthComplete.isInvisible = false
+//                AuthComplete.isInvisible = false
 
                 showToast("90초 이내에 인증을 완료해 주세요.")
                 // Save verification ID and resending token so we can use them later
@@ -103,7 +98,27 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
-    private val binding: ActivitySignupBinding by lazy { ActivitySignupBinding.inflate(layoutInflater) }
+    var second = 0
+    var minute = 0
+
+    val countDown  = object : CountDownTimer(1000 * 90, 1000) {
+        @SuppressLint("SetTextI18n")
+        override fun onTick(p0: Long) {
+            second = ((p0 / 1000) % 60).toInt()
+            minute = ((p0 / 1000) / 60).toInt()
+
+            // countDownInterval 마다 호출 (여기선 1000ms)
+            runOnUiThread {
+                binding.SignUpAuthCredentialTimer.text = "$minute:${String.format("%02d",second)}"
+            }
+
+        }
+
+        override fun onFinish() {
+            // 타이머가 종료되면 호출
+            binding.SignUpAuthCredentialTimer.text = "1:30"
+        }
+    }
 
     private val userEmailEditText: EditText by lazy {
         findViewById(R.id.userEmailEditText)
@@ -157,10 +172,10 @@ class SignUpActivity : AppCompatActivity() {
     private val userAuthCompleteEditText: EditText by lazy {
         findViewById(R.id.userAuthCompleteEditText)
     }
-
-    private val AuthComplete: Button by lazy {
-        findViewById(R.id.AuthComplete)
-    }
+//
+//    private val AuthComplete: Button by lazy {
+//        findViewById(R.id.AuthComplete)
+//    }
 
     private val SignUpDone: Button by lazy {
         findViewById(R.id.SignUpDone)
@@ -176,10 +191,7 @@ class SignUpActivity : AppCompatActivity() {
     private val privacyPolicyCheck: CheckBox by lazy {
         findViewById(R.id.privacyPolicyCheck)
     }
-//
-//    private val communityToolbar: Toolbar by lazy{
-//        findViewById(R.id.communityToolbar)
-//    }
+
 
     private var emailflag = false
     private var nameflag = false
@@ -224,7 +236,7 @@ class SignUpActivity : AppCompatActivity() {
         initValidInvisible()
         signUpComplete()
         phoneSnsAuthCheck()
-        authCompleteCheck()
+//        authCompleteCheck()
         allUseTermsCheck()
 
         privPolicyCheck()
@@ -292,20 +304,20 @@ class SignUpActivity : AppCompatActivity() {
 
         }
     }
-
-    private fun authCompleteCheck() {
-        AuthComplete.setOnClickListener {
-//            Log.d("AuthComplete.setOnClickListener","${storedVerificationId.toString()}")
-            var authNumber = userAuthCompleteEditText.text.toString()
-            val phoneCredential =
-                PhoneAuthProvider.getCredential(
-                    storedVerificationId,
-                    authNumber
-                )
-            signInWithPhoneAuthCredential(phoneCredential)
-
-        }
-    }
+//
+//    private fun authCompleteCheck() {
+//        AuthComplete.setOnClickListener {
+////            Log.d("AuthComplete.setOnClickListener","${storedVerificationId.toString()}")
+//            var authNumber = userAuthCompleteEditText.text.toString()
+//            val phoneCredential =
+//                PhoneAuthProvider.getCredential(
+//                    storedVerificationId,
+//                    authNumber
+//                )
+//            signInWithPhoneAuthCredential(phoneCredential)
+//
+//        }
+//    }
 
     private fun phoneSnsAuthCheck() {
         phoneSnsAuth.setOnClickListener {
@@ -315,6 +327,8 @@ class SignUpActivity : AppCompatActivity() {
                 showToast("핸드폰 번호를 입력해 주세요.")
                 return@setOnClickListener
             }
+
+            countDown.start()
 
 //            firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(userPhone, "123456")
 
@@ -365,7 +379,20 @@ class SignUpActivity : AppCompatActivity() {
     private fun signUpComplete() {
         SignUpDone.setOnClickListener {
 
+            val userPhone = binding.userAuthCompleteEditText.text.trim().toString()
 
+            if (userPhone.isEmpty()) {
+                showToast("핸드폰 번호를 입력해 주세요.")
+                return@setOnClickListener
+            }
+
+            val authNumber = userAuthCompleteEditText.text.toString()
+            val phoneCredential =
+                PhoneAuthProvider.getCredential(
+                    storedVerificationId,
+                    authNumber
+                )
+            signInWithPhoneAuthCredential(phoneCredential)
 
                 //todo 임시 주석처리 모달 팝업 처리후 주석해제해야 함.
             if (!checkForm()) {
@@ -403,7 +430,13 @@ class SignUpActivity : AppCompatActivity() {
                 Log.d("userdb!!.VillaUserDao().insert","Villauser")
 
                 // 회원가입 완료 팝업
-                showSignInCompletePopup()
+//                showSignInCompletePopup()
+
+                showToast("가입을 환영합니다.")
+
+                val toMain = Intent(this, MainActivity::class.java)
+                startActivity(toMain)
+
 //            }
             }
 
@@ -418,20 +451,8 @@ class SignUpActivity : AppCompatActivity() {
     //회원가입완료 팝업 dialog 호출
     private fun showSignInCompletePopup() {
 
-        val okDialog = OkFragment()
-        okDialog.show(supportFragmentManager, "OkFragment")
-
-//
-//        var okPopup = AlertDialog.Builder(this)
-//        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//        val view = inflater.inflate(R.layout.ok_popup, null)
-//        okPopup.setView(view)
-//
-//        var listener = DialogInterface.OnClickListener { popup, _ ->
-//            var alert = popup as AlertDialog
-//        }
-
-//        okPopup.show()
+        val welcomeDialog = WelcomeDialog(this)
+        welcomeDialog.showDialog()
 
     }
 
@@ -441,7 +462,7 @@ class SignUpActivity : AppCompatActivity() {
         userNameValid1.isInvisible = true
         userPWValid1.isInvisible = true
         userPWValid3.isInvisible = true
-        AuthComplete.isInvisible = true
+//        AuthComplete.isInvisible = true
 
         privacyPolicyValid.isInvisible = true
     }

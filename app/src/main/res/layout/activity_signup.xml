@@ -261,18 +261,31 @@
                     tools:ignore="TextFields" />
 
                 <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/AuthComplete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:text="@string/smsAuthComplete"
-                    android:background="@drawable/sms_button_shape"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="@+id/userAuthCompleteEditText"
+                    android:id="@+id/SignUpAuthCredentialTimer"
+                    android:layout_width="49dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/change_phonenum_timer_shape"
+                    android:text="1:30"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/main_button_background"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/userAuthCompleteEditText"
-                    app:layout_constraintBottom_toBottomOf="@+id/userAuthCompleteEditText"
-                    android:layout_margin="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:clickable="false"
                     />
+
+<!--                <androidx.appcompat.widget.AppCompatButton-->
+<!--                    android:id="@+id/AuthComplete"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    android:text="@string/smsAuthComplete"-->
+<!--                    android:background="@drawable/sms_button_shape"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    app:layout_constraintEnd_toEndOf="@+id/userAuthCompleteEditText"-->
+<!--                    app:layout_constraintTop_toTopOf="@+id/userAuthCompleteEditText"-->
+<!--                    app:layout_constraintBottom_toBottomOf="@+id/userAuthCompleteEditText"-->
+<!--                    android:layout_margin="10dp"-->
+<!--                    android:layout_marginBottom="10dp"-->
+<!--                    />-->
 
                 <TextView
                     android:id="@+id/termsOfUse"
