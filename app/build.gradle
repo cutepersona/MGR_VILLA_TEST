@@ -46,7 +46,8 @@ dependencies {
     // 스와이프
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 
-   // databinding
+
+    // databinding
     kapt 'com.android.databinding:compiler:3.5.3'
 
     // retrofit2
@@ -96,6 +97,11 @@ dependencies {
     // 카카오
     implementation "com.kakao.sdk:v2-user:2.8.5" // 카카오 로그인
     implementation "com.kakao.sdk:v2-talk:2.8.5" // 친구, 메시지(카카오톡)
+
+    // 네이버 아이디로 로그인
+    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
+
+
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'

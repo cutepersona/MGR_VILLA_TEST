@@ -1,6 +1,7 @@
 package fastcampus.aop.part2.mgr_villa
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,8 +14,11 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.common.model.AuthErrorCause.*
 import com.kakao.sdk.user.UserApiClient
+import com.nhn.android.naverlogin.OAuthLogin
+import com.nhn.android.naverlogin.OAuthLoginHandler
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityMainBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +31,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     var backKeyPressedTime: Long = 0
+
+    lateinit var mOAuthLoginInstance : OAuthLogin
+    lateinit var mContext: Context
+
+    val naver_client_id = ""
+    val naver_client_secret = ""
+    val naver_client_name = ""
 
 
 
@@ -45,6 +56,13 @@ class MainActivity : AppCompatActivity() {
 
         autoLogin()
 
+        mContext = this
+
+        mOAuthLoginInstance = OAuthLogin.getInstance()
+        mOAuthLoginInstance.init(mContext, naver_client_id, naver_client_secret, naver_client_name)
+
+        buttonOAuthLoginImg.setOAuthLoginHandler(mOAuthLoginHandler)
+
         initSignUp()
         initLogin()
         initSearchId()
@@ -55,6 +73,30 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
+    val mOAuthLoginHandler: OAuthLoginHandler = object : OAuthLoginHandler() {
+        @SuppressLint("HandlerLeak")
+        override fun run(success: Boolean) {
+            if (success) {
+                showToast("네아로")
+
+//                val accessToken: String = mOAuthLoginModule.getAccessToken(baseContext)
+//                val refreshToken: String = mOAuthLoginModule.getRefreshToken(baseContext)
+//                val expiresAt: Long = mOAuthLoginModule.getExpiresAt(baseContext)
+//                val tokenType: String = mOAuthLoginModule.getTokenType(baseContext)
+//                var intent = Intent(this, )
+            } else {
+                val errorCode: String = mOAuthLoginInstance.getLastErrorCode(mContext).code
+                val errorDesc = mOAuthLoginInstance.getLastErrorDesc(mContext)
+
+                Toast.makeText(
+                    baseContext, "errorCode:" + errorCode
+                            + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
 
     // Main 카카오 버튼 초기화
     private fun initMainKakaoButton() {
