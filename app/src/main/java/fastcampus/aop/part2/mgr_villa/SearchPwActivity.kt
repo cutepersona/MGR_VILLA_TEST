@@ -1,8 +1,10 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
@@ -39,6 +41,28 @@ class SearchPwActivity : AppCompatActivity() {
         ActivitySearchpwBinding.inflate(
             layoutInflater
         )
+    }
+
+    var second = 0
+    var minute = 0
+
+    val countDown  = object : CountDownTimer(1000 * 90, 1000) {
+        @SuppressLint("SetTextI18n")
+        override fun onTick(p0: Long) {
+            second = ((p0 / 1000) % 60).toInt()
+            minute = ((p0 / 1000) / 60).toInt()
+
+            // countDownInterval 마다 호출 (여기선 1000ms)
+            runOnUiThread {
+                binding.SearchPwAuthCredentialTimer.text = "$minute:${String.format("%02d",second)}"
+            }
+
+        }
+
+        override fun onFinish() {
+            // 타이머가 종료되면 호출
+            binding.SearchPwAuthCredentialTimer.text = "1:30"
+        }
     }
 
     private val collbacks by lazy {
@@ -98,6 +122,8 @@ class SearchPwActivity : AppCompatActivity() {
 
         initToolBar()
 
+        countDown.cancel()
+
         auth = Firebase.auth
         auth.setLanguageCode("kr")
 
@@ -107,7 +133,12 @@ class SearchPwActivity : AppCompatActivity() {
         initSearchPwOnClick()
     }
 
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        countDown.cancel()
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
+    }
 
     // email 체크
     private fun initEmailEditTextCheck() {
@@ -155,6 +186,8 @@ class SearchPwActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            countDown.start()
+
 //            showToast("phoneSnsAuthCheck")
 
             val options = PhoneAuthOptions.newBuilder(auth)
@@ -170,6 +203,18 @@ class SearchPwActivity : AppCompatActivity() {
 
     private fun initSearchPwOnClick() {
         binding.searchPwDone.setOnClickListener {
+
+            val userPhone = binding.userPhoneNumberEditText.text.trim().toString()
+            val authNum = binding.userAuthCompleteEditText.text.trim().toString()
+
+            if (authNum.isEmpty()) {
+                showToast("인증 번호를 입력해 주세요.")
+                return@setOnClickListener
+            }
+            if (userPhone.isEmpty()){
+                showToast("휴대폰 번호를 입력해 주세요.")
+                return@setOnClickListener
+            }
 
             CoroutineScope(Dispatchers.IO).launch {
                 val userdb = VillaNoticeHelper.getInstance(applicationContext)
@@ -217,8 +262,7 @@ class SearchPwActivity : AppCompatActivity() {
 
 
 //                        startActivity(Intent(this, ChangePwActivity::class.java))
-
-
+                    countDown.cancel()
 
                     val changePwIntent = Intent(this@SearchPwActivity, ChangePwActivity::class.java)
 
@@ -297,15 +341,22 @@ class SearchPwActivity : AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
-        return super.onOptionsItemSelected(item)
+        countDown.cancel()
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
+
+        return true
+
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
     private fun showToast(message: String) {

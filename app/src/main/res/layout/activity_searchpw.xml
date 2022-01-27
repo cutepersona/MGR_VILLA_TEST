@@ -174,6 +174,20 @@
                     app:layout_constraintTop_toBottomOf="@+id/userPhoneNumberValid1"
                     tools:ignore="TextFields" />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/SearchPwAuthCredentialTimer"
+                    android:layout_width="49dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/change_phonenum_timer_shape"
+                    android:text="1:30"
+                    android:layout_marginRight="10dp"
+                    android:textColor="@color/main_button_background"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/userAuthCompleteEditText"
+                    app:layout_constraintBottom_toBottomOf="@+id/userAuthCompleteEditText"
+                    android:clickable="false"
+                    />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

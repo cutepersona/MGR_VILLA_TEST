@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityMainBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
@@ -71,15 +72,18 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
 
-        if (System.currentTimeMillis() > backKeyPressedTime + 2500) {
-            backKeyPressedTime = System.currentTimeMillis()
+        ActivityCompat.finishAffinity(this)
+        System.exit(0)
 
-            return
-        }
-
-        if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
-            finishAffinity()
-        }
+//        if (System.currentTimeMillis() > backKeyPressedTime + 2500) {
+//            backKeyPressedTime = System.currentTimeMillis()
+//
+//            return
+//        }
+//
+//        if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
+//            finishAffinity()
+//        }
     }
 
     private fun autoLogin(){

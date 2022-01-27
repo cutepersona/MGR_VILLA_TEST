@@ -226,6 +226,9 @@ class SignUpActivity : AppCompatActivity() {
         auth = Firebase.auth
         auth.setLanguageCode("kr")
 
+        initToolBar()
+
+        countDown.cancel()
 
         initEmailEditTextCheck()
         initNameTextCheck()
@@ -248,17 +251,38 @@ class SignUpActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
+
+    }
+
+    private fun initToolBar() {
+        val toolbar = findViewById<Toolbar>(R.id.communityToolbar)
+        setSupportActionBar(toolbar)
+
+        val ab = supportActionBar!!
+        ab.setDisplayHomeAsUpEnabled(true)
+    }
+
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
-        return super.onOptionsItemSelected(item)
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
+
+        return true
+
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
     private fun privPolicyCheck() {
@@ -379,10 +403,15 @@ class SignUpActivity : AppCompatActivity() {
     private fun signUpComplete() {
         SignUpDone.setOnClickListener {
 
-            val userPhone = binding.userAuthCompleteEditText.text.trim().toString()
+            val userPhone = binding.userPhoneNumberEditText.text.trim().toString()
+            val authNum = binding.userAuthCompleteEditText.text.trim().toString()
 
-            if (userPhone.isEmpty()) {
-                showToast("핸드폰 번호를 입력해 주세요.")
+            if (authNum.isEmpty()) {
+                showToast("인증 번호를 입력해 주세요.")
+                return@setOnClickListener
+            }
+            if (userPhone.isEmpty()){
+                showToast("휴대폰 번호를 입력해 주세요.")
                 return@setOnClickListener
             }
 
@@ -394,7 +423,6 @@ class SignUpActivity : AppCompatActivity() {
                 )
             signInWithPhoneAuthCredential(phoneCredential)
 
-                //todo 임시 주석처리 모달 팝업 처리후 주석해제해야 함.
             if (!checkForm()) {
 
 //                Log.d("emailflag", "${emailflag}")
@@ -431,11 +459,11 @@ class SignUpActivity : AppCompatActivity() {
 
                 // 회원가입 완료 팝업
 //                showSignInCompletePopup()
-
+                countDown.cancel()
                 showToast("가입을 환영합니다.")
 
-                val toMain = Intent(this, MainActivity::class.java)
-                startActivity(toMain)
+                val toLogin = Intent(this, LoginActivity::class.java)
+                startActivity(toLogin)
 
 //            }
             }
