@@ -206,6 +206,11 @@ class SignUpActivity : AppCompatActivity() {
     private val emailValidation = "^[a-zA-Z0-9]+@[a-zA-Z0-9]+\$"
     private val nameValidation = "^[a-zA-Zㄱ-ㅣ가-힣]*$"
 
+    // 소셜 로그인 정보
+    var Nemail: String = ""
+    var Nname: String = ""
+    var Nmobile: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_signup)
@@ -222,6 +227,14 @@ class SignUpActivity : AppCompatActivity() {
         } else if (intent.hasExtra("mgr")) {
             binding.emptyButtomUp.text = intent.getStringExtra("mgr")
         }
+
+        if (intent.hasExtra("N")){
+//            showToast(intent.getStringExtra("N").toString())
+            binding.userEmailEditText.setText(intent.getStringExtra("Nemail").toString())
+            binding.userNameEditText.setText(intent.getStringExtra("Nname").toString())
+            binding.userPhoneNumberEditText.setText(intent.getStringExtra("Nmobile").toString())
+        }
+
 
         auth = Firebase.auth
         auth.setLanguageCode("kr")

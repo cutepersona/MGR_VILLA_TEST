@@ -5,13 +5,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import com.kakao.sdk.auth.model.OAuthToken
-import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.common.model.AuthErrorCause.*
 import com.kakao.sdk.user.UserApiClient
 import com.nhn.android.naverlogin.OAuthLogin
@@ -19,6 +17,17 @@ import com.nhn.android.naverlogin.OAuthLoginHandler
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityMainBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.lang.RuntimeException
+import java.lang.StringBuilder
+import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.URL
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -35,9 +44,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var mOAuthLoginInstance : OAuthLogin
     lateinit var mContext: Context
 
-    val naver_client_id = ""
-    val naver_client_secret = ""
-    val naver_client_name = ""
+    val naver_client_id = "NJrt6Ht1CE5xqoouwaIq"
+    val naver_client_secret = "Jc4B24yJvN"
+    val naver_client_name = "MGR_VILLA"
 
 
 
@@ -61,7 +70,8 @@ class MainActivity : AppCompatActivity() {
         mOAuthLoginInstance = OAuthLogin.getInstance()
         mOAuthLoginInstance.init(mContext, naver_client_id, naver_client_secret, naver_client_name)
 
-        buttonOAuthLoginImg.setOAuthLoginHandler(mOAuthLoginHandler)
+        binding.buttonOAuthLoginImg.setOAuthLoginHandler(mOAuthLoginHandler)
+
 
         initSignUp()
         initLogin()
@@ -74,16 +84,50 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    val mOAuthLoginHandler: OAuthLoginHandler = object : OAuthLoginHandler() {
-        @SuppressLint("HandlerLeak")
+    val mOAuthLoginHandler: OAuthLoginHandler = @SuppressLint("HandlerLeak")
+    object : OAuthLoginHandler() {
         override fun run(success: Boolean) {
             if (success) {
-                showToast("네아로")
+//                showToast("네아로")
 
-//                val accessToken: String = mOAuthLoginModule.getAccessToken(baseContext)
-//                val refreshToken: String = mOAuthLoginModule.getRefreshToken(baseContext)
-//                val expiresAt: Long = mOAuthLoginModule.getExpiresAt(baseContext)
-//                val tokenType: String = mOAuthLoginModule.getTokenType(baseContext)
+                val accessToken: String = mOAuthLoginInstance.getAccessToken(baseContext)
+//                val refreshToken: String = mOAuthLoginInstance.getRefreshToken(baseContext)
+//                val expiresAt: Long = mOAuthLoginInstance.getExpiresAt(baseContext)
+//                val tokenType: String = mOAuthLoginInstance.getTokenType(baseContext)
+
+                val header = "Bearer " + accessToken
+                val url = "https://openapi.naver.com/v1/nid/me"
+
+
+                val requestHeaders: MutableMap<String, String> = HashMap()
+                requestHeaders["Authorization"] = header
+
+
+
+                Thread(Runnable {
+                    val responseBody = get(url, requestHeaders)
+
+                    runOnUiThread{
+                        val loginResult = JSONObject(responseBody)
+                        val response: JSONObject = loginResult.getJSONObject("response")
+
+                        val email = response.getString("email")
+                        val mobile = response.getString("mobile").replace("-","")
+                        val name = response.getString("name")
+
+                        val toTenantDiv = Intent(this@MainActivity, ChoiceMgrTenantActivity::class.java)
+                        toTenantDiv.putExtra("N","NAVER")
+                        toTenantDiv.putExtra("Nemail",email)
+                        toTenantDiv.putExtra("Nname",name)
+                        toTenantDiv.putExtra("Nmobile",mobile)
+                        startActivity(toTenantDiv)
+
+
+                    }
+
+                }).start()
+
+
 //                var intent = Intent(this, )
             } else {
                 val errorCode: String = mOAuthLoginInstance.getLastErrorCode(mContext).code
@@ -96,6 +140,57 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private operator fun get(apiUrl: String, requestHeaders: Map<String, String>): String? {
+            val con = connect(apiUrl)
+            return try {
+                con!!.requestMethod = "GET"
+                for ((key, value) in requestHeaders) {
+                    con.setRequestProperty(key, value)
+                }
+                val responseCode = con.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
+                    readBody(con.inputStream)
+                } else { // 에러 발생
+                    readBody(con.errorStream)
+                }
+            } catch (e: IOException) {
+                throw RuntimeException("API 요청과 응답 실패", e)
+            } finally {
+                con!!.disconnect()
+            }
+
+
+    }
+
+
+    private fun connect(apiUrl: String): HttpURLConnection? {
+        return try {
+            val url = URL(apiUrl)
+            url.openConnection() as HttpURLConnection
+        } catch (e: MalformedURLException) {
+            throw RuntimeException("API URL이 잘못되었습니다. : $apiUrl", e)
+        } catch (e: IOException) {
+            throw RuntimeException("연결이 실패했습니다. : $apiUrl", e)
+        }
+    }
+
+    private fun readBody(body: InputStream): String? {
+        val streamReader = InputStreamReader(body)
+        try {
+            BufferedReader(streamReader).use { lineReader ->
+                val responseBody = StringBuilder()
+                var line: String?
+                while (lineReader.readLine().also { line = it } != null) {
+                    responseBody.append(line)
+                }
+                return responseBody.toString()
+            }
+        } catch (e: IOException) {
+            throw RuntimeException("API 응답을 읽는데 실패했습니다.", e)
+        }
+    }
+
 
 
     // Main 카카오 버튼 초기화

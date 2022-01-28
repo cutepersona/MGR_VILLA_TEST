@@ -13,9 +13,20 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
 
     private val binding: ActivityChoiceMgrTenantBinding by lazy { ActivityChoiceMgrTenantBinding.inflate(layoutInflater) }
 
+    var Nemail: String = ""
+    var Nname: String = ""
+    var Nmobile: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        if (intent.hasExtra("N")){
+//            showToast(intent.getStringExtra("N").toString())
+            Nemail = intent.getStringExtra("Nemail").toString()
+            Nname = intent.getStringExtra("Nname").toString()
+            Nmobile = intent.getStringExtra("Nmobile").toString()
+        }
 
         initToolBar()
         initTenantButton()
@@ -48,6 +59,10 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
         binding.TenantButton.setOnClickListener {
             val tenantSignUpActivity = Intent(this, SignUpActivity::class.java)
             tenantSignUpActivity.putExtra("tenant","TENANT")
+            tenantSignUpActivity.putExtra("N","N")
+            tenantSignUpActivity.putExtra("Nemail",Nemail)
+            tenantSignUpActivity.putExtra("Nname",Nname)
+            tenantSignUpActivity.putExtra("Nmobile",Nmobile)
             startActivity(tenantSignUpActivity)
 
         }
@@ -77,6 +92,10 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
     private fun callMgrSighUpActivity(){
         val callSignUpActivity = Intent(this, SignUpActivity::class.java)
         callSignUpActivity.putExtra("mgr","MGR")
+        callSignUpActivity.putExtra("N","N")
+        callSignUpActivity.putExtra("Nemail",Nemail)
+        callSignUpActivity.putExtra("Nname",Nname)
+        callSignUpActivity.putExtra("Nmobile",Nmobile)
         startActivity(callSignUpActivity)
     }
 
