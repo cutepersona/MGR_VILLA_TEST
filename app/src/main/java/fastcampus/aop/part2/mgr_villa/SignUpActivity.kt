@@ -17,6 +17,8 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.nhn.android.naverlogin.OAuthLogin
 import fastcampus.aop.part2.mgr_villa.customdialog.WelcomeDialog
@@ -212,7 +214,12 @@ class SignUpActivity : AppCompatActivity() {
     var Nname: String = ""
     var Nmobile: String = ""
 
+
+    // 네이버 아이디 로그인
     lateinit var mOAuthLoginInstance : OAuthLogin
+
+    // firestore Database 이용
+    val firestoreDB = Firebase.firestore
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -225,6 +232,8 @@ class SignUpActivity : AppCompatActivity() {
 
         val ab = supportActionBar!!
         ab.setDisplayHomeAsUpEnabled(true)
+
+//        firestore = FirebaseFirestore.getInstance()
 
         if (intent.hasExtra("tenant")) {
             binding.emptyButtomUp.text = intent.getStringExtra("tenant")
@@ -460,6 +469,8 @@ class SignUpActivity : AppCompatActivity() {
 
                 return@setOnClickListener
             } else {
+
+                // 회원정보 저장
 //                    Log.d("checkForm", "${checkForm().toString()}")
                 val userdb = VillaNoticeHelper.getInstance(applicationContext)
 
@@ -468,28 +479,118 @@ class SignUpActivity : AppCompatActivity() {
 //                Log.d("userPassword","${userPasswordEditText1.text}")
 //                Log.d("userPhoneNumber","${userPhoneNumberEditText.text}")
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    userdb!!.VillaNoticeDao().insert(
-                        VillaUsers(
-                            userEmailEditText.text.toString().trim(),
-                            "1",
-                            userNameEditText.text.toString().trim(),
-                            userPasswordEditText1.text.toString().trim(),
-                            userPhoneNumberEditText.text.toString().trim(),
-                            binding.emptyButtomUp.text.toString().trim()
-                        )
-                    )
-                }
+
+
+//                val VillaUsers = VillaUsers(
+//                    userEmailEditText.text.toString().trim(),
+//                    "1",
+//                    userNameEditText.text.toString().trim(),
+//                    userPasswordEditText1.text.toString().trim(),
+//                    userPhoneNumberEditText.text.toString().trim(),
+//                    binding.emptyButtomUp.text.toString().trim()
+//                )
+
+                val VillaUsers = hashMapOf(
+                    "mailAddress" to userEmailEditText.text.toString().trim(),
+                    "roomNumber" to "1",
+                    "userName" to userNameEditText.text.toString().trim(),
+                    "passWord" to userPasswordEditText1.text.toString().trim(),
+                    "phoneNumber" to userPhoneNumberEditText.text.toString().trim(),
+                    "userType" to binding.emptyButtomUp.text.toString().trim()
+                )
+
+                firestoreDB.collection("VillaUsers")
+                    .add(VillaUsers)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                        CoroutineScope(Dispatchers.IO).launch {
+                            userdb!!.VillaNoticeDao().insert(
+                                VillaUsers(
+                                    userEmailEditText.text.toString().trim(),
+                                    "1",
+                                    userNameEditText.text.toString().trim(),
+                                    userPasswordEditText1.text.toString().trim(),
+                                    userPhoneNumberEditText.text.toString().trim(),
+                                    binding.emptyButtomUp.text.toString().trim()
+                                )
+                            )
+                        }
+
+                        showToast("가입을 환영합니다.")
+
+                        val toLogin = Intent(this, LoginActivity::class.java)
+                        startActivity(toLogin)
+                    }
+                    .addOnFailureListener { e ->
+                        showToast("가입에 실패하였습니다.")
+                        Log.w(TAG, "Error adding document", e)
+                        return@addOnFailureListener
+                    }
+//
+//                firestore?.collection("VillaUsers")?.document(userEmailEditText.text.toString().trim())?.set(VillaUsers)
+//                    ?.addOnSuccessListener { result ->
+//
+//                        CoroutineScope(Dispatchers.IO).launch {
+//                            userdb!!.VillaNoticeDao().insert(
+//                                VillaUsers(
+//                                    userEmailEditText.text.toString().trim(),
+//                                    "1",
+//                                    userNameEditText.text.toString().trim(),
+//                                    userPasswordEditText1.text.toString().trim(),
+//                                    userPhoneNumberEditText.text.toString().trim(),
+//                                    binding.emptyButtomUp.text.toString().trim()
+//                                )
+//                            )
+//                        }
+//
+//                        showToast("가입을 환영합니다.")
+//
+//                        val toLogin = Intent(this, LoginActivity::class.java)
+//                        startActivity(toLogin)
+//                    }
+//                    ?.addOnFailureListener {
+//                        showToast("가입에 실패하였습니다.")
+//                        return@addOnFailureListener
+//                    }
+//
+//                firestore.collection("VillaUsers").add(VillaUsers)
+//                    .addOnSuccessListener {
+//                        result ->
+//
+//                        CoroutineScope(Dispatchers.IO).launch {
+//                            userdb!!.VillaNoticeDao().insert(
+//                                VillaUsers(
+//                                    userEmailEditText.text.toString().trim(),
+//                                    "1",
+//                                    userNameEditText.text.toString().trim(),
+//                                    userPasswordEditText1.text.toString().trim(),
+//                                    userPhoneNumberEditText.text.toString().trim(),
+//                                    binding.emptyButtomUp.text.toString().trim()
+//                                )
+//                            )
+//                        }
+//
+//                        showToast("가입을 환영합니다.")
+//
+//                        val toLogin = Intent(this, LoginActivity::class.java)
+//                        startActivity(toLogin)
+//                    }
+//                    .addOnFailureListener {
+//                        showToast("가입에 실패하였습니다.")
+//                        Log.d()
+//                        return@addOnFailureListener
+//                    }
+
 
                 Log.d("userdb!!.VillaUserDao().insert","Villauser")
 
                 // 회원가입 완료 팝업
 //                showSignInCompletePopup()
                 countDown.cancel()
-                showToast("가입을 환영합니다.")
-
-                val toLogin = Intent(this, LoginActivity::class.java)
-                startActivity(toLogin)
+//                showToast("가입을 환영합니다.")
+//
+//                val toLogin = Intent(this, LoginActivity::class.java)
+//                startActivity(toLogin)
 
 //            }
             }
@@ -543,7 +644,7 @@ class SignUpActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
 //                    Log.d(TAG, "signInWithCredential:success")
-                    showToast("인증완료 되었습니다.")
+//                    showToast("인증완료 되었습니다.")
                     val user = task.result?.user
                     authCheckFlag = true
 //                    Log.d(TAG, "${user?.phoneNumber.toString()}")
