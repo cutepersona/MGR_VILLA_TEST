@@ -45,6 +45,7 @@ dependencies {
 
     // 스와이프
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+    implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
 
 
     // databinding

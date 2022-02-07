@@ -6,12 +6,15 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.nhn.android.naverlogin.OAuthLogin
 import fastcampus.aop.part2.mgr_villa.customdialog.mgrCheckDialog
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityChoiceMgrTenantBinding
 
 class ChoiceMgrTenantActivity: AppCompatActivity() {
 
     private val binding: ActivityChoiceMgrTenantBinding by lazy { ActivityChoiceMgrTenantBinding.inflate(layoutInflater) }
+
+    lateinit var mOAuthLoginInstance : OAuthLogin
 
     var Nemail: String = ""
     var Nname: String = ""
@@ -28,9 +31,20 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
             Nmobile = intent.getStringExtra("Nmobile").toString()
         }
 
+        mOAuthLoginInstance = OAuthLogin.getInstance()
+//        mOAuthLoginInstance.init(mContext, naver_client_id, naver_client_secret, naver_client_name)
+
         initToolBar()
         initTenantButton()
         initMgrButton()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        mOAuthLoginInstance.logout(applicationContext)
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
+
     }
 
     private fun initToolBar() {
@@ -43,15 +57,24 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
-        return super.onOptionsItemSelected(item)
+        mOAuthLoginInstance.logout(applicationContext)
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
+
+        return true
+
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        mOAuthLoginInstance.logout(applicationContext)
+//
+//        return super.onOptionsItemSelected(item)
     }
 
     // tenant 버튼 클릭

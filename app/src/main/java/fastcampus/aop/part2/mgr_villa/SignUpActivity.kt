@@ -18,6 +18,7 @@ import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.nhn.android.naverlogin.OAuthLogin
 import fastcampus.aop.part2.mgr_villa.customdialog.WelcomeDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivitySignupBinding
@@ -211,6 +212,9 @@ class SignUpActivity : AppCompatActivity() {
     var Nname: String = ""
     var Nmobile: String = ""
 
+    lateinit var mOAuthLoginInstance : OAuthLogin
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_signup)
@@ -235,6 +239,7 @@ class SignUpActivity : AppCompatActivity() {
             binding.userPhoneNumberEditText.setText(intent.getStringExtra("Nmobile").toString())
         }
 
+        mOAuthLoginInstance = OAuthLogin.getInstance()
 
         auth = Firebase.auth
         auth.setLanguageCode("kr")
@@ -266,6 +271,7 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        mOAuthLoginInstance.logout(applicationContext)
         val toMain = Intent(this, MainActivity::class.java)
         startActivity(toMain)
 
@@ -282,6 +288,7 @@ class SignUpActivity : AppCompatActivity() {
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
+        mOAuthLoginInstance.logout(applicationContext)
         val toMain = Intent(this, MainActivity::class.java)
         startActivity(toMain)
 

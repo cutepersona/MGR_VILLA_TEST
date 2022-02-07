@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.nhn.android.naverlogin.OAuthLogin
 import fastcampus.aop.part2.mgr_villa.LoginActivity
 import fastcampus.aop.part2.mgr_villa.MainActivity
 import fastcampus.aop.part2.mgr_villa.R
@@ -27,6 +28,8 @@ class LogOutDialog(context: Context) {
     private val dialog = Dialog(context)
     private lateinit var onClickListener: OnDialogClickListener
 
+    lateinit var mOAuthLoginInstance : OAuthLogin
+
     fun setOnClickListener(listener: OnDialogClickListener) {
         onClickListener = listener
     }
@@ -34,6 +37,7 @@ class LogOutDialog(context: Context) {
     fun showDialog() {
         dialog.setContentView(R.layout.logout)
         dialog.setCanceledOnTouchOutside(false)
+        mOAuthLoginInstance = OAuthLogin.getInstance()
         dialog.show()
 
 
@@ -43,6 +47,7 @@ class LogOutDialog(context: Context) {
 
         dialog.finishButton.setOnClickListener {
             MyApplication.prefs.clear()
+            mOAuthLoginInstance.logout(dialog.context)
             dialog.dismiss()
             val toMain = Intent(dialog.context, MainActivity::class.java)
             startActivity(dialog.context,toMain,null)
