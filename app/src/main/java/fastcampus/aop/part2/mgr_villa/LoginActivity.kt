@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityLoginBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
@@ -24,6 +27,8 @@ class LoginActivity : AppCompatActivity() {
 
     //    private lateinit var binding: ActivityLoginBinding
     private val binding: ActivityLoginBinding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
+
+    val firestoreDB = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +52,44 @@ class LoginActivity : AppCompatActivity() {
 //            userEditor.putString("pw", binding.userPasswordEditText1.text.toString().trim())
 //            userEditor.apply()
 
-            MyApplication.prefs.setString("email", binding.userEmailEditText.text.toString().trim())
-            MyApplication.prefs.setString("pw", binding.userPasswordEditText1.text.toString().trim())
+
 
             val userdb = VillaNoticeHelper.getInstance(applicationContext)
 //            val villadb = VillaInfoHelper.getInstance(applicationContext)
+
+            // TODO 회원정보 가져오기
+            firestoreDB.collection("VillaUsers")
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful){
+                        for (i in task.result!!){
+                            if (i.id == binding.userEmailEditText.text.toString().trim()){
+                                MyApplication.prefs.setString("email", i.data["mailAddress"].toString().trim())
+                                MyApplication.prefs.setString("pw", i.data["passWord"].toString().trim())
+                                MyApplication.prefs.setString("userType",i.data["userType"].toString().trim())
+                                break
+                            }
+                        }
+                    }
+                }
+                .addOnFailureListener {
+                    showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+                    return@addOnFailureListener
+                }
+//                .addOnSuccessListener { document ->
+//                    if (document != null) {
+//                        val loginUser = document.toObject<VillaUsers1>()
+//                        showToast("${loginUser?.mailAddress}")
+//                    } else {
+//                        showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+//                        return@addOnSuccessListener
+//                    }
+//                }
+//                .addOnFailureListener {
+//                    showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+//                    return@addOnFailureListener
+//                }
+
 
             Thread(Runnable {
                 val user = userdb?.VillaNoticeDao()?.userLogin(
@@ -77,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
                         showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
                     }
                     else {
-                        MyApplication.prefs.setString("userType",user.userType)
+//                        MyApplication.prefs.setString("userType",user.userType)
                         if (villaInfo >= 1) {
                             // TODO 홈화면으로 이동해야함.
                             if (user.userType.equals("MGR")){

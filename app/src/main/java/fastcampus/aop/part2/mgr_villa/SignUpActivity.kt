@@ -490,6 +490,8 @@ class SignUpActivity : AppCompatActivity() {
 //                    binding.emptyButtomUp.text.toString().trim()
 //                )
 
+                val users = firestoreDB.collection("VillaUsers")
+
                 val VillaUsers = hashMapOf(
                     "mailAddress" to userEmailEditText.text.toString().trim(),
                     "roomNumber" to "1",
@@ -498,11 +500,12 @@ class SignUpActivity : AppCompatActivity() {
                     "phoneNumber" to userPhoneNumberEditText.text.toString().trim(),
                     "userType" to binding.emptyButtomUp.text.toString().trim()
                 )
-
-                firestoreDB.collection("VillaUsers")
-                    .add(VillaUsers)
+                users.document(userEmailEditText.text.toString().trim())
+                    .set(VillaUsers)
+//                firestoreDB.collection("VillaUsers")
+//                users.add(VillaUsers)
                     .addOnSuccessListener { documentReference ->
-                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+//                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                         CoroutineScope(Dispatchers.IO).launch {
                             userdb!!.VillaNoticeDao().insert(
                                 VillaUsers(
@@ -526,60 +529,6 @@ class SignUpActivity : AppCompatActivity() {
                         Log.w(TAG, "Error adding document", e)
                         return@addOnFailureListener
                     }
-//
-//                firestore?.collection("VillaUsers")?.document(userEmailEditText.text.toString().trim())?.set(VillaUsers)
-//                    ?.addOnSuccessListener { result ->
-//
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            userdb!!.VillaNoticeDao().insert(
-//                                VillaUsers(
-//                                    userEmailEditText.text.toString().trim(),
-//                                    "1",
-//                                    userNameEditText.text.toString().trim(),
-//                                    userPasswordEditText1.text.toString().trim(),
-//                                    userPhoneNumberEditText.text.toString().trim(),
-//                                    binding.emptyButtomUp.text.toString().trim()
-//                                )
-//                            )
-//                        }
-//
-//                        showToast("가입을 환영합니다.")
-//
-//                        val toLogin = Intent(this, LoginActivity::class.java)
-//                        startActivity(toLogin)
-//                    }
-//                    ?.addOnFailureListener {
-//                        showToast("가입에 실패하였습니다.")
-//                        return@addOnFailureListener
-//                    }
-//
-//                firestore.collection("VillaUsers").add(VillaUsers)
-//                    .addOnSuccessListener {
-//                        result ->
-//
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            userdb!!.VillaNoticeDao().insert(
-//                                VillaUsers(
-//                                    userEmailEditText.text.toString().trim(),
-//                                    "1",
-//                                    userNameEditText.text.toString().trim(),
-//                                    userPasswordEditText1.text.toString().trim(),
-//                                    userPhoneNumberEditText.text.toString().trim(),
-//                                    binding.emptyButtomUp.text.toString().trim()
-//                                )
-//                            )
-//                        }
-//
-//                        showToast("가입을 환영합니다.")
-//
-//                        val toLogin = Intent(this, LoginActivity::class.java)
-//                        startActivity(toLogin)
-//                    }
-//                    .addOnFailureListener {
-//                        showToast("가입에 실패하였습니다.")
-//                        Log.d()
-//                        return@addOnFailureListener
-//                    }
 
 
                 Log.d("userdb!!.VillaUserDao().insert","Villauser")
