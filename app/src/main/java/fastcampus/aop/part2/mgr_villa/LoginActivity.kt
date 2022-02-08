@@ -57,23 +57,50 @@ class LoginActivity : AppCompatActivity() {
             val userdb = VillaNoticeHelper.getInstance(applicationContext)
 //            val villadb = VillaInfoHelper.getInstance(applicationContext)
 
-            // TODO 회원정보 가져오기
+            // 로그인 회원정보 가져오기
             firestoreDB.collection("VillaUsers")
+                .whereEqualTo("mailAddress", binding.userEmailEditText.text.toString().trim())
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful){
                         for (i in task.result!!){
-                            if (i.id == binding.userEmailEditText.text.toString().trim()){
-                                MyApplication.prefs.setString("email", i.data["mailAddress"].toString().trim())
-                                MyApplication.prefs.setString("pw", i.data["passWord"].toString().trim())
+//                            if (i.id == binding.userEmailEditText.text.toString().trim()) {
+                                MyApplication.prefs.setString("email",i.data["mailAddress"].toString().trim())
+                                MyApplication.prefs.setString("pw",i.data["passWord"].toString().trim())
                                 MyApplication.prefs.setString("userType",i.data["userType"].toString().trim())
+
+                                // 로그인 된 회원 정보 체크
+                                firestoreDB.collection("VillaInfo")
+                                    .whereEqualTo("mailAddress", i.id)
+                                    .get()
+                                    .addOnSuccessListener { task ->
+                                        // 관리자 email로 등록된 집이 없음.
+                                        if (task.isEmpty && i.data["userType"].toString() .equals("MGR")) {
+//                                            showToast("집없고 관리자")
+                                            val addrSearchActivity = Intent(this, AddressSearchActivity::class.java)
+                                            addrSearchActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+                                            startActivity(addrSearchActivity)
+                                        }
+                                        // 관리자 email로 등록된 집이 있음
+                                        if (!task.isEmpty && i.data["userType"].toString() .equals("MGR")){
+                                            val mgrHomeActivity = Intent(this, VillaHomeActivity::class.java)
+                                            mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+                                            startActivity(mgrHomeActivity)
+                                        }
+                                        // 세입자 email로
+                                    }
+                                    .addOnFailureListener {
+                                        showToast("관리자 정보 체크")
+                                        return@addOnFailureListener
+                                    }
                                 break
-                            }
+//                            }
+
                         }
                     }
                 }
                 .addOnFailureListener {
-                    showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+                    showToast("회원정보를 불러오지 못했습니다.")
                     return@addOnFailureListener
                 }
 //                .addOnSuccessListener { document ->
@@ -91,73 +118,78 @@ class LoginActivity : AppCompatActivity() {
 //                }
 
 
-            Thread(Runnable {
-                val user = userdb?.VillaNoticeDao()?.userLogin(
-                    binding.userEmailEditText.text.toString().trim(),
-                    binding.userPasswordEditText1.text.toString().trim()
-                )
-
-//                villadb!!.VillaInfoDao().deleteAll()
-
-                val villaInfo = userdb!!.VillaNoticeDao().isVilla(binding.userEmailEditText.text.toString())
 
 
-                var tenantRequestCheck: Int = 0
-                var tenantStatusCheck: String = ""
 
-                if (user?.userType.equals("TENANT")){
-                    tenantRequestCheck = userdb!!.VillaNoticeDao().isVillaTenantCheck(binding.userEmailEditText.text.toString())
-                    tenantStatusCheck = userdb!!.VillaNoticeDao().tenantStatusCheck(binding.userEmailEditText.text.toString())
-                }
 
-                runOnUiThread {
-                    if (user == null) {
-                        showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
-                    }
-                    else {
-//                        MyApplication.prefs.setString("userType",user.userType)
-                        if (villaInfo >= 1) {
-                            // TODO 홈화면으로 이동해야함.
-                            if (user.userType.equals("MGR")){
-                                val mgrHomeActivity =
-                                    Intent(this, VillaHomeActivity::class.java)
-                                mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
-                                startActivity(mgrHomeActivity)
-                            }
 
-                        }else{
-                            // 빌라 정보가 없고 관리자인 경우 빌라정보 등록
-                            if (villaInfo < 1 && user.userType.equals("MGR")) {
-                                val addrSearchActivity =
-                                    Intent(this, AddressSearchActivity::class.java)
-                                addrSearchActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
-                                startActivity(addrSearchActivity)
-                            }
-                            // 입주요청하지 않고 세입자인 경우 입주요청화면 이동
-                            if (tenantRequestCheck < 1 && user.userType.equals("TENANT")){
-                                val addrSearchTenantActivity =
-                                    Intent(this, AddressSearchForTenantActivity::class.java)
-                                addrSearchTenantActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
-                                startActivity(addrSearchTenantActivity)
-                            }
-                            // 입주요청은 했으나 아직 입주완료되지 않은 경우
-                            if (tenantRequestCheck > 0 && tenantStatusCheck.equals("Request")){
-                                showToast("입주대기 중입니다. 관리자에게 문의바랍니다.")
-                            }
-                            // 입주요청이 완료된 세입자
-                            if (tenantRequestCheck > 0 && tenantStatusCheck.equals("IntoDone")){
-                                val mgrHomeActivity =
-                                    Intent(this, VillaHomeActivity::class.java)
-                                mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
-                                startActivity(mgrHomeActivity)
-                            }
-
-                        }
-
-                    }
-                }
-            }).start()
-
+//------------------------------------------------------------------------------------------------------
+//            Thread(Runnable {
+//                val user = userdb?.VillaNoticeDao()?.userLogin(
+//                    binding.userEmailEditText.text.toString().trim(),
+//                    binding.userPasswordEditText1.text.toString().trim()
+//                )
+//
+//
+//                val villaInfo = userdb!!.VillaNoticeDao().isVilla(binding.userEmailEditText.text.toString())
+//
+//
+//                var tenantRequestCheck: Int = 0
+//                var tenantStatusCheck: String = ""
+//
+//                if (user?.userType.equals("TENANT")){
+//                    tenantRequestCheck = userdb!!.VillaNoticeDao().isVillaTenantCheck(binding.userEmailEditText.text.toString())
+//                    tenantStatusCheck = userdb!!.VillaNoticeDao().tenantStatusCheck(binding.userEmailEditText.text.toString())
+//                }
+//
+//                runOnUiThread {
+//                    if (user == null) {
+//                        showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+//                    }
+//                    else {
+////                        MyApplication.prefs.setString("userType",user.userType)
+//                        if (villaInfo >= 1) {
+//                            // TODO 홈화면으로 이동해야함.
+//                            if (user.userType.equals("MGR")){
+//                                val mgrHomeActivity =
+//                                    Intent(this, VillaHomeActivity::class.java)
+//                                mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+//                                startActivity(mgrHomeActivity)
+//                            }
+//
+//                        }else{
+//                            // 빌라 정보가 없고 관리자인 경우 빌라정보 등록
+//                            if (villaInfo < 1 && user.userType.equals("MGR")) {
+//                                val addrSearchActivity =
+//                                    Intent(this, AddressSearchActivity::class.java)
+//                                addrSearchActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+//                                startActivity(addrSearchActivity)
+//                            }
+//                            // 입주요청하지 않고 세입자인 경우 입주요청화면 이동
+//                            if (tenantRequestCheck < 1 && user.userType.equals("TENANT")){
+//                                val addrSearchTenantActivity =
+//                                    Intent(this, AddressSearchForTenantActivity::class.java)
+//                                addrSearchTenantActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+//                                startActivity(addrSearchTenantActivity)
+//                            }
+//                            // 입주요청은 했으나 아직 입주완료되지 않은 경우
+//                            if (tenantRequestCheck > 0 && tenantStatusCheck.equals("Request")){
+//                                showToast("입주대기 중입니다. 관리자에게 문의바랍니다.")
+//                            }
+//                            // 입주요청이 완료된 세입자
+//                            if (tenantRequestCheck > 0 && tenantStatusCheck.equals("IntoDone")){
+//                                val mgrHomeActivity =
+//                                    Intent(this, VillaHomeActivity::class.java)
+//                                mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+//                                startActivity(mgrHomeActivity)
+//                            }
+//
+//                        }
+//
+//                    }
+//                }
+//            }).start()
+//------------------------------------------------------------------------------------------------------
 
         }
     }

@@ -519,7 +519,7 @@ class SignUpActivity : AppCompatActivity() {
 //                        }
 //                    }
 
-                // TODO 회원정보 체크하기
+                // 회원정보 체크하기
                 firestoreDB.collection("VillaUsers")
                     .get()
                     .addOnCompleteListener { task ->
@@ -558,6 +558,7 @@ class SignUpActivity : AppCompatActivity() {
                                             Log.w(TAG, "Error adding document", e)
                                             return@addOnFailureListener
                                         }
+                                    break
                                 }
                             }
                         }

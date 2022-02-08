@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -10,9 +11,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityVillainfoBinding
 import fastcampus.aop.part2.mgr_villa.model.VillaInfo
+import fastcampus.aop.part2.mgr_villa.model.VillaUsers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class VillaInfoActivity : AppCompatActivity() {
@@ -24,6 +31,7 @@ class VillaInfoActivity : AppCompatActivity() {
     }
 
     private var tenantCountFlag = false
+    val firestoreDB = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,50 +91,125 @@ class VillaInfoActivity : AppCompatActivity() {
             if (!checkForm()) {
                 return@setOnClickListener
             } else {
-                val villadb = VillaNoticeHelper.getInstance(applicationContext)
 
-                Thread(Runnable {
+                val villaInfo = firestoreDB.collection("VillaInfo")
 
-                    villadb!!.VillaNoticeDao()?.insert(
-                        VillaInfo(
-                            binding.villaAddressEditText.text.toString().trim(),
-                            binding.roadAddressEditText.text.toString().trim(),
-                            binding.villaNameEditText.text.toString().trim(),
-                            "",
-                            binding.villaTenantCountEditText.text.toString(),
-                            0,
-                            binding.elevatorSwitch.isChecked,
-                            binding.villaInfoEmailHidden.text.toString(),
-                            ""
-                        )
-                    )
+                val VillaInfo = hashMapOf(
+                    "villaAddress" to binding.villaAddressEditText.text.toString().trim(),
+                    "roadAddress" to binding.roadAddressEditText.text.toString().trim(),
+                    "villaName" to binding.villaNameEditText.text.toString().trim(),
+                    "villaAlias" to "",
+                    "villaTenantCount" to binding.villaTenantCountEditText.text.toString(),
+                    "villaParkCount" to 0,
+                    "villaElevator" to binding.elevatorSwitch.isChecked,
+                    "mailAddress" to binding.villaInfoEmailHidden.text.toString(),
+                    "roomNumber" to ""
+                )
 
-                    runOnUiThread {
+                // 회원정보 체크하기
+                firestoreDB.collection("VillaInfo")
+//                    .whereEqualTo("mailAddress", binding.villaInfoEmailHidden.text.toString())
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            if (!task.result!!.isEmpty){
+                                for (i in task.result!!) {
+                                    showToast(i.id)
+                                    if (i.id == binding.villaAddressEditText.text.toString().trim()) {
+                                        showToast("이미 등록된 주소입니다.")
+                                        return@addOnCompleteListener
+                                        break
+                                    }
+                                }
+                            } else {
+                                // 새주소 등록
+                                    villaInfo.document(binding.villaAddressEditText.text.toString().trim())
+                                        .set(VillaInfo)
+                                        .addOnSuccessListener { documentReference ->
+//                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+//                                            CoroutineScope(Dispatchers.IO).launch {
+//                                                userdb!!.VillaNoticeDao().insert(
+//                                                    VillaUsers(
+//                                                        userEmailEditText.text.toString().trim(),
+//                                                        "1",
+//                                                        userNameEditText.text.toString().trim(),
+//                                                        userPasswordEditText1.text.toString()
+//                                                            .trim(),
+//                                                        userPhoneNumberEditText.text.toString()
+//                                                            .trim(),
+//                                                        binding.emptyButtomUp.text.toString().trim()
+//                                                    )
+//                                                )
+//                                            }
 
+//                                            showToast("회원가입을 환영합니다.")
                         val homeActivity = Intent(this, VillaHomeActivity::class.java)
                         homeActivity.putExtra("email", binding.villaInfoEmailHidden.text.toString())
                         startActivity(homeActivity)
-
-
-//                        if (user == null) {
-//                            showToast("회원정보가 없습니다.")
-//                        }
-//                        else {
-//                            if (villaInfo >= 1) {
-//                                // TODO 홈화면으로 이동해야함.
-//                            }else{
-//                                if (villaInfo < 1 && user.userType.equals("MGR")) {
-////                            showToast("villaInfo==null")
-//                                    val addrSearchActivity =
-//                                        Intent(this, AddressSearchActivity::class.java)
-//                                    startActivity(addrSearchActivity)
-//                                }
-//                            }
-//
-//                        }
+                                        }
+                                        .addOnFailureListener { e ->
+                                            showToast("등록에 실패하였습니다.")
+                                            Log.w(ContentValues.TAG, "Error adding document", e)
+                                            return@addOnFailureListener
+                                        }
+                                }
+                        }
+                        else {
+                            showToast("정보를 불러오지 못했습니다.")
+                            return@addOnCompleteListener
+                        }
                     }
-                }).start()
+                    .addOnFailureListener {
+                        showToast("등록에 실패 하였습니다.")
+                        return@addOnFailureListener
+                    }
 
+//
+//                //----------------------------------------------------------------------------------------------------
+//                val villadb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                Thread(Runnable {
+//
+//                    villadb!!.VillaNoticeDao()?.insert(
+//                        VillaInfo(
+//                            binding.villaAddressEditText.text.toString().trim(),
+//                            binding.roadAddressEditText.text.toString().trim(),
+//                            binding.villaNameEditText.text.toString().trim(),
+//                            "",
+//                            binding.villaTenantCountEditText.text.toString(),
+//                            0,
+//                            binding.elevatorSwitch.isChecked,
+//                            binding.villaInfoEmailHidden.text.toString(),
+//                            ""
+//                        )
+//                    )
+//
+//                    runOnUiThread {
+//
+//                        val homeActivity = Intent(this, VillaHomeActivity::class.java)
+//                        homeActivity.putExtra("email", binding.villaInfoEmailHidden.text.toString())
+//                        startActivity(homeActivity)
+//
+//
+////                        if (user == null) {
+////                            showToast("회원정보가 없습니다.")
+////                        }
+////                        else {
+////                            if (villaInfo >= 1) {
+////                                // TODO 홈화면으로 이동해야함.
+////                            }else{
+////                                if (villaInfo < 1 && user.userType.equals("MGR")) {
+//////                            showToast("villaInfo==null")
+////                                    val addrSearchActivity =
+////                                        Intent(this, AddressSearchActivity::class.java)
+////                                    startActivity(addrSearchActivity)
+////                                }
+////                            }
+////
+////                        }
+//                    }
+//                }).start()
+////----------------------------------------------------------------------------------------------------
 
             }
         }
