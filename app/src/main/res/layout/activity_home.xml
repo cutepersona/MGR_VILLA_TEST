@@ -73,7 +73,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/hUserNameIs"
         android:textSize="30sp"
-        android:text="test"
         android:textStyle="bold"
         android:layout_marginLeft="20dp"
         />

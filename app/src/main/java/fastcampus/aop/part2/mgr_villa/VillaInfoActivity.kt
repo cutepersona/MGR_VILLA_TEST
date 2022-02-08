@@ -114,7 +114,6 @@ class VillaInfoActivity : AppCompatActivity() {
                         if (task.isSuccessful) {
                             if (!task.result!!.isEmpty){
                                 for (i in task.result!!) {
-                                    showToast(i.id)
                                     if (i.id == binding.villaAddressEditText.text.toString().trim()) {
                                         showToast("이미 등록된 주소입니다.")
                                         return@addOnCompleteListener

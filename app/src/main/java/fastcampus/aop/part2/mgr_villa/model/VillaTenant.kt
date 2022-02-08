@@ -17,13 +17,13 @@ import androidx.room.PrimaryKey
     )
 )
 data class VillaTenant (
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "roomId") var roomId: Long? = 0,
-    @ColumnInfo(name = "roomNumber") var roomNumber: String,
-    @ColumnInfo(name = "tenantEmail") var tenantEmail: String?,
-    @ColumnInfo(name = "tenantContractDate") var tenantContractDate: String?,
-    @ColumnInfo(name = "tenantLeaveDate") var tenantLeaveDate: String?,
-    @ColumnInfo(name = "tenantStatus") var tenantStatus: String?,
-    @ColumnInfo(name = "villaAddr") var villaAddr: String,
-    @ColumnInfo(name = "roadAddress") var roadAddress: String
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "roomId") var roomId: String = "",
+    @ColumnInfo(name = "roomNumber") var roomNumber: String = "",
+    @ColumnInfo(name = "tenantEmail") var tenantEmail: String? = "",
+    @ColumnInfo(name = "tenantContractDate") var tenantContractDate: String? = "",
+    @ColumnInfo(name = "tenantLeaveDate") var tenantLeaveDate: String? = "",
+    @ColumnInfo(name = "tenantStatus") var tenantStatus: String? = "",
+    @ColumnInfo(name = "villaAddr") var villaAddr: String = "",
+    @ColumnInfo(name = "roadAddress") var roadAddress: String = ""
 )

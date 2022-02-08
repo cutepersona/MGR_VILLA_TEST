@@ -6,11 +6,35 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.R
 import fastcampus.aop.part2.mgr_villa.model.TenantLayout
+import fastcampus.aop.part2.mgr_villa.model.VillaTenant
 
-class TenantAdapter(val tenantList: ArrayList<TenantLayout>): RecyclerView.Adapter<TenantAdapter.TenantViewHolder>() {
+class TenantAdapter(val tenantList: ArrayList<VillaTenant>): RecyclerView.Adapter<TenantAdapter.TenantViewHolder>() {
+
+    val firestoreDB = Firebase.firestore
+    
+    init {
+        firestoreDB?.collection("VillaTenant").orderBy("roomNumber", Query.Direction.ASCENDING)
+            ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            tenantList.clear()
+
+            for (snapshot in querySnapshot!!.documents){
+                val item = snapshot.toObject(VillaTenant::class.java)
+                item!!.roomId = snapshot.id
+                tenantList.add(item!!)
+            }
+            notifyDataSetChanged()
+        }
+        
+    }
+    
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TenantAdapter.TenantViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycleview_tenants, parent, false)
         return TenantViewHolder(view)
@@ -21,10 +45,10 @@ class TenantAdapter(val tenantList: ArrayList<TenantLayout>): RecyclerView.Adapt
     }
 
     override fun onBindViewHolder(holder: TenantViewHolder, position: Int) {
-        holder.tenantRoomNumber.text = tenantList[position].tenantRoomNumber
+        holder.tenantRoomNumber.text = tenantList[position].roomNumber
         holder.tenantContractDate.text = tenantList[position].tenantContractDate
         holder.tenantLeaveDate.text = tenantList[position].tenantLeaveDate
-        holder.tenantRoomId.text = tenantList[position].tenantRoomId.toString()
+        holder.tenantRoomId.text = tenantList[position].roomId.toString()
 
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)

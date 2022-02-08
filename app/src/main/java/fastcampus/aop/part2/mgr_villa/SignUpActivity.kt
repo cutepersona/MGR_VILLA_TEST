@@ -521,48 +521,86 @@ class SignUpActivity : AppCompatActivity() {
 
                 // 회원정보 체크하기
                 firestoreDB.collection("VillaUsers")
+                    .whereEqualTo("mailAddress", binding.userEmailEditText.text.toString().trim())
                     .get()
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            for (i in task.result!!) {
-                                if (i.id == binding.userEmailEditText.text.toString().trim()) {
-                                    showToast("이미 가입된 계정입니다.")
-                                    break
-                                } else {
-                                    users.document(userEmailEditText.text.toString().trim())
-                                        .set(VillaUsers)
-                                        .addOnSuccessListener { documentReference ->
+                    .addOnSuccessListener { result ->
+                        if (!result.isEmpty){
+                            showToast("이미 가입된 계정입니다.")
+                            return@addOnSuccessListener
+                        }else {
+                            users.document(userEmailEditText.text.toString().trim())
+                                .set(VillaUsers)
+                                .addOnSuccessListener { documentReference ->
 //                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                                            CoroutineScope(Dispatchers.IO).launch {
-                                                userdb!!.VillaNoticeDao().insert(
-                                                    VillaUsers(
-                                                        userEmailEditText.text.toString().trim(),
-                                                        "1",
-                                                        userNameEditText.text.toString().trim(),
-                                                        userPasswordEditText1.text.toString()
-                                                            .trim(),
-                                                        userPhoneNumberEditText.text.toString()
-                                                            .trim(),
-                                                        binding.emptyButtomUp.text.toString().trim()
-                                                    )
-                                                )
-                                            }
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        userdb!!.VillaNoticeDao().insert(
+                                            VillaUsers(
+                                                userEmailEditText.text.toString().trim(),
+                                                "1",
+                                                userNameEditText.text.toString().trim(),
+                                                userPasswordEditText1.text.toString()
+                                                    .trim(),
+                                                userPhoneNumberEditText.text.toString()
+                                                    .trim(),
+                                                binding.emptyButtomUp.text.toString().trim()
+                                            )
+                                        )
+                                    }
 
-                                            showToast("회원가입을 환영합니다.")
+                                    showToast("회원가입을 환영합니다.")
 
-                                            val toLogin = Intent(this, LoginActivity::class.java)
-                                            startActivity(toLogin)
-                                        }
-                                        .addOnFailureListener { e ->
-                                            showToast("회원가입에 실패하였습니다.")
-                                            Log.w(TAG, "Error adding document", e)
-                                            return@addOnFailureListener
-                                        }
-                                    break
+                                    val toLogin = Intent(this, LoginActivity::class.java)
+                                    startActivity(toLogin)
                                 }
-                            }
+                                .addOnFailureListener { e ->
+                                    showToast("회원가입에 실패하였습니다.")
+                                    Log.w(TAG, "Error adding document", e)
+                                    return@addOnFailureListener
+                                }
                         }
                     }
+//
+//                    .addOnCompleteListener { task ->
+//                        if (task.isSuccessful) {
+//                            for (i in task.result!!) {
+//                                if (i.id == binding.userEmailEditText.text.toString().trim()) {
+//                                    showToast("이미 가입된 계정입니다.")
+//                                    break
+//                                } else {
+//                                    users.document(userEmailEditText.text.toString().trim())
+//                                        .set(VillaUsers)
+//                                        .addOnSuccessListener { documentReference ->
+////                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+//                                            CoroutineScope(Dispatchers.IO).launch {
+//                                                userdb!!.VillaNoticeDao().insert(
+//                                                    VillaUsers(
+//                                                        userEmailEditText.text.toString().trim(),
+//                                                        "1",
+//                                                        userNameEditText.text.toString().trim(),
+//                                                        userPasswordEditText1.text.toString()
+//                                                            .trim(),
+//                                                        userPhoneNumberEditText.text.toString()
+//                                                            .trim(),
+//                                                        binding.emptyButtomUp.text.toString().trim()
+//                                                    )
+//                                                )
+//                                            }
+//
+//                                            showToast("회원가입을 환영합니다.")
+//
+//                                            val toLogin = Intent(this, LoginActivity::class.java)
+//                                            startActivity(toLogin)
+//                                        }
+//                                        .addOnFailureListener { e ->
+//                                            showToast("회원가입에 실패하였습니다.")
+//                                            Log.w(TAG, "Error adding document", e)
+//                                            return@addOnFailureListener
+//                                        }
+//                                    break
+//                                }
+//                            }
+//                        }
+//                    }
                     .addOnFailureListener {
                         showToast("회원가입에 실패 하였습니다.")
                         return@addOnFailureListener

@@ -4,5 +4,5 @@ class TenantLayout (
     val tenantRoomId: Long?,
     val tenantRoomNumber: String,
     val tenantContractDate: String,
-    val tenantLeaveDate: String,
+    val tenantLeaveDate: String
 )
