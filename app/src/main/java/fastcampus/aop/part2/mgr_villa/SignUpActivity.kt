@@ -25,6 +25,7 @@ import fastcampus.aop.part2.mgr_villa.customdialog.WelcomeDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivitySignupBinding
 import fastcampus.aop.part2.mgr_villa.model.VillaUsers
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,7 +43,11 @@ class SignUpActivity : AppCompatActivity() {
     private var authCheckFlag: Boolean = false
 
 
-    private val binding: ActivitySignupBinding by lazy { ActivitySignupBinding.inflate(layoutInflater) }
+    private val binding: ActivitySignupBinding by lazy {
+        ActivitySignupBinding.inflate(
+            layoutInflater
+        )
+    }
 
     private val collbacks by lazy {
         object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -104,7 +109,7 @@ class SignUpActivity : AppCompatActivity() {
     var second = 0
     var minute = 0
 
-    val countDown  = object : CountDownTimer(1000 * 90, 1000) {
+    val countDown = object : CountDownTimer(1000 * 90, 1000) {
         @SuppressLint("SetTextI18n")
         override fun onTick(p0: Long) {
             second = ((p0 / 1000) % 60).toInt()
@@ -112,7 +117,7 @@ class SignUpActivity : AppCompatActivity() {
 
             // countDownInterval 마다 호출 (여기선 1000ms)
             runOnUiThread {
-                binding.SignUpAuthCredentialTimer.text = "$minute:${String.format("%02d",second)}"
+                binding.SignUpAuthCredentialTimer.text = "$minute:${String.format("%02d", second)}"
             }
 
         }
@@ -216,7 +221,7 @@ class SignUpActivity : AppCompatActivity() {
 
 
     // 네이버 아이디 로그인
-    lateinit var mOAuthLoginInstance : OAuthLogin
+    lateinit var mOAuthLoginInstance: OAuthLogin
 
     // firestore Database 이용
     val firestoreDB = Firebase.firestore
@@ -241,7 +246,7 @@ class SignUpActivity : AppCompatActivity() {
             binding.emptyButtomUp.text = intent.getStringExtra("mgr")
         }
 
-        if (intent.hasExtra("N")){
+        if (intent.hasExtra("N")) {
 //            showToast(intent.getStringExtra("N").toString())
             binding.userEmailEditText.setText(intent.getStringExtra("Nemail").toString())
             binding.userNameEditText.setText(intent.getStringExtra("Nname").toString())
@@ -345,12 +350,14 @@ class SignUpActivity : AppCompatActivity() {
         AllUseTerms.setOnClickListener {
 //            Log.d("AllUseTerms.setOnClickListener", "necessaryTermsCheck.isChecked")
             if (necessaryTermsCheck.isChecked
-                && !privacyPolicyCheck.isChecked){
+                && !privacyPolicyCheck.isChecked
+            ) {
                 privacyPolicyCheck.isChecked = true
             } else if (!necessaryTermsCheck.isChecked
-                && privacyPolicyCheck.isChecked){
+                && privacyPolicyCheck.isChecked
+            ) {
                 necessaryTermsCheck.isChecked = true
-            }else{
+            } else {
                 necessaryTermsCheck.isChecked = !necessaryTermsCheck.isChecked
                 privacyPolicyCheck.isChecked = !privacyPolicyCheck.isChecked
             }
@@ -406,12 +413,12 @@ class SignUpActivity : AppCompatActivity() {
         checkPWrewind()
         checkPhoneNumber()
 
-        if (!necessaryTermsCheck.isChecked || !privacyPolicyCheck.isChecked){
-             privacyPolicyValid.setTextColor(-65535)
-                privacyPolicyValid.isInvisible = false
-                privacyPolicyValid.setText(R.string.must_insert)
-                privacyflag = false
-        }else{
+        if (!necessaryTermsCheck.isChecked || !privacyPolicyCheck.isChecked) {
+            privacyPolicyValid.setTextColor(-65535)
+            privacyPolicyValid.isInvisible = false
+            privacyPolicyValid.setText(R.string.must_insert)
+            privacyflag = false
+        } else {
             privacyflag = true
         }
 
@@ -420,11 +427,11 @@ class SignUpActivity : AppCompatActivity() {
 //        privPolicyCheck()
 
         return (emailflag
-                &&nameflag
-                &&pwflag
-                &&repwflag
-                &&termsflag
-                &&privacyflag)
+                && nameflag
+                && pwflag
+                && repwflag
+                && termsflag
+                && privacyflag)
 
     }
 
@@ -439,13 +446,13 @@ class SignUpActivity : AppCompatActivity() {
                 showToast("인증 번호를 입력해 주세요.")
                 return@setOnClickListener
             }
-            if (userPhone.isEmpty()){
+            if (userPhone.isEmpty()) {
                 showToast("휴대폰 번호를 입력해 주세요.")
                 return@setOnClickListener
             }
 
             val authNumber = userAuthCompleteEditText.text.toString()
-            if (authNumber.isNotEmpty()){
+            if (authNumber.isNotEmpty()) {
 
                 val phoneCredential =
                     PhoneAuthProvider.getCredential(
@@ -480,7 +487,6 @@ class SignUpActivity : AppCompatActivity() {
 //                Log.d("userPhoneNumber","${userPhoneNumberEditText.text}")
 
 
-
 //                val VillaUsers = VillaUsers(
 //                    userEmailEditText.text.toString().trim(),
 //                    "1",
@@ -500,38 +506,69 @@ class SignUpActivity : AppCompatActivity() {
                     "phoneNumber" to userPhoneNumberEditText.text.toString().trim(),
                     "userType" to binding.emptyButtomUp.text.toString().trim()
                 )
-                users.document(userEmailEditText.text.toString().trim())
-                    .set(VillaUsers)
+//
 //                firestoreDB.collection("VillaUsers")
-//                users.add(VillaUsers)
-                    .addOnSuccessListener { documentReference ->
+//                    .get()
+//                    .addOnSuccessListener { result ->
+//                        val user = result.find { it["mailAddress"] ==  userEmailEditText.text.toString().trim()}
+//                        if (user != null) {
+//                            showToast(user.id.toString())
+//                            return@addOnSuccessListener
+//                        } else {
+//                            showToast("mail null")
+//                        }
+//                    }
+
+                // TODO 회원정보 체크하기
+                firestoreDB.collection("VillaUsers")
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            for (i in task.result!!) {
+                                if (i.id == binding.userEmailEditText.text.toString().trim()) {
+                                    showToast("이미 가입된 계정입니다.")
+                                    break
+                                } else {
+                                    users.document(userEmailEditText.text.toString().trim())
+                                        .set(VillaUsers)
+                                        .addOnSuccessListener { documentReference ->
 //                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                        CoroutineScope(Dispatchers.IO).launch {
-                            userdb!!.VillaNoticeDao().insert(
-                                VillaUsers(
-                                    userEmailEditText.text.toString().trim(),
-                                    "1",
-                                    userNameEditText.text.toString().trim(),
-                                    userPasswordEditText1.text.toString().trim(),
-                                    userPhoneNumberEditText.text.toString().trim(),
-                                    binding.emptyButtomUp.text.toString().trim()
-                                )
-                            )
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                userdb!!.VillaNoticeDao().insert(
+                                                    VillaUsers(
+                                                        userEmailEditText.text.toString().trim(),
+                                                        "1",
+                                                        userNameEditText.text.toString().trim(),
+                                                        userPasswordEditText1.text.toString()
+                                                            .trim(),
+                                                        userPhoneNumberEditText.text.toString()
+                                                            .trim(),
+                                                        binding.emptyButtomUp.text.toString().trim()
+                                                    )
+                                                )
+                                            }
+
+                                            showToast("회원가입을 환영합니다.")
+
+                                            val toLogin = Intent(this, LoginActivity::class.java)
+                                            startActivity(toLogin)
+                                        }
+                                        .addOnFailureListener { e ->
+                                            showToast("회원가입에 실패하였습니다.")
+                                            Log.w(TAG, "Error adding document", e)
+                                            return@addOnFailureListener
+                                        }
+                                }
+                            }
                         }
-
-                        showToast("가입을 환영합니다.")
-
-                        val toLogin = Intent(this, LoginActivity::class.java)
-                        startActivity(toLogin)
                     }
-                    .addOnFailureListener { e ->
-                        showToast("가입에 실패하였습니다.")
-                        Log.w(TAG, "Error adding document", e)
+                    .addOnFailureListener {
+                        showToast("회원가입에 실패 하였습니다.")
                         return@addOnFailureListener
                     }
 
 
-                Log.d("userdb!!.VillaUserDao().insert","Villauser")
+                Log.d("userdb!!.VillaUserDao().insert", "Villauser")
 
                 // 회원가입 완료 팝업
 //                showSignInCompletePopup()
