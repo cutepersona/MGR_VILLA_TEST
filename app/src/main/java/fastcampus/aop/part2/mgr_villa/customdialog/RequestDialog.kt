@@ -26,7 +26,7 @@ class RequestDialog(context: Context) :AppCompatActivity() {
         onClickListener = listener
     }
 
-    fun showDialog(roomNumber:String, roomId:Long) {
+    fun showDialog(roomNumber:String, roomId:String) {
         dialog.setContentView(R.layout.tenant_request)
         dialog.setCanceledOnTouchOutside(false)
         dialog.requestTile.setText(roomNumber + "으로 전입요청 하시겠습니까?")
@@ -45,7 +45,7 @@ class RequestDialog(context: Context) :AppCompatActivity() {
     }
 
     interface OnDialogClickListener {
-        fun onClicked(context: Context, requestResult:String, roomId: Long)
+        fun onClicked(context: Context, requestResult:String, roomId: String)
     }
 
     private fun showToast(message: String) {

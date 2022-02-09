@@ -58,7 +58,7 @@ class TenantAdapter(val tenantList: ArrayList<VillaTenant>): RecyclerView.Adapte
         holder.tenantRoomNumber.text = tenantList[position].roomNumber
         holder.tenantContractDate.text = tenantList[position].tenantContractDate
         holder.tenantLeaveDate.text = tenantList[position].tenantLeaveDate
-        holder.tenantRoomId.text = tenantList[position].roomId.toString()
+        holder.tenantRoomId.text = tenantList[position].roomId
 
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)

@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,11 +8,42 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.R
 import fastcampus.aop.part2.mgr_villa.model.TenantLayout
 import fastcampus.aop.part2.mgr_villa.model.TenantRequestLayout
+import fastcampus.aop.part2.mgr_villa.model.VillaTenant
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
-class TenantRequestAdapter(val tenantList: ArrayList<TenantRequestLayout>): RecyclerView.Adapter<TenantRequestAdapter.TenantRequestViewHolder>() {
+class TenantRequestAdapter(val tenantList: ArrayList<VillaTenant>): RecyclerView.Adapter<TenantRequestAdapter.TenantRequestViewHolder>() {
+
+    val firestoreDB = Firebase.firestore
+
+    init {
+        firestoreDB?.collection("VillaTenant")
+            .whereEqualTo("villaAddr", MyApplication.prefs.getString("requestAddress", "").trim())
+            .orderBy("roomNumber", Query.Direction.ASCENDING)
+            .addSnapshotListener { querySnapshot, e ->
+                tenantList.clear()
+
+                if (e != null){
+//                    showToast(e.message.toString())
+                    Log.d("VillaTenant/TenantRequestAdapter------------------>", e.message.toString())
+                    return@addSnapshotListener
+                }
+
+                for (snapshot in querySnapshot!!.documents){
+                    val item = snapshot.toObject(VillaTenant::class.java)
+                    item!!.roomId = snapshot.id
+                    tenantList.add(item!!)
+                }
+                notifyDataSetChanged()
+            }
+
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TenantRequestAdapter.TenantRequestViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycleview_tenantsrequest, parent, false)
         return TenantRequestViewHolder(view)
@@ -22,8 +54,8 @@ class TenantRequestAdapter(val tenantList: ArrayList<TenantRequestLayout>): Recy
     }
 
     override fun onBindViewHolder(holder: TenantRequestViewHolder, position: Int) {
-        holder.requestRoomNumber.text = tenantList[position].tenantRoomNumber
-        holder.requestRoomId.text = tenantList[position].tenantRoomId.toString()
+        holder.requestRoomNumber.text = tenantList[position].roomNumber
+        holder.requestRoomId.text = tenantList[position].roomId
 
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)

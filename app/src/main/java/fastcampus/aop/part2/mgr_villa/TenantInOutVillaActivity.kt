@@ -321,21 +321,21 @@ class TenantInOutVillaActivity : AppCompatActivity() {
 
     // 관리자 전입 체크
     private fun mgrInCheck() {
-        Thread(Runnable {
-            val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-
-            val mgrUser = villaNoticedb!!.VillaNoticeDao().isIntoMgrCheck(
-                MyApplication.prefs.getString("villaAddress","").trim()
-            )
-
-            runOnUiThread {
-                if (mgrUser > 0) {
-                    binding.mgrTenantIn.isVisible = false
-                } else {
-                    binding.mgrTenantIn.isVisible = true
-                }
-            }
-        }).start()
+//        Thread(Runnable {
+//            val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//            val mgrUser = villaNoticedb!!.VillaNoticeDao().isIntoMgrCheck(
+//                MyApplication.prefs.getString("villaAddress","").trim()
+//            )
+//
+//            runOnUiThread {
+//                if (mgrUser > 0) {
+//                    binding.mgrTenantIn.isVisible = false
+//                } else {
+//                    binding.mgrTenantIn.isVisible = true
+//                }
+//            }
+//        }).start()
     }
 
 

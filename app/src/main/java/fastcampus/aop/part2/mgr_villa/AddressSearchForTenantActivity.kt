@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.Object.KakaoApiRetrofitClient
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiTenantAdapter
@@ -38,6 +40,8 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
             layoutInflater
         )
     }
+
+    val firestoreDB = Firebase.firestore
 
     private val addrTenantListItems = arrayListOf<AddrTenantLayout>()                   // 리싸이클러 뷰 아이템
     private val addrListAdapter = KakaoApiTenantAdapter(addrTenantListItems)            // 리싸이클러 뷰 어댑터
@@ -69,32 +73,41 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
         addrListAdapter.setItemClickListener(object : KakaoApiTenantAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
 
-                Thread(Runnable {
-
-                    val userdb = VillaNoticeHelper.getInstance(applicationContext)
-
-                    val isRequestVilla = userdb!!.VillaNoticeDao().isRequestVilla(
-                        addrTenantListItems[position].address_name
-                    )
-
-                    runOnUiThread {
-                        if(isRequestVilla < 1){
+                firestoreDB.collection("VillaInfo")
+                    .whereEqualTo("villaAddress", addrTenantListItems[position].address_name.trim())
+                    .get()
+                    .addOnSuccessListener { task ->
+                        if(task.isEmpty){
                             showToast("해당 주소지가 등록되어 있지 않습니다. 관리자에게 문의바랍니다.")
+                            return@addOnSuccessListener
                         } else {
                             val ToRequestAddr = Intent(v.context, TenantListForRequestActivity::class.java)
-                            ToRequestAddr.putExtra("requestAddress",addrTenantListItems[position].address_name)
+                            ToRequestAddr.putExtra("requestAddress",addrTenantListItems[position].address_name.trim())
                             startActivity(ToRequestAddr)
                         }
                     }
-                }).start()
 
-//                val addVillaInfoActivity = Intent(v.context, VillaInfoActivity::class.java)
-//                addVillaInfoActivity.putExtra("address", addrListItems[position].address_name)
-//                if (!addrListItems[position].villa_name.isNullOrEmpty()){
-//                    addVillaInfoActivity.putExtra("villa_name", addrListItems[position].villa_name)
-//                }
-//                addVillaInfoActivity.putExtra("email", binding.emailHiddenTenant.text.toString().trim())
-//                startActivity(addVillaInfoActivity)
+
+//---------------------------------------------------------------------------------------
+//                Thread(Runnable {
+//
+//                    val userdb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                    val isRequestVilla = userdb!!.VillaNoticeDao().isRequestVilla(
+//                        addrTenantListItems[position].address_name
+//                    )
+//
+//                    runOnUiThread {
+//                        if(isRequestVilla < 1){
+//                            showToast("해당 주소지가 등록되어 있지 않습니다. 관리자에게 문의바랍니다.")
+//                        } else {
+//                            val ToRequestAddr = Intent(v.context, TenantListForRequestActivity::class.java)
+//                            ToRequestAddr.putExtra("requestAddress",addrTenantListItems[position].address_name)
+//                            startActivity(ToRequestAddr)
+//                        }
+//                    }
+//                }).start()
+//---------------------------------------------------------------------------------------
 
             }
 
@@ -106,20 +119,6 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
 
     }
 
-    private fun initRequestTenant() {
-        Thread(Runnable {
-
-            val userdb = VillaNoticeHelper.getInstance(applicationContext)
-
-            val userInfo = userdb!!.VillaNoticeDao().getUser(
-                MyApplication.prefs.getString("email","")
-            )
-
-            runOnUiThread {
-
-            }
-        }).start()
-    }
 
     private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.addrSearchTenantToolbar)

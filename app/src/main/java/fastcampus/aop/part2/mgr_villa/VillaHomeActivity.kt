@@ -136,7 +136,6 @@ class VillaHomeActivity : AppCompatActivity() {
         if (MyApplication.prefs.getString("userType","").equals("MGR")){
 
             var tenentCurrentCount = 0
-
             firestoreDB.collection("VillaTenant")
                 .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", ""))
                 .get()
@@ -147,7 +146,6 @@ class VillaHomeActivity : AppCompatActivity() {
                         }
                     }
                 }
-
 
             firestoreDB.collection("VillaTenant")
                 .whereEqualTo("tenantEmail", userEmail)
@@ -180,7 +178,9 @@ class VillaHomeActivity : AppCompatActivity() {
 
                                         val transaction = supportFragmentManager.beginTransaction()
                                         transaction.add(R.id.recycleViewConstraint, mgrFrag)
+                                        transaction.detach(mgrFrag).attach(mgrFrag)
                                         transaction.commit()
+                                        break
                                     }
 
                                 }
@@ -198,6 +198,7 @@ class VillaHomeActivity : AppCompatActivity() {
                                 if (task.isSuccessful){
                                     for (i in task.result!!) {
                                         roomNum = i.data["roomNumber"].toString()
+                                        break
                                     }
                                 }
                             }
@@ -227,6 +228,7 @@ class VillaHomeActivity : AppCompatActivity() {
 
                                         val transaction = supportFragmentManager.beginTransaction()
                                         transaction.add(R.id.recycleViewConstraint, mgrFrag)
+                                        transaction.detach(mgrFrag).attach(mgrFrag)
                                         transaction.commit()
                                     }
 
@@ -234,16 +236,55 @@ class VillaHomeActivity : AppCompatActivity() {
                             }
                     }
                 }
+        } else {
+
+            // 세입자 정보
+            var roomNum = ""
+
+            // 입주 호 가져오기
+            firestoreDB.collection("VillaTenant")
+                .whereEqualTo("tenantEmail", userEmail)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (i in task.result!!) {
+                            roomNum = i.data["roomNumber"].toString()
+                            break
+                        }
+                    }
+                }
 
 
+            // 빌라입주정보 가져오기
+            firestoreDB.collection("VillaTenant")
+                .whereEqualTo("tenantEmail", MyApplication.prefs.getString("email", ""))
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful){
+                        for (i in task.result!!) {
+                            val bundle = Bundle()
+                            bundle.putString("roomNumber",roomNum)
+                            bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
+                            bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
+                            bundle.putString("currentTenantCount", "0")
+                            bundle.putString("totalTenantCount", "0")
+
+                            // 집 주소 및 전입호수 전달
+                            val mgrFrag = MgrHomeFragment()
+                            mgrFrag.arguments = bundle
+
+                            val transaction = supportFragmentManager.beginTransaction()
+                            transaction.add(R.id.recycleViewConstraint, mgrFrag)
+                            transaction.detach(mgrFrag).attach(mgrFrag)
+                            transaction.commit()
+                            break
+                        }
+
+                    }
+                }
 
 
-        }
-
-
-
-
-
+            }
 
 //        Thread(Runnable {
 //            Thread.sleep(100L)              // 현재 세입자 정보를 바로 못가져와서 Sleep 줌
@@ -380,7 +421,31 @@ class VillaHomeActivity : AppCompatActivity() {
     // 로그인 정보 가져오기
     private fun initLoginData(email: String) {
         if (MyApplication.prefs.getString("userType","").equals("TENANT")){
-            showToast("세입자")
+            // 회원이름 가져오기
+            firestoreDB.collection("VillaUsers")
+                .whereEqualTo("mailAddress", email)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (i in task.result!!) {
+                            binding.hUserName.text = i.data["userName"].toString()
+                            break
+                        }
+                    }
+                }
+            // 집정보 가져오기
+            firestoreDB.collection("VillaTenant")
+                .whereEqualTo("tenantEmail", email)
+                .get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (i in task.result!!) {
+                            MyApplication.prefs.setString("villaAddress", i.data["villaAddr"].toString().trim())
+                            MyApplication.prefs.setString("roadAddress", i.data["roadAddress"].toString().trim())
+                            break
+////            MyApplication.prefs.setString("roomNumber", tenantInfo?.roomNumber.toString())
+                        }
+                    }
+                }
         } else {
             // 회원이름 가져오기
             firestoreDB.collection("VillaUsers")
@@ -390,6 +455,7 @@ class VillaHomeActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         for (i in task.result!!) {
                             binding.hUserName.text = i.data["userName"].toString()
+                            break
                         }
                     }
                 }
@@ -403,6 +469,7 @@ class VillaHomeActivity : AppCompatActivity() {
                             MyApplication.prefs.setString("villaAddress", i.data["villaAddress"].toString().trim())
                             MyApplication.prefs.setString("roadAddress", i.data["roadAddress"].toString().trim())
 ////            MyApplication.prefs.setString("roomNumber", tenantInfo?.roomNumber.toString())
+                            break
                         }
                     }
                 }
