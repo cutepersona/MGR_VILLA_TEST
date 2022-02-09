@@ -85,24 +85,19 @@ class TenantListActivity: AppCompatActivity() {
                         imageView.tenantUpdate -> {
 //                            Thread(Runnable {
 //                                runOnUiThread {
-//                                    val tenantUpdate =
-//                                        Intent(v.context, TenantInOutVillaActivity::class.java)
-//                                    tenantUpdate.putExtra(
-//                                        "roomId",
-//                                        TenantRoomListItems[position].roomId.toString()
-//                                    )
-//                                    tenantUpdate.putExtra(
-//                                        "roomNumber",
-//                                        TenantRoomListItems[position].roomNumber
-//                                    )
-//                                    startActivity(tenantUpdate)
+//                            showToast(TenantRoomListItems[position].roomId)
+                                    val tenantUpdate =
+                                        Intent(v.context, TenantInOutVillaActivity::class.java)
+                                    tenantUpdate.putExtra("roomId",TenantRoomListItems[position].roomId)
+                                    tenantUpdate.putExtra("roomNumber",TenantRoomListItems[position].roomNumber)
+                                    startActivity(tenantUpdate)
 //                                }
 //                            }).start()
                         }
                         imageView.tenantDelete -> {
                             TenantDeleteDialog.showDialog(
                                 TenantRoomListItems[position].roomNumber,
-                                TenantRoomListItems[position].roomId.toString().toLong()
+                                TenantRoomListItems[position].roomId
                             )
 
                         }
@@ -117,7 +112,7 @@ class TenantListActivity: AppCompatActivity() {
 
 
         TenantDeleteDialog.setOnClickListener(object : TenantDeleteDialog.OnDialogClickListener {
-            override fun onClicked(context: Context, requestDelete: String, roomId: Long) {
+            override fun onClicked(context: Context, requestDelete: String, roomId: String) {
                 if (!requestDelete.isEmpty()) {
                     // 호 삭제
                     val villadb = VillaNoticeHelper.getInstance(applicationContext)
@@ -147,9 +142,19 @@ class TenantListActivity: AppCompatActivity() {
 
     private fun initTenantRooms() {
 
-        firestoreDB?.collection("VillaTenant").orderBy("roomNumber", Query.Direction.ASCENDING)
-            ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+//        showToast(MyApplication.prefs.getString("villaAddress", "").trim())
+
+        firestoreDB?.collection("VillaTenant")
+            .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+            .orderBy("roomNumber", Query.Direction.ASCENDING)
+            .addSnapshotListener { querySnapshot, e ->
             TenantRoomListItems.clear()
+
+                if (e != null){
+//                    showToast(e.message.toString())
+                    Log.d("VillaTenant/TenantAdapter------------------>", e.message.toString())
+                    return@addSnapshotListener
+                }
 
             for (snapshot in querySnapshot!!.documents){
                 val item = snapshot.toObject(VillaTenant::class.java)

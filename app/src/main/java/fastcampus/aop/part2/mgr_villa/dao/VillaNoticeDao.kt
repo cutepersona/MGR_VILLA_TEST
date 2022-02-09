@@ -185,7 +185,7 @@ interface VillaNoticeDao {
 
     // Delete
     @Query("DELETE FROM VillaTenant WHERE villaAddr =:villaAddr AND roomId =:roomId")
-    fun deleteTenant(villaAddr: String, roomId: Long)
+    fun deleteTenant(villaAddr: String, roomId: String)
 
     //-----------------------------------------VillaAccount------------------------------------------
     @Insert(onConflict = OnConflictStrategy.REPLACE)

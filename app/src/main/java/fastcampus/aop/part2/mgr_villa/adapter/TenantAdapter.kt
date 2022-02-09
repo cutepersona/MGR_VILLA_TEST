@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,23 +16,32 @@ import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.R
 import fastcampus.aop.part2.mgr_villa.model.TenantLayout
 import fastcampus.aop.part2.mgr_villa.model.VillaTenant
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
 class TenantAdapter(val tenantList: ArrayList<VillaTenant>): RecyclerView.Adapter<TenantAdapter.TenantViewHolder>() {
 
     val firestoreDB = Firebase.firestore
     
     init {
-        firestoreDB?.collection("VillaTenant").orderBy("roomNumber", Query.Direction.ASCENDING)
-            ?.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
-            tenantList.clear()
+        firestoreDB?.collection("VillaTenant")
+            .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+            .orderBy("roomNumber", Query.Direction.ASCENDING)
+            .addSnapshotListener { querySnapshot, e ->
+                tenantList.clear()
 
-            for (snapshot in querySnapshot!!.documents){
-                val item = snapshot.toObject(VillaTenant::class.java)
-                item!!.roomId = snapshot.id
-                tenantList.add(item!!)
+                if (e != null){
+//                    showToast(e.message.toString())
+                    Log.d("VillaTenant/TenantAdapter------------------>", e.message.toString())
+                    return@addSnapshotListener
+                }
+
+                for (snapshot in querySnapshot!!.documents){
+                    val item = snapshot.toObject(VillaTenant::class.java)
+                    item!!.roomId = snapshot.id
+                    tenantList.add(item!!)
+                }
+                notifyDataSetChanged()
             }
-            notifyDataSetChanged()
-        }
         
     }
     

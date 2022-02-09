@@ -11,6 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.customdialog.RequestTenantDialog
 import fastcampus.aop.part2.mgr_villa.customdialog.TenantOutDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -24,7 +26,7 @@ class TenantInOutVillaActivity : AppCompatActivity() {
 
     val binding: ActivityTenantinoutBinding by lazy { ActivityTenantinoutBinding.inflate(layoutInflater) }
 
-
+    val firestoreDB = Firebase.firestore
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,21 +59,33 @@ class TenantInOutVillaActivity : AppCompatActivity() {
         val TenantOutDialog = TenantOutDialog(this)
         initTenantOutVilla(TenantOutDialog)
         TenantOutDialog.setOnClickListener(object : TenantOutDialog.OnDialogClickListener{
-            override fun onClicked(context: Context, requestDelete: String, roomId: Long) {
+            override fun onClicked(context: Context, requestDelete: String, roomId: String) {
                 if (!requestDelete.isEmpty()){
-                    Thread(Runnable {
-                        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
 
-                        villaNoticedb!!.VillaNoticeDao().leaveTenant(
-                            MyApplication.prefs.getString("villaAddress","").trim()
-                            ,binding.TenantIORoomId.text.toString().toLong()
-                        )
+                    firestoreDB.collection("VillaTenant").document(binding.TenantIORoomId.text.toString())
+                        .update(mapOf(
+                            "tenantEmail" to ""
+                            ,"tenantContractDate" to ""
+                            ,"tenantLeaveDate" to ""
+                            ,"tenantStatus" to ""
+                        ))
 
-                        runOnUiThread {
-                            val toTenantList = Intent(context, TenantListActivity::class.java)
-                            startActivity(toTenantList)
-                        }
-                    }).start()
+                    val toTenantList = Intent(context, TenantListActivity::class.java)
+                    startActivity(toTenantList)
+
+//                    Thread(Runnable {
+//                        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                        villaNoticedb!!.VillaNoticeDao().leaveTenant(
+//                            MyApplication.prefs.getString("villaAddress","").trim()
+//                            ,binding.TenantIORoomId.text.toString().toLong()
+//                        )
+//
+//                        runOnUiThread {
+//                            val toTenantList = Intent(context, TenantListActivity::class.java)
+//                            startActivity(toTenantList)
+//                        }
+//                    }).start()
                 }
             }
         })
@@ -138,25 +152,83 @@ class TenantInOutVillaActivity : AppCompatActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initTenantInfo(){
 
-        val villadb = VillaNoticeHelper.getInstance(applicationContext)
+//        showToast(binding.TenantIORoomId.text.toString())
 
-        Thread(Runnable {
+        firestoreDB.collection("VillaTenant").document(binding.TenantIORoomId.text.toString())
+//            .whereEqualTo("roomId", binding.TenantIORoomId.text)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null){
+                    binding.tenantIOEmail.setText(document["tenantEmail"].toString().trim())
+                    binding.tenantIOContractDate.setText(document["tenantContractDate"].toString().trim())
+                    binding.tenantIOLeaveDate.setText(document["tenantLeaveDate"].toString().trim())
 
-            val tenantRooms =  villadb?.VillaNoticeDao()?.getTenantInfo(binding.TenantIORoomId.text.toString().toLong())
-            val tenantInfo = villadb?.VillaNoticeDao()?.getUser(tenantRooms?.tenantEmail.toString())
+                    if (!document["tenantEmail"].toString().trim().isNullOrEmpty()){
+                        // 로그인 회원정보 가져오기
+                        firestoreDB.collection("VillaUsers").document(document["tenantEmail"].toString().trim())
+                            .get()
+                            .addOnSuccessListener { user ->
+                                if (user != null){
+                                    binding.tenantIOTenantName.setText(user["userName"].toString().trim())
+                                    binding.tenantIOTenantPhone.setText(initPhoneRegax(user["phoneNumber"].toString()).trim())
+                                }
+                            }
+                    }
 
-            runOnUiThread {
-                if (tenantRooms != null
-                    && tenantInfo != null
-                ){
-                    binding.tenantIOEmail.setText(tenantRooms.tenantEmail)
-                    binding.tenantIOContractDate.setText(tenantRooms.tenantContractDate)
-                    binding.tenantIOLeaveDate.setText(tenantRooms.tenantLeaveDate)
-                    binding.tenantIOTenantName.setText(tenantInfo.userName)
-                    binding.tenantIOTenantPhone.setText(initPhoneRegax(tenantInfo.phoneNumber))
                 }
+
+
+
+//                        checkTenantCount = i.data["villaTenantCount"].toString().toInt()
+//                        showToast(i.data["villaTenantCount"].toString())
+
             }
-        }).start()
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    for (i in task.result!!) {
+//                            binding.tenantIOEmail.setText(i.data["tenantEmail"].toString())
+//                            binding.tenantIOContractDate.setText(i.data["tenantContractDate"].toString())
+//                            binding.tenantIOLeaveDate.setText(i.data["tenantLeaveDate"].toString())
+//
+//                        // 로그인 회원정보 가져오기
+//                        firestoreDB.collection("VillaUsers")
+//                            .whereEqualTo("mailAddress", i.data["tenantEmail"].toString())
+//                            .get()
+//                            .addOnCompleteListener { task ->
+//                                if (task.isSuccessful){
+//                                    for (j in task.result!!){
+//                                        binding.tenantIOTenantName.setText(j.data["userName"].toString())
+//                                        binding.tenantIOTenantPhone.setText(initPhoneRegax(j.data["phoneNumber"].toString()))
+//                                        break
+//                                        }
+//                                    }
+//                                }
+////                        checkTenantCount = i.data["villaTenantCount"].toString().toInt()
+////                        showToast(i.data["villaTenantCount"].toString())
+//                        break
+//                    }
+//                }
+//            }
+
+
+//        val villadb = VillaNoticeHelper.getInstance(applicationContext)
+//        Thread(Runnable {
+//
+//            val tenantRooms =  villadb?.VillaNoticeDao()?.getTenantInfo(binding.TenantIORoomId.text.toString().toLong())
+//            val tenantInfo = villadb?.VillaNoticeDao()?.getUser(tenantRooms?.tenantEmail.toString())
+//
+//            runOnUiThread {
+//                if (tenantRooms != null
+//                    && tenantInfo != null
+//                ){
+//                    binding.tenantIOEmail.setText(tenantRooms.tenantEmail)
+//                    binding.tenantIOContractDate.setText(tenantRooms.tenantContractDate)
+//                    binding.tenantIOLeaveDate.setText(tenantRooms.tenantLeaveDate)
+//                    binding.tenantIOTenantName.setText(tenantInfo.userName)
+//                    binding.tenantIOTenantPhone.setText(initPhoneRegax(tenantInfo.phoneNumber))
+//                }
+//            }
+//        }).start()
     }
 
     // 전화번호 정규식 적용하기
@@ -190,30 +262,45 @@ class TenantInOutVillaActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            Thread(Runnable {
-                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-
-                val mgrUser = villaNoticedb!!.VillaNoticeDao().intoTenant(
-                    binding.tenantIOEmail.text.toString().trim()
-                    ,binding.tenantIOContractDate.text.toString().trim()
-                    ,binding.tenantIOLeaveDate.text.toString().trim()
-                    ,MyApplication.prefs.getString("villaAddress","").trim()
-                    ,binding.TenantIORoomId.text.toString().toLong()
-                )
-
-                runOnUiThread {
+            firestoreDB.collection("VillaTenant").document(binding.TenantIORoomId.text.toString())
+                .update(mapOf(
+                    "tenantEmail" to binding.tenantIOEmail.text.toString().trim()
+                    ,"tenantContractDate" to binding.tenantIOContractDate.text.toString().trim()
+                    ,"tenantLeaveDate" to binding.tenantIOLeaveDate.text.toString().trim()
+                    ,"tenantStatus" to "IntoDone"
+                ))
 
                     showToast("전입이 완료되었습니다.")
                     val toTenantList = Intent(this, TenantListActivity::class.java)
                     startActivity(toTenantList)
-                }
-            }).start()
+
+//            Thread(Runnable {
+//                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                val mgrUser = villaNoticedb!!.VillaNoticeDao().intoTenant(
+//                    binding.tenantIOEmail.text.toString().trim()
+//                    ,binding.tenantIOContractDate.text.toString().trim()
+//                    ,binding.tenantIOLeaveDate.text.toString().trim()
+//                    ,MyApplication.prefs.getString("villaAddress","").trim()
+//                    ,binding.TenantIORoomId.text.toString().toLong()
+//                )
+//
+//                runOnUiThread {
+//
+//                    showToast("전입이 완료되었습니다.")
+//                    val toTenantList = Intent(this, TenantListActivity::class.java)
+//                    startActivity(toTenantList)
+//                }
+//            }).start()
         }
     }
 
     // 퇴거하기
     private fun initTenantOutVilla(TenantOutDialog: TenantOutDialog) {
         binding.RequestTenantOutVillaButton.setOnClickListener {
+
+
+            //-------------------------------------------------------------------------------------
 //            Thread(Runnable {
 //                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
 //
@@ -223,11 +310,12 @@ class TenantInOutVillaActivity : AppCompatActivity() {
 //                )
 //
 //                runOnUiThread {
-                    TenantOutDialog.showDialog(binding.tenantIORoomNumber.text.toString(), binding.TenantIORoomId.text.toString().toLong())
+                    TenantOutDialog.showDialog(binding.tenantIORoomNumber.text.toString(), binding.TenantIORoomId.text.toString())
 //                    val toTenantList = Intent(this, TenantListActivity::class.java)
 //                    startActivity(toTenantList)
 //                }
 //            }).start()
+            //-------------------------------------------------------------------------------------
         }
     }
 
@@ -255,21 +343,38 @@ class TenantInOutVillaActivity : AppCompatActivity() {
     private fun initMgrIn() {
         binding.mgrTenantIn.setOnClickListener {
 
-            Thread(Runnable {
-                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-
-                    val mgrUser = villaNoticedb!!.VillaNoticeDao().getMgrUser(
-                            MyApplication.prefs.getString("villaAddress","").trim()
-                    )
-
-                    runOnUiThread {
-                        binding.tenantIOEmail.setText(mgrUser.mailAddress)
-                        binding.tenantIOTenantName.setText(mgrUser.userName)
-                        binding.tenantIOContractDate.setText("-")
-                        binding.tenantIOLeaveDate.setText("-")
-                        binding.tenantIOTenantPhone.setText(mgrUser.phoneNumber)
+            // 관리자 정보 가져오기
+            firestoreDB.collection("VillaUsers")
+                .whereEqualTo("mailAddress", MyApplication.prefs.getString("email","").trim())
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (i in task.result!!) {
+                            binding.tenantIOEmail.setText(i.data["mailAddress"].toString())
+                            binding.tenantIOTenantName.setText(i.data["userName"].toString())
+                            binding.tenantIOContractDate.setText("-")
+                            binding.tenantIOLeaveDate.setText("-")
+                            binding.tenantIOTenantPhone.setText(initPhoneRegax(i.data["phoneNumber"].toString()))
+                            break
+                        }
                     }
-            }).start()
+                }
+
+//            Thread(Runnable {
+//                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                    val mgrUser = villaNoticedb!!.VillaNoticeDao().getMgrUser(
+//                            MyApplication.prefs.getString("villaAddress","").trim()
+//                    )
+//
+//                    runOnUiThread {
+//                        binding.tenantIOEmail.setText(mgrUser.mailAddress)
+//                        binding.tenantIOTenantName.setText(mgrUser.userName)
+//                        binding.tenantIOContractDate.setText("-")
+//                        binding.tenantIOLeaveDate.setText("-")
+//                        binding.tenantIOTenantPhone.setText(mgrUser.phoneNumber)
+//                    }
+//            }).start()
 
         }
     }
