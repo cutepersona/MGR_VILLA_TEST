@@ -53,9 +53,9 @@ class VillaInfoActivity : AppCompatActivity() {
             binding.roadAddressEditText.setText(intent.getStringExtra("roadAddress").toString())
         }
         if (intent.hasExtra("villa_name")) {
-            if (intent.getStringExtra("villa_name").toString().isNullOrEmpty()){
+            if (intent.getStringExtra("villa_name").toString().isNullOrEmpty()) {
                 binding.villaNameEditText.setText("")
-            }else{
+            } else {
                 binding.villaNameEditText.setText(intent.getStringExtra("villa_name").toString())
             }
 
@@ -112,48 +112,60 @@ class VillaInfoActivity : AppCompatActivity() {
                     .get()
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            if (!task.result!!.isEmpty){
+                            if (!task.result!!.isEmpty) {
                                 for (i in task.result!!) {
-                                    if (i.id == binding.villaAddressEditText.text.toString().trim()) {
+                                    if (i.id == binding.villaAddressEditText.text.toString()
+                                            .trim()
+                                    ) {
                                         showToast("이미 등록된 주소입니다.")
                                         return@addOnCompleteListener
                                         break
+                                    } else {
+                                        // 새주소 등록
+                                        villaInfo.document(
+                                            binding.villaAddressEditText.text.toString().trim()
+                                        )
+                                            .set(VillaInfo)
+                                            .addOnSuccessListener { documentReference ->
+//                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                                val homeActivity =
+                                                    Intent(this, VillaHomeActivity::class.java)
+                                                homeActivity.putExtra(
+                                                    "email",
+                                                    binding.villaInfoEmailHidden.text.toString()
+                                                )
+                                                startActivity(homeActivity)
+                                            }
+                                            .addOnFailureListener { e ->
+                                                showToast("등록에 실패하였습니다.")
+                                                Log.w(ContentValues.TAG, "Error adding document", e)
+                                                return@addOnFailureListener
+                                            }
                                     }
                                 }
                             } else {
                                 // 새주소 등록
-                                    villaInfo.document(binding.villaAddressEditText.text.toString().trim())
-                                        .set(VillaInfo)
-                                        .addOnSuccessListener { documentReference ->
+                                villaInfo.document(
+                                    binding.villaAddressEditText.text.toString().trim()
+                                )
+                                    .set(VillaInfo)
+                                    .addOnSuccessListener { documentReference ->
 //                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-//                                            CoroutineScope(Dispatchers.IO).launch {
-//                                                userdb!!.VillaNoticeDao().insert(
-//                                                    VillaUsers(
-//                                                        userEmailEditText.text.toString().trim(),
-//                                                        "1",
-//                                                        userNameEditText.text.toString().trim(),
-//                                                        userPasswordEditText1.text.toString()
-//                                                            .trim(),
-//                                                        userPhoneNumberEditText.text.toString()
-//                                                            .trim(),
-//                                                        binding.emptyButtomUp.text.toString().trim()
-//                                                    )
-//                                                )
-//                                            }
-
-//                                            showToast("회원가입을 환영합니다.")
-                        val homeActivity = Intent(this, VillaHomeActivity::class.java)
-                        homeActivity.putExtra("email", binding.villaInfoEmailHidden.text.toString())
-                        startActivity(homeActivity)
-                                        }
-                                        .addOnFailureListener { e ->
-                                            showToast("등록에 실패하였습니다.")
-                                            Log.w(ContentValues.TAG, "Error adding document", e)
-                                            return@addOnFailureListener
-                                        }
-                                }
-                        }
-                        else {
+                                        val homeActivity =
+                                            Intent(this, VillaHomeActivity::class.java)
+                                        homeActivity.putExtra(
+                                            "email",
+                                            binding.villaInfoEmailHidden.text.toString()
+                                        )
+                                        startActivity(homeActivity)
+                                    }
+                                    .addOnFailureListener { e ->
+                                        showToast("등록에 실패하였습니다.")
+                                        Log.w(ContentValues.TAG, "Error adding document", e)
+                                        return@addOnFailureListener
+                                    }
+                            }
+                        } else {
                             showToast("정보를 불러오지 못했습니다.")
                             return@addOnCompleteListener
                         }
