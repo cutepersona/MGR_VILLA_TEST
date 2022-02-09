@@ -7,6 +7,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.customdialog.LogOutDialog
 import fastcampus.aop.part2.mgr_villa.customdialog.SignOutDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -20,6 +22,8 @@ class MyPageActivity : AppCompatActivity() {
             layoutInflater
         )
     }
+
+    val firestoreDB = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,19 +92,31 @@ class MyPageActivity : AppCompatActivity() {
 
     // 내 기본정보 가져오기
     private fun initMyInfo() {
-        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-        Thread(Runnable {
-            val userInfo = villaNoticedb!!.VillaNoticeDao().getUser(
-                MyApplication.prefs.getString("email", "").trim()
-            )
 
-            runOnUiThread {
-                binding.MyName.setText(userInfo.userName)
-                binding.MyPageUserEmail.setText(userInfo.mailAddress)
-                binding.MyPageUserPhone.setText(initPhoneRegax(userInfo.phoneNumber))
-
+        firestoreDB.collection("VillaUsers")
+            .document(MyApplication.prefs.getString("email",""))
+            .get()
+            .addOnSuccessListener { task ->
+                binding.MyName.setText(task["userName"].toString())
+                binding.MyPageUserEmail.setText(task["mailAddress"].toString())
+                binding.MyPageUserPhone.setText(initPhoneRegax(task["phoneNumber"].toString()))
             }
-        }).start()
+        //----------------------------------------------------------------------------------
+//
+//        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//        Thread(Runnable {
+//            val userInfo = villaNoticedb!!.VillaNoticeDao().getUser(
+//                MyApplication.prefs.getString("email", "").trim()
+//            )
+//
+//            runOnUiThread {
+//                binding.MyName.setText(userInfo.userName)
+//                binding.MyPageUserEmail.setText(userInfo.mailAddress)
+//                binding.MyPageUserPhone.setText(initPhoneRegax(userInfo.phoneNumber))
+//
+//            }
+//        }).start()
+        //----------------------------------------------------------------------------------
     }
 
     // 전화번호 정규식 적용하기

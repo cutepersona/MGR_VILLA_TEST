@@ -6,6 +6,8 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import de.hdodenhof.circleimageview.CircleImageView
 import fastcampus.aop.part2.mgr_villa.customdialog.LogOutDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -17,6 +19,8 @@ import kotlinx.android.synthetic.main.activity_myinfo.*
 class MyInfoActivity : AppCompatActivity() {
 
     private val binding : ActivityMyinfoBinding by lazy { ActivityMyinfoBinding.inflate(layoutInflater)}
+
+    val firestoreDB = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,16 +50,26 @@ class MyInfoActivity : AppCompatActivity() {
 
     // 내 기본정보 가져오기
     private fun initMyInfo() {
-        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-        Thread(Runnable {
-            val userInfo = villaNoticedb!!.VillaNoticeDao().getUser(
-                    MyApplication.prefs.getString("email","").trim()
-            )
 
-            runOnUiThread {
-                binding.InfoUserName.setText(userInfo.userName)
-            }
-        }).start()
+        firestoreDB.collection("VillaUsers")
+            .document(MyApplication.prefs.getString("email",""))
+            .get()
+            .addOnSuccessListener { task ->
+                binding.InfoUserName.setText(task["userName"].toString())
+                }
+
+//----------------------------------------------------------------------------
+//        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//        Thread(Runnable {
+//            val userInfo = villaNoticedb!!.VillaNoticeDao().getUser(
+//                    MyApplication.prefs.getString("email","").trim()
+//            )
+//
+//            runOnUiThread {
+//                binding.InfoUserName.setText(userInfo.userName)
+//            }
+//        }).start()
+// ----------------------------------------------------------------------------
     }
 
     override fun onBackPressed() {

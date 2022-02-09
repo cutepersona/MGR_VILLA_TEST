@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityChangepwBinding
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityLoginBinding
@@ -19,6 +21,9 @@ import fastcampus.aop.part2.mgr_villa.databinding.ActivityMypagechangepwBinding
 class MyPageChangePwActivity : AppCompatActivity() {
 
     private val binding: ActivityMypagechangepwBinding by lazy { ActivityMypagechangepwBinding.inflate(layoutInflater) }
+
+    val firestoreDB = Firebase.firestore
+
     private var email: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,17 +52,26 @@ class MyPageChangePwActivity : AppCompatActivity() {
             } else {
                 showToast("비밀번호가 변경되지 않았습니다.")
             }
-
         }
     }
 
     private fun changPassWord(): Boolean {
         return if (!email.isEmpty()) {
-            val userdb = VillaNoticeHelper.getInstance(applicationContext)
 
-            Thread(Runnable {
-                userdb!!.VillaNoticeDao().updatePW(email, binding.MyPageUserPasswordEditText1.text.toString())
-            }).start()
+            firestoreDB.collection("VillaUsers")
+                .document(email)
+                .update(mapOf(
+                    "passWord" to binding.MyPageUserPasswordEditText1.text.toString().trim()
+                ))
+
+//--------------------------------------------------------------------------------------------------
+//            val userdb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//            Thread(Runnable {
+//                userdb!!.VillaNoticeDao().updatePW(email, binding.MyPageUserPasswordEditText1.text.toString())
+//            }).start()
+//--------------------------------------------------------------------------------------------------
+
             true
         } else {
             false

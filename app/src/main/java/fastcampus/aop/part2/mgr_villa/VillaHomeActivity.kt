@@ -285,7 +285,7 @@ class VillaHomeActivity : AppCompatActivity() {
 
 
             }
-
+//-------------------------------------------------------------------------------------------
 //        Thread(Runnable {
 //            Thread.sleep(100L)              // 현재 세입자 정보를 바로 못가져와서 Sleep 줌
 //            val userdb = VillaNoticeHelper.getInstance(applicationContext)
@@ -383,6 +383,7 @@ class VillaHomeActivity : AppCompatActivity() {
 //
 //            }
 //        }).start()
+        //-------------------------------------------------------------------------------------------
     }
 
     // HomeFragment에서 하위 Fragment생성

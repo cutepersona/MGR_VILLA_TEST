@@ -19,6 +19,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityChangepwBinding
@@ -33,6 +34,8 @@ import kotlin.concurrent.timer
 class MyPageChangePhoneNumActivity : AppCompatActivity() {
 
     private val binding: ActivityMypagechangephonenumBinding by lazy { ActivityMypagechangephonenumBinding.inflate(layoutInflater) }
+
+    val firestoreDB = Firebase.firestore
 
     private lateinit var auth: FirebaseAuth
 
@@ -219,11 +222,19 @@ class MyPageChangePhoneNumActivity : AppCompatActivity() {
 
     private fun changePhoneNum(): Boolean {
         return if (!email.isEmpty()) {
-            val userdb = VillaNoticeHelper.getInstance(applicationContext)
 
-            Thread(Runnable {
-                userdb!!.VillaNoticeDao().updatePhoneNum(binding.MyPageUserPhoneNumberEditText.text.toString(), email)
-            }).start()
+            firestoreDB.collection("VillaUsers")
+                .document(email)
+                .update(mapOf(
+                    "phoneNumber" to binding.MyPageUserPhoneNumberEditText.text.toString().trim()
+                ))
+//------------------------------------------------------------------------------------------
+//            val userdb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//            Thread(Runnable {
+//                userdb!!.VillaNoticeDao().updatePhoneNum(binding.MyPageUserPhoneNumberEditText.text.toString(), email)
+//            }).start()
+//------------------------------------------------------------------------------------------
             true
         } else {
             false
