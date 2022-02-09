@@ -114,17 +114,34 @@ class TenantListActivity: AppCompatActivity() {
         TenantDeleteDialog.setOnClickListener(object : TenantDeleteDialog.OnDialogClickListener {
             override fun onClicked(context: Context, requestDelete: String, roomId: String) {
                 if (!requestDelete.isEmpty()) {
-                    // 호 삭제
-                    val villadb = VillaNoticeHelper.getInstance(applicationContext)
 
-                    Thread(Runnable {
-                        villadb!!.VillaNoticeDao().deleteTenant(
-                            MyApplication.prefs.getString("villaAddress", "").trim(), roomId
-                        )
-                        runOnUiThread {
+                    firestoreDB?.collection("VillaTenant")
+                        .document(roomId)
+                        .delete()
+                        .addOnSuccessListener {
                             initTenantRooms()
                         }
-                    }).start()
+                        .addOnFailureListener {
+                            showToast("삭제처리 되지 않았습니다.")
+                            return@addOnFailureListener
+                        }
+
+
+
+
+                    //--------------------------------------------------------------------
+                    // 호 삭제
+//                    val villadb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                    Thread(Runnable {
+//                        villadb!!.VillaNoticeDao().deleteTenant(
+//                            MyApplication.prefs.getString("villaAddress", "").trim(), roomId
+//                        )
+//                        runOnUiThread {
+//                            initTenantRooms()
+//                        }
+//                    }).start()
+                    //--------------------------------------------------------------------
                 }
             }
         })

@@ -3,12 +3,16 @@ package fastcampus.aop.part2.mgr_villa
 import android.animation.ObjectAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.NoticeAdapter
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -17,6 +21,7 @@ import fastcampus.aop.part2.mgr_villa.kakaodata.KakaoData
 import fastcampus.aop.part2.mgr_villa.model.AddrLayout
 import fastcampus.aop.part2.mgr_villa.model.NoticeLayout
 import fastcampus.aop.part2.mgr_villa.model.VillaNotice
+import fastcampus.aop.part2.mgr_villa.model.VillaTenant
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.android.synthetic.main.activity_noticelist.*
 
@@ -24,7 +29,9 @@ class NoticeListActivity: AppCompatActivity() {
 
     private val binding:ActivityNoticelistBinding by lazy { ActivityNoticelistBinding.inflate(layoutInflater)}
 
-    private var NoticeListItems = arrayListOf<NoticeLayout>()                   // 리싸이클러 뷰 아이템
+    val firestoreDB = Firebase.firestore
+
+    private var NoticeListItems = arrayListOf<VillaNotice>()                   // 리싸이클러 뷰 아이템
     private val NoticeListAdapter = NoticeAdapter(NoticeListItems)            // 리싸이클러 뷰 어댑터
 
     private var isNoticeFabOpen = false
@@ -83,38 +90,51 @@ class NoticeListActivity: AppCompatActivity() {
 
          NoticeListItems.clear()
 
-        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+        firestoreDB?.collection("VillaNotice")
+            .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+            .orderBy("noticeDatetime", Query.Direction.DESCENDING)
+            .addSnapshotListener { querySnapshot, e ->
+                NoticeListItems.clear()
 
-        Thread(Runnable {
+                if (e != null){
+//                    showToast(e.message.toString())
+                    Log.d("VillaNotice/NoticeAdapter------------------>", e.message.toString())
+                    return@addSnapshotListener
+                }
 
-            val listNotice = villaNoticedb!!.VillaNoticeDao().getAllNotice(MyApplication.prefs.getString("villaAddress",""))
-
-            for(Notice in listNotice){
-                // 결과를 리싸이클러 뷰에 추가
-                var item = NoticeLayout(Notice.noticeNo
-                    ,Notice.noticeTitle
-                    ,Notice.noticeDatetime
-                )
-                NoticeListItems.add(item)
-            }
-
-            runOnUiThread {
+                for (snapshot in querySnapshot!!.documents){
+                    val item = snapshot.toObject(VillaNotice::class.java)
+                    item!!.noticeNo = snapshot.id
+                    NoticeListItems.add(item!!)
+                }
                 NoticeListAdapter.notifyDataSetChanged()
             }
-        }).start()
 
-//            for(document in searchResult!!.documents){
+
+
+        //-----------------------------------------------------------------------------------------------
+//        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//        Thread(Runnable {
+//
+//            val listNotice = villaNoticedb!!.VillaNoticeDao().getAllNotice(MyApplication.prefs.getString("villaAddress",""))
+//
+//            for(Notice in listNotice){
 //                // 결과를 리싸이클러 뷰에 추가
-//                var item = AddrLayout(document.road_address_name
-//                    ,document.address_name
-//                    ,document.place_name
+//                var item = NoticeLayout(Notice.noticeNo
+//                    ,Notice.noticeTitle
+//                    ,Notice.noticeDatetime
 //                )
 //                NoticeListItems.add(item)
 //            }
 //
-//            NoticeListAdapter.notifyDataSetChanged()
+//            runOnUiThread {
+//                NoticeListAdapter.notifyDataSetChanged()
+//            }
+//        }).start()
 
 
+    //-----------------------------------------------------------------------------------------------
 
     }
 

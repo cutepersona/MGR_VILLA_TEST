@@ -16,12 +16,12 @@ import androidx.room.ForeignKey.CASCADE
 )
 
 data class VillaNotice(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "noticeNo") var noticeNo: Long? = 0,
-    @ColumnInfo(name = "noticeTitle") var noticeTitle: String,
-    @ColumnInfo(name = "noticeContent") var noticeContent: String,
-    @ColumnInfo(name = "noticeDatetime") var noticeDatetime: String,
-    @ColumnInfo(name = "villaAddr") var villaAddr: String
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "noticeNo") var noticeNo: String = "",
+    @ColumnInfo(name = "noticeTitle") var noticeTitle: String = "",
+    @ColumnInfo(name = "noticeContent") var noticeContent: String = "",
+    @ColumnInfo(name = "noticeDatetime") var noticeDatetime: String = "",
+    @ColumnInfo(name = "villaAddr") var villaAddr: String = ""
 )
 //{ constructor() : this(null, "", "", "","") }
 

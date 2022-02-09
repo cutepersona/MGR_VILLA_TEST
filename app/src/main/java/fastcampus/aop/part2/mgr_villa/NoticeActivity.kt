@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.NoticeAdapter
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -27,8 +30,10 @@ class NoticeActivity: AppCompatActivity() {
 
     private val binding: ActivityNoticeBinding by lazy { ActivityNoticeBinding.inflate(layoutInflater)}
 
+    val firestoreDB = Firebase.firestore
+
     private var NoticeTitleFlag =  false
-    private var NoticeNo: Long = 0
+    private var NoticeNo: String = ""
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +51,7 @@ class NoticeActivity: AppCompatActivity() {
             binding.villaNoticeTitleEditText.isFocusableInTouchMode = false
             binding.villaNoticeContentEditText.isFocusableInTouchMode = false
 
-            NoticeNo = intent.getLongExtra("noticeNo",0)
+            NoticeNo = intent.getStringExtra("noticeNo").toString()
             getNoticeContent()
         } else {
             if(!intent.hasExtra("noticeNo")){
@@ -58,7 +63,7 @@ class NoticeActivity: AppCompatActivity() {
                 binding.UpdateNoticeButton.isVisible = true
                 binding.DeleteNoticeButton.isVisible = true
 
-                NoticeNo = intent.getLongExtra("noticeNo",0)
+                NoticeNo = intent.getStringExtra("noticeNo").toString()
                 getNoticeContent()
             }
         }
@@ -74,16 +79,29 @@ class NoticeActivity: AppCompatActivity() {
 
     // 공지사항 불러오기
     private fun getNoticeContent() {
-        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
 
-        Thread(Runnable {
-            var notice = villaNoticedb!!.VillaNoticeDao().getNotice(NoticeNo)
 
-            runOnUiThread {
-                binding.villaNoticeTitleEditText.setText(notice.noticeTitle)
-                binding.villaNoticeContentEditText.setText(notice.noticeContent)
+        firestoreDB.collection("VillaNotice").document(NoticeNo)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null){
+                    binding.villaNoticeTitleEditText.setText(document["noticeTitle"].toString().trim())
+                    binding.villaNoticeContentEditText.setText(document["noticeContent"].toString().trim())
+                }
             }
-        }).start()
+
+        //----------------------------------------------------------------------------------------------
+//        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//        Thread(Runnable {
+//            var notice = villaNoticedb!!.VillaNoticeDao().getNotice(NoticeNo)
+//
+//            runOnUiThread {
+//                binding.villaNoticeTitleEditText.setText(notice.noticeTitle)
+//                binding.villaNoticeContentEditText.setText(notice.noticeContent)
+//            }
+//        }).start()
+        //----------------------------------------------------------------------------------------------
 
 
     }
@@ -97,54 +115,112 @@ class NoticeActivity: AppCompatActivity() {
                 if (!checkForm()) {
                     return@setOnClickListener
                 } else {
-                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-                    Thread(Runnable {
-                        villaNoticedb!!.VillaNoticeDao().villaNoticeInsert(
-                            VillaNotice(
-                                null,
-                                binding.villaNoticeTitleEditText.text.toString().trim(),
-                                binding.villaNoticeContentEditText.text.toString().trim(),
-                                now.toString(),
-                                MyApplication.prefs.getString("villaAddress","").trim()
-                            )
-                        )
+                    val villaNotice = firestoreDB.collection("VillaNotice")
 
-                        runOnUiThread {
+                    val VillaNotice = hashMapOf(
+                        "noticeNo" to "0",
+                        "noticeTitle" to binding.villaNoticeTitleEditText.text.toString().trim(),
+                        "noticeContent" to binding.villaNoticeContentEditText.text.toString().trim(),
+                        "noticeDatetime" to now.toString(),
+                        "villaAddr" to MyApplication.prefs.getString("villaAddress", "").trim()
+                    )
+
+                    villaNotice.document()
+                        .set(VillaNotice)
+                        .addOnSuccessListener { documentReference ->
+//                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                         val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
                         startActivity(NoticeListActivity)
+
                         }
-                    }).start()
+                        .addOnFailureListener { e ->
+                            showToast("공지 등록에 실패하였습니다.")
+                            Log.w(ContentValues.TAG, "Error adding document", e)
+                            return@addOnFailureListener
+                        }
+
+
+
+                    //-----------------------------------------------------------------------------
+//                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//                    Thread(Runnable {
+//                        villaNoticedb!!.VillaNoticeDao().villaNoticeInsert(
+//                            VillaNotice(
+//                                null,
+//                                binding.villaNoticeTitleEditText.text.toString().trim(),
+//                                binding.villaNoticeContentEditText.text.toString().trim(),
+//                                now.toString(),
+//                                MyApplication.prefs.getString("villaAddress","").trim()
+//                            )
+//                        )
+//
+//                        runOnUiThread {
+//                        val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
+//                        startActivity(NoticeListActivity)
+//                        }
+//                    }).start()
+                    //-----------------------------------------------------------------------------
                 }
             }
 
             binding.UpdateNoticeButton.setOnClickListener {
-                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-                Thread(Runnable {
-                    villaNoticedb!!.VillaNoticeDao().updateNotice(
-                            binding.villaNoticeTitleEditText.text.toString().trim(),
-                            binding.villaNoticeContentEditText.text.toString().trim(),
-                            NoticeNo
-                    )
 
-                    runOnUiThread {
-                        val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
-                        startActivity(NoticeListActivity)
-                    }
-                }).start()
+
+                firestoreDB.collection("VillaNotice").document(NoticeNo)
+                    .update(mapOf(
+                        "noticeTitle" to binding.villaNoticeTitleEditText.text.toString().trim()
+                        ,"noticeContent" to binding.villaNoticeContentEditText.text.toString().trim()
+                    ))
+
+                val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
+                startActivity(NoticeListActivity)
+
+
+                //--------------------------------------------------------------------------------
+//                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//                Thread(Runnable {
+//                    villaNoticedb!!.VillaNoticeDao().updateNotice(
+//                            binding.villaNoticeTitleEditText.text.toString().trim(),
+//                            binding.villaNoticeContentEditText.text.toString().trim(),
+//                            NoticeNo
+//                    )
+//
+//                    runOnUiThread {
+//                        val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
+//                        startActivity(NoticeListActivity)
+//                    }
+//                }).start()
+                //--------------------------------------------------------------------------------
             }
 
             binding.DeleteNoticeButton.setOnClickListener {
-                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-                Thread(Runnable {
-                    villaNoticedb!!.VillaNoticeDao().deleteNotice(
-                        NoticeNo
-                    )
 
-                    runOnUiThread {
+
+                firestoreDB?.collection("VillaNotice")
+                    .document(NoticeNo)
+                    .delete()
+                    .addOnSuccessListener {
                         val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
                         startActivity(NoticeListActivity)
                     }
-                }).start()
+                    .addOnFailureListener {
+                        showToast("삭제처리 되지 않았습니다.")
+                        return@addOnFailureListener
+                    }
+
+                //--------------------------------------------------------------------------------
+//                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//                Thread(Runnable {
+//                    villaNoticedb!!.VillaNoticeDao().deleteNotice(
+//                        NoticeNo
+//                    )
+//
+//                    runOnUiThread {
+//                        val NoticeListActivity = Intent(this, NoticeListActivity::class.java)
+//                        startActivity(NoticeListActivity)
+//                    }
+//                }).start()
+                //--------------------------------------------------------------------------------
             }
 
 
