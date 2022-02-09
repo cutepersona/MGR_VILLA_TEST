@@ -19,6 +19,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivitySearchpwBinding
@@ -29,6 +30,7 @@ class SearchPwActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
 
+    val firestoreDB = Firebase.firestore
 
     private var resendToken: PhoneAuthProvider.ForceResendingToken? = null
     private var storedVerificationId = ""
@@ -46,7 +48,7 @@ class SearchPwActivity : AppCompatActivity() {
     var second = 0
     var minute = 0
 
-    val countDown  = object : CountDownTimer(1000 * 90, 1000) {
+    val countDown = object : CountDownTimer(1000 * 90, 1000) {
         @SuppressLint("SetTextI18n")
         override fun onTick(p0: Long) {
             second = ((p0 / 1000) % 60).toInt()
@@ -54,7 +56,8 @@ class SearchPwActivity : AppCompatActivity() {
 
             // countDownInterval 마다 호출 (여기선 1000ms)
             runOnUiThread {
-                binding.SearchPwAuthCredentialTimer.text = "$minute:${String.format("%02d",second)}"
+                binding.SearchPwAuthCredentialTimer.text =
+                    "$minute:${String.format("%02d", second)}"
             }
 
         }
@@ -211,40 +214,65 @@ class SearchPwActivity : AppCompatActivity() {
                 showToast("인증 번호를 입력해 주세요.")
                 return@setOnClickListener
             }
-            if (userPhone.isEmpty()){
+            if (userPhone.isEmpty()) {
                 showToast("휴대폰 번호를 입력해 주세요.")
                 return@setOnClickListener
             }
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val userdb = VillaNoticeHelper.getInstance(applicationContext)
-                val checkId = userdb!!.VillaNoticeDao().isUserId(
-                    binding.userEmailEditText.text.toString().trim()
-                    ,binding.userPhoneNumberEditText.text.toString().trim()
-                )
 
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (checkId < 1){
-                        showToast("회원정보가 없습니다.")
-                        return@launch
-                    }else{
+            // 로그인 회원정보 가져오기
+            firestoreDB.collection("VillaUsers")
+                .document(binding.userEmailEditText.text.toString().trim())
+//                .whereEqualTo("mailAddress", binding.userEmailEditText.text.toString().trim())
+                .get()
+                .addOnSuccessListener { task ->
+                    if (task["mailAddress"].toString().equals(binding.userEmailEditText.text.toString())){
                         val authNumber = binding.userAuthCompleteEditText.text.toString()
-                        if (authNumber.isNotEmpty()){
+                        if (authNumber.isNotEmpty()) {
                             val phoneCredential =
                                 PhoneAuthProvider.getCredential(
                                     storedVerificationId,
                                     authNumber
                                 )
-
                             signInWithPhoneAuthCredential(phoneCredential)
                         } else {
                             showToast("아직 인증되지 않았습니다.")
-                            return@launch
                         }
+                    } else {
+                        showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+                        return@addOnSuccessListener
                     }
                 }
-            }
 
+//
+//            CoroutineScope(Dispatchers.IO).launch {
+//                val userdb = VillaNoticeHelper.getInstance(applicationContext)
+//                val checkId = userdb!!.VillaNoticeDao().isUserId(
+//                    binding.userEmailEditText.text.toString().trim(),
+//                    binding.userPhoneNumberEditText.text.toString().trim()
+//                )
+//
+//                CoroutineScope(Dispatchers.Main).launch {
+//                    if (checkId < 1) {
+//                        showToast("회원정보가 없습니다.")
+//                        return@launch
+//                    } else {
+//                        val authNumber = binding.userAuthCompleteEditText.text.toString()
+//                        if (authNumber.isNotEmpty()) {
+//                            val phoneCredential =
+//                                PhoneAuthProvider.getCredential(
+//                                    storedVerificationId,
+//                                    authNumber
+//                                )
+//
+//                            signInWithPhoneAuthCredential(phoneCredential)
+//                        } else {
+//                            showToast("아직 인증되지 않았습니다.")
+//                            return@launch
+//                        }
+//                    }
+//                }
+//            }
 
 
         }
@@ -255,7 +283,7 @@ class SearchPwActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     // Sign in success, update UI with the signed-in user's information
-                    showToast("인증완료 되었습니다.")
+//                    showToast("인증완료 되었습니다.")
 //                    val user = task.result?.user
 //                    authCheckFlag = true
 //                    if (authCheckFlag){

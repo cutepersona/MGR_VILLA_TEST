@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityChangepwBinding
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityLoginBinding
@@ -18,6 +20,8 @@ import fastcampus.aop.part2.mgr_villa.databinding.ActivityLoginBinding
 class ChangePwActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityChangepwBinding
+
+    val firestoreDB = Firebase.firestore
 
     private var email: String = ""
 
@@ -58,11 +62,19 @@ class ChangePwActivity : AppCompatActivity() {
     private fun changPassWord(): Boolean {
         return if (!email.isEmpty()) {
 
-            val userdb = VillaNoticeHelper.getInstance(applicationContext)
-
-            Thread(Runnable {
-            userdb!!.VillaNoticeDao().updatePW(email, binding.userPasswordEditText1.text.toString())
-            }).start()
+            firestoreDB.collection("VillaUsers")
+                .document(email)
+                .update(mapOf(
+                    "passWord" to binding.userPasswordEditText1.text.toString().trim()
+                ))
+//------------------------------------------------------------------------
+//
+//            val userdb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//            Thread(Runnable {
+//            userdb!!.VillaNoticeDao().updatePW(email, binding.userPasswordEditText1.text.toString())
+//            }).start()
+//------------------------------------------------------------------------
             true
         } else {
             false
