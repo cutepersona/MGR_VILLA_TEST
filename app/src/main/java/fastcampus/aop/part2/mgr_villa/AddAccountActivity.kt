@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import com.google.android.datatransport.runtime.scheduling.jobscheduling.SchedulerConfig
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.adapter.BankDialogAdapter
 import fastcampus.aop.part2.mgr_villa.customdialog.mgrAddAccountDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -22,10 +25,12 @@ class AddAccountActivity: AppCompatActivity() {
 
     private val binding: ActivityAccountBinding by lazy { ActivityAccountBinding.inflate(layoutInflater)}
 
+    val firestoreDB = Firebase.firestore
+
     private var BankNameFlag =  false
     private var AccountHolderFlag = false
     private var AccountNumberFlag = false
-    private var AccountId: Long = 0
+    private var AccountId: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +44,7 @@ class AddAccountActivity: AppCompatActivity() {
         initButtonSetOnClick()
 
         if(intent.hasExtra("accountId")){
-            AccountId = intent.getLongExtra("accountId",0)
+            AccountId = intent.getStringExtra("accountId").toString()
             getAccountContent()
         }
 
@@ -89,66 +94,183 @@ class AddAccountActivity: AppCompatActivity() {
 
     // 계좌정보 불러오기
     private fun getAccountContent() {
-        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
 
-        Thread(Runnable {
-            val account = villaNoticedb!!.VillaNoticeDao().getVillaAccount(AccountId)
-
-            runOnUiThread {
-                binding.accountId.setText(account.accountId.toString())
-                binding.bankNameText.setText(account.bankName)
-                binding.accountHolderEditText.setText(account.accountHolder)
-                binding.accountNumberEditText.setText(account.accountNumber)
+        firestoreDB.collection("VillaAccount")
+            .document(AccountId)
+            .get()
+            .addOnSuccessListener { result ->
+                binding.accountId.setText(result["accountId"].toString())
+                binding.bankNameText.setText(result["bankName"].toString())
+                binding.accountHolderEditText.setText(result["accountHolder"].toString())
+                binding.accountNumberEditText.setText(result["accountNumber"].toString())
             }
-        }).start()
 
+//----------------------------------------------------------------------------------------
+//        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//        Thread(Runnable {
+//            val account = villaNoticedb!!.VillaNoticeDao().getVillaAccount(AccountId)
+//
+//            runOnUiThread {
+//                binding.accountId.setText(account.accountId.toString())
+//                binding.bankNameText.setText(account.bankName)
+//                binding.accountHolderEditText.setText(account.accountHolder)
+//                binding.accountNumberEditText.setText(account.accountNumber)
+//            }
+//        }).start()
+//----------------------------------------------------------------------------------------
 
     }
 
     private fun initButtonSetOnClick() {
         try {
             binding.AddAccountButton.setOnClickListener {
-
-                val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-
                 if (!checkForm()) {
                     return@setOnClickListener
                 } else {
-                    if(AccountId <= 1){
-                        Thread(Runnable {
-                            villaNoticedb!!.VillaNoticeDao().villaAccountInsert(
-                                VillaAccount(
-                                    null,
-                                    binding.bankNameText.text.toString().trim(),
-                                    binding.accountHolderEditText.text.toString().trim(),
-                                    binding.accountNumberEditText.text.toString().trim(),
-                                    "",
-                                    MyApplication.prefs.getString("villaAddress","").trim()
+
+
+//
+//                    // 계좌 정보가 없을때 신규 등록
+//                    val villaAccount = firestoreDB.collection("VillaAccount")
+//
+//                    val VillaAccount = hashMapOf(
+//                        "accountId" to "0",
+//                        "bankName" to binding.bankNameText.text.toString().trim(),
+//                        "accountHolder" to binding.accountHolderEditText.text.toString().trim(),
+//                        "accountNumber" to binding.accountNumberEditText.text.toString().trim(),
+//                        "favorite" to "favorite",
+//                        "villaAddr" to MyApplication.prefs.getString("villaAddress", "").trim()
+//                    )
+//
+//                    villaAccount.document(MyApplication.prefs.getString("villaAddress", "").trim() + "_" + binding.accountNumberEditText.text.toString().trim())
+//                        .set(VillaAccount)
+//                        .addOnSuccessListener { documentReference ->
+////                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+//                            val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
+//                            startActivity(AccountListActivity)
+//                        }
+//                        .addOnFailureListener { e ->
+//                            showToast("관리비 계좌 등록에 실패하였습니다.")
+//                            Log.w(ContentValues.TAG, "Error adding document", e)
+//                            return@addOnFailureListener
+//                        }
+
+
+                    // 계좌 체크
+                    firestoreDB.collection("VillaAccount")
+                        .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                        .get()
+                        .addOnSuccessListener { result ->
+                            // 기존 계좌가 있고
+                            if(!result.isEmpty){
+                                // 밖에서 가져온 accountId가 있는 경우 update
+                                if (!AccountId.isNullOrEmpty()){
+                                    firestoreDB.collection("VillaAccount")
+                                        .document(AccountId)
+                                        .update(mapOf(
+                                            "bankName" to binding.bankNameText.text.toString().trim(),
+                                            "accountHolder" to binding.accountHolderEditText.text.toString().trim(),
+                                            "accountNumber" to binding.accountNumberEditText.text.toString().trim()
+                                        ))
+                                    val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
+                                    startActivity(AccountListActivity)
+                                } else {
+                                    // 계좌 정보가 없을때 신규 등록
+                                    val villaAccount = firestoreDB.collection("VillaAccount")
+
+                                    val VillaAccount = hashMapOf(
+                                        "accountId" to "0",
+                                        "bankName" to binding.bankNameText.text.toString().trim(),
+                                        "accountHolder" to binding.accountHolderEditText.text.toString().trim(),
+                                        "accountNumber" to binding.accountNumberEditText.text.toString().trim(),
+                                        "favorite" to "",
+                                        "villaAddr" to MyApplication.prefs.getString("villaAddress", "").trim()
+                                    )
+
+                                    villaAccount.document(MyApplication.prefs.getString("villaAddress", "").trim() + "_" + binding.accountNumberEditText.text.toString().trim())
+                                        .set(VillaAccount)
+                                        .addOnSuccessListener { documentReference ->
+//                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                            val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
+                                            startActivity(AccountListActivity)
+                                        }
+                                        .addOnFailureListener { e ->
+                                            showToast("관리비 계좌 등록에 실패하였습니다.")
+                                            Log.w(ContentValues.TAG, "Error adding document", e)
+                                            return@addOnFailureListener
+                                        }
+                                }
+                            } else {
+                                // 계좌 정보가 없을때 신규 등록
+                                val villaAccount = firestoreDB.collection("VillaAccount")
+
+                                val VillaAccount = hashMapOf(
+                                    "accountId" to "0",
+                                    "bankName" to binding.bankNameText.text.toString().trim(),
+                                    "accountHolder" to binding.accountHolderEditText.text.toString().trim(),
+                                    "accountNumber" to binding.accountNumberEditText.text.toString().trim(),
+                                    "favorite" to "favorite",
+                                    "villaAddr" to MyApplication.prefs.getString("villaAddress", "").trim()
                                 )
-                            )
 
-                            runOnUiThread {
-                                val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
-                                startActivity(AccountListActivity)
+                                villaAccount.document(MyApplication.prefs.getString("villaAddress", "").trim() + "_" + binding.accountNumberEditText.text.toString().trim())
+                                    .set(VillaAccount)
+                                    .addOnSuccessListener { documentReference ->
+//                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                        val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
+                                        startActivity(AccountListActivity)
+                                    }
+                                    .addOnFailureListener { e ->
+                                        showToast("관리비 계좌 등록에 실패하였습니다.")
+                                        Log.w(ContentValues.TAG, "Error adding document", e)
+                                        return@addOnFailureListener
+                                    }
                             }
-                        }).start()
-                    } else {
-                        Thread(Runnable {
-                            villaNoticedb!!.VillaNoticeDao().updateAccount(
-                                    binding.bankNameText.text.toString().trim(),
-                                    binding.accountHolderEditText.text.toString().trim(),
-                                    binding.accountNumberEditText.text.toString().trim(),
-                                    MyApplication.prefs.getString("villaAddress","").trim(),
-                                    AccountId
-                            )
+                        }
 
-                            runOnUiThread {
-                                val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
-                                startActivity(AccountListActivity)
-                            }
-                        }).start()
-                    }
 
+
+
+
+//-------------------------------------------------------------------------------------------------
+//                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                    if(AccountId <= 1){
+//                        Thread(Runnable {
+//                            villaNoticedb!!.VillaNoticeDao().villaAccountInsert(
+//                                VillaAccount(
+//                                    "",
+//                                    binding.bankNameText.text.toString().trim(),
+//                                    binding.accountHolderEditText.text.toString().trim(),
+//                                    binding.accountNumberEditText.text.toString().trim(),
+//                                    "",
+//                                    MyApplication.prefs.getString("villaAddress","").trim()
+//                                )
+//                            )
+//
+//                            runOnUiThread {
+//                                val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
+//                                startActivity(AccountListActivity)
+//                            }
+//                        }).start()
+//                    } else {
+//                        Thread(Runnable {
+//                            villaNoticedb!!.VillaNoticeDao().updateAccount(
+//                                    binding.bankNameText.text.toString().trim(),
+//                                    binding.accountHolderEditText.text.toString().trim(),
+//                                    binding.accountNumberEditText.text.toString().trim(),
+//                                    MyApplication.prefs.getString("villaAddress","").trim(),
+//                                    AccountId
+//                            )
+//
+//                            runOnUiThread {
+//                                val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
+//                                startActivity(AccountListActivity)
+//                            }
+//                        }).start()
+//                    }
+//-------------------------------------------------------------------------------------------------
 
 
                 }

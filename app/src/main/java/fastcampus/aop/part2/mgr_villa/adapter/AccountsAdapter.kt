@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,13 +8,44 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.R
 import fastcampus.aop.part2.mgr_villa.model.AccountLayout
 import fastcampus.aop.part2.mgr_villa.model.TenantLayout
+import fastcampus.aop.part2.mgr_villa.model.VillaAccount
+import fastcampus.aop.part2.mgr_villa.model.VillaNotice
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
-class AccountsAdapter(val accountList: ArrayList<AccountLayout>): RecyclerView.Adapter<AccountsAdapter.AccountViewHolder>() {
+class AccountsAdapter(val accountList: ArrayList<VillaAccount>): RecyclerView.Adapter<AccountsAdapter.AccountViewHolder>() {
+
+    val firestoreDB = Firebase.firestore
 
     private var selectedPosition = -1
+
+    init {
+        firestoreDB?.collection("VillaAccount")
+            .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+            .orderBy("bankName", Query.Direction.ASCENDING)
+            .addSnapshotListener { querySnapshot, e ->
+                accountList.clear()
+
+                if (e != null){
+//                    showToast(e.message.toString())
+                    Log.d("VillaAccount/AccountsAdapter------------------>", e.message.toString())
+                    return@addSnapshotListener
+                }
+
+                for (snapshot in querySnapshot!!.documents){
+                    val item = snapshot.toObject(VillaAccount::class.java)
+                    item!!.accountId = snapshot.id
+                    accountList.add(item!!)
+                }
+                notifyDataSetChanged()
+            }
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountsAdapter.AccountViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycleview_accounts, parent, false)
@@ -25,7 +57,7 @@ class AccountsAdapter(val accountList: ArrayList<AccountLayout>): RecyclerView.A
     }
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-        holder.accountId.text = accountList[position].accountId.toString()
+        holder.accountId.text = accountList[position].accountId
         holder.accountBankName.text = accountList[position].bankName
         holder.accountHolder.text = accountList[position].accountHolder
         holder.accountNumber.text = accountList[position].accountNumber

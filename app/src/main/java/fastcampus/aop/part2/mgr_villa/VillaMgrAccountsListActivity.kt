@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
@@ -11,6 +12,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.adapter.AccountsAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.NoticeAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.TenantAdapter
@@ -18,6 +22,8 @@ import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityAccountlistBinding
 import fastcampus.aop.part2.mgr_villa.model.AccountLayout
 import fastcampus.aop.part2.mgr_villa.model.NoticeLayout
+import fastcampus.aop.part2.mgr_villa.model.VillaAccount
+import fastcampus.aop.part2.mgr_villa.model.VillaTenant
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.android.synthetic.main.activity_accountlist.*
 import kotlinx.android.synthetic.main.recycleview_accounts.view.*
@@ -32,7 +38,9 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
         )
     }
 
-    private var AccountListItems = arrayListOf<AccountLayout>()                   // 리싸이클러 뷰 아이템
+    val firestoreDB = Firebase.firestore
+
+    private var AccountListItems = arrayListOf<VillaAccount>()                   // 리싸이클러 뷰 아이템
     private val AccountListAdapter = AccountsAdapter(AccountListItems)            // 리싸이클러 뷰 어댑터
 
 
@@ -58,37 +66,62 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
             AccountsAdapter.OnSlideButtonClickListener {
             override fun onSlideButtonClick(v: View, imageView: ImageView, position: Int) {
 
-                val villadb = VillaNoticeHelper.getInstance(applicationContext)
-                val mgrCheck = MyApplication.prefs.getString("userType", "")
+//                val villadb = VillaNoticeHelper.getInstance(applicationContext)
+//                val mgrCheck = MyApplication.prefs.getString("userType", "")
 
-                if (mgrCheck.equals("MGR")
-                    && !mgrCheck.equals("")
-                ) {
+//                if (mgrCheck.equals("MGR")
+//                    && !mgrCheck.equals("")
+//                ) {
                     when (imageView) {
                         imageView.AccountUpdate -> {
-                            Thread(Runnable {
-                                runOnUiThread {
-                                    val AccountActivity = Intent(v.context, AddAccountActivity::class.java)
-                                    AccountActivity.putExtra("accountId",AccountListItems[position].accountId.toString().toLong())
-                                    startActivity(AccountActivity)
-                                }
-                            }).start()
+
+
+                            val AccountActivity = Intent(v.context, AddAccountActivity::class.java)
+                            AccountActivity.putExtra("accountId",AccountListItems[position].accountId)
+                            startActivity(AccountActivity)
+
+                            //-----------------------------------------------------------------------------
+//                            Thread(Runnable {
+//                                runOnUiThread {
+//                                    val AccountActivity = Intent(v.context, AddAccountActivity::class.java)
+//                                    AccountActivity.putExtra("accountId",AccountListItems[position].accountId.toString().toLong())
+//                                    startActivity(AccountActivity)
+//                                }
+//                            }).start()
+                            //-----------------------------------------------------------------------------
                         }
                         imageView.AccountDelete -> {
-                            Thread(Runnable {
-                                villadb!!.VillaNoticeDao().deleteAccount(
-                                    MyApplication.prefs.getString("villaAddress", "").trim(),
-                                    AccountListItems[position].accountId.toString().toLong()
-                                )
-                                runOnUiThread {
-                                    initAccountsItems()
+
+                            firestoreDB.collection("VillaAccount")
+                                .document(AccountListItems[position].accountId)
+                                .get()
+                                .addOnSuccessListener { task ->
+                                    if(task["favorite"].toString().equals("favorite")){
+                                        showToast("주계좌는 삭제할 수 없습니다.")
+                                        return@addOnSuccessListener
+                                    } else {
+                                        firestoreDB.collection("VillaAccount")
+                                            .document(AccountListItems[position].accountId)
+                                            .delete()
+                                    }
                                 }
-                            }).start()
-//                            showToast(TenantRoomListItems[position].tenantRoomId.toString())
+
+                            //-----------------------------------------------------------------------------
+//                            Thread(Runnable {
+//                                villadb!!.VillaNoticeDao().deleteAccount(
+//                                    MyApplication.prefs.getString("villaAddress", "").trim(),
+//                                    AccountListItems[position].accountId.toString().toLong()
+//                                )
+//                                runOnUiThread {
+//                                    initAccountsItems()
+//                                }
+//                            }).start()
+                            //-----------------------------------------------------------------------------
+
                         }
 
                     }
-                }
+//                }
 
             }
 
@@ -97,24 +130,46 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
         AccountListAdapter.setItemClickListener( object :AccountsAdapter.OnItemClickListener{
             override fun onClick(v: View, imageView: ImageView, position: Int) {
 
-                val villadb = VillaNoticeHelper.getInstance(applicationContext)
-                Thread(Runnable {
-                    villadb!!.VillaNoticeDao().updateNoneFavorite(
-                        "",
-                        MyApplication.prefs.getString("villaAddress", "").trim()
-                    )
 
-                    villadb!!.VillaNoticeDao().updateFavorite(
-                        "favorite",
-                        MyApplication.prefs.getString("villaAddress", "").trim(),
-                        AccountListItems[position].accountId.toString().toLong()
-                    )
-                    runOnUiThread {
-                        initAccountsItems()
-//                        imageView.setImageResource(R.drawable.ic_circle_fav)
-
+                firestoreDB.collection("VillaAccount")
+                    .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+                    .get()
+                    .addOnSuccessListener { results ->
+                        for(i in results){
+                            firestoreDB.collection("VillaAccount")
+                                .document(i.id)
+                                .update(mapOf(
+                                    "favorite" to ""
+                                ))
+                        }
+                        firestoreDB.collection("VillaAccount")
+                            .document(AccountListItems[position].accountId)
+                            .update(mapOf(
+                                "favorite" to "favorite"
+                            ))
                     }
-                }).start()
+
+                AccountListAdapter.notifyDataSetChanged()
+//---------------------------------------------------------------------
+//                val villadb = VillaNoticeHelper.getInstance(applicationContext)
+//                Thread(Runnable {
+//                    villadb!!.VillaNoticeDao().updateNoneFavorite(
+//                        "",
+//                        MyApplication.prefs.getString("villaAddress", "").trim()
+//                    )
+//
+//                    villadb!!.VillaNoticeDao().updateFavorite(
+//                        "favorite",
+//                        MyApplication.prefs.getString("villaAddress", "").trim(),
+//                        AccountListItems[position].accountId.toString().toLong()
+//                    )
+//                    runOnUiThread {
+//                        initAccountsItems()
+////                        imageView.setImageResource(R.drawable.ic_circle_fav)
+//
+//                    }
+//                }).start()
+//---------------------------------------------------------------------
             }
         })
 
@@ -130,38 +185,63 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
 
     private fun initAccountsItems() {
 
-        AccountListItems.clear()
+        firestoreDB?.collection("VillaAccount")
+            .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+            .orderBy("bankName", Query.Direction.ASCENDING)
+            .addSnapshotListener { querySnapshot, e ->
+                AccountListItems.clear()
 
-        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+                if (e != null){
+//                    showToast(e.message.toString())
+                    Log.d("VillaAccount/AccountsAdapter------------------>", e.message.toString())
+                    return@addSnapshotListener
+                }
 
-        Thread(Runnable {
+                for (snapshot in querySnapshot!!.documents){
+                    val item = snapshot.toObject(VillaAccount::class.java)
+                    item!!.accountId = snapshot.id
+                    AccountListItems.add(item!!)
+                }
 
-            val listAccounts = villaNoticedb!!.VillaNoticeDao()
-                .getAllVillaAccounts(MyApplication.prefs.getString("villaAddress", ""))
+                binding.mgrAccountsNull.isVisible = AccountListItems.count() <= 0
 
-            val AccountCount = villaNoticedb!!.VillaNoticeDao()
-                .isAccount(MyApplication.prefs.getString("villaAddress", ""))
-
-            for (Account in listAccounts) {
-                // 결과를 리싸이클러 뷰에 추가
-                val item = AccountLayout(
-                    Account.accountId,
-                    Account.bankName,
-                    Account.accountHolder,
-                    Account.accountNumber,
-                    Account.favorite
-                )
-                AccountListItems.add(item)
-
-
-            }
-
-            runOnUiThread {
                 AccountListAdapter.notifyDataSetChanged()
-
-                binding.mgrAccountsNull.isVisible = AccountCount <= 0
             }
-        }).start()
+
+//-------------------------------------------------------------------------------------------------------
+//        AccountListItems.clear()
+//
+//        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//        Thread(Runnable {
+//
+//            val listAccounts = villaNoticedb!!.VillaNoticeDao()
+//                .getAllVillaAccounts(MyApplication.prefs.getString("villaAddress", ""))
+//
+//            val AccountCount = villaNoticedb!!.VillaNoticeDao()
+//                .isAccount(MyApplication.prefs.getString("villaAddress", ""))
+//
+//            for (Account in listAccounts) {
+//                // 결과를 리싸이클러 뷰에 추가
+//                val item = AccountLayout(
+//                    Account.accountId,
+//                    Account.bankName,
+//                    Account.accountHolder,
+//                    Account.accountNumber,
+//                    Account.favorite
+//                )
+//                AccountListItems.add(item)
+//
+//
+//            }
+//
+//            runOnUiThread {
+//                AccountListAdapter.notifyDataSetChanged()
+//
+//                binding.mgrAccountsNull.isVisible = AccountCount <= 0
+//            }
+//        }).start()
+//-------------------------------------------------------------------------------------------------------
 
     }
 

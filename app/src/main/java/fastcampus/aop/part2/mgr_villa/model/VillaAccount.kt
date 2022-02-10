@@ -16,12 +16,12 @@ import androidx.room.ForeignKey.CASCADE
 )
 
 data class VillaAccount(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "accountId") var accountId: Long? = 0,
-    @ColumnInfo(name = "bankName") var bankName: String,
-    @ColumnInfo(name = "accountHolder") var accountHolder: String,
-    @ColumnInfo(name = "accountNumber") var accountNumber: String,
-    @ColumnInfo(name = "favorite") var favorite: String,
-    @ColumnInfo(name = "villaAddr") var villaAddr: String
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "accountId") var accountId: String = "",
+    @ColumnInfo(name = "bankName") var bankName: String = "",
+    @ColumnInfo(name = "accountHolder") var accountHolder: String = "",
+    @ColumnInfo(name = "accountNumber") var accountNumber: String = "",
+    @ColumnInfo(name = "favorite") var favorite: String = "",
+    @ColumnInfo(name = "villaAddr") var villaAddr: String = ""
 )
 
