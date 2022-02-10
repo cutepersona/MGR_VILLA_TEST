@@ -49,7 +49,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
     val firestoreDB = Firebase.firestore
 
     private var tenantRoomId : String = ""
-    private var tenantRoomNumer : String = ""
+    private var tenantRoomNumber : String = ""
 
     private var tonCostAmount: String = ""
     private var cleanCostAmount: String = ""
@@ -72,7 +72,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
             tenantRoomId = intent.getStringExtra("tenantRoomId").toString()
         }
         if (intent.hasExtra("tenantRoomNumber")){
-            tenantRoomNumer = intent.getStringExtra("tenantRoomNumber").toString()
+            tenantRoomNumber = intent.getStringExtra("tenantRoomNumber").toString()
         }
 
         initToolBar()
@@ -114,7 +114,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                     .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
                     .whereEqualTo("costYear",binding.CostYearMonth.text.substring(0, 4))
                     .whereEqualTo("costMonth",binding.CostYearMonth.text.substring(5, 7))
-                    .whereEqualTo("roomNumber",tenantRoomNumer)
+                    .whereEqualTo("roomNumber",tenantRoomNumber)
                     .get()
                     .addOnSuccessListener { tenantCostResult ->
                         // 관리비 등록 이력이 있을때
@@ -338,7 +338,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                 .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
                 .whereEqualTo("costYear",binding.CostYearMonth.text.substring(0, 4))
                 .whereEqualTo("costMonth",binding.CostYearMonth.text.substring(5, 7))
-                .whereEqualTo("roomNumber",tenantRoomNumer)
+                .whereEqualTo("roomNumber",tenantRoomNumber)
                 .get()
                 .addOnSuccessListener { tenantCostResult ->
                     // 관리비 등록 이력이 있을때
@@ -671,7 +671,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
             .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
             .whereEqualTo("costYear",binding.CostYearMonth.text.substring(0, 4))
             .whereEqualTo("costMonth",binding.CostYearMonth.text.substring(5, 7))
-            .whereEqualTo("roomNumber",tenantRoomNumer)
+            .whereEqualTo("roomNumber",tenantRoomNumber)
             .get()
             .addOnSuccessListener { tenantCostResult ->
                 // 관리비 등록 이력이 있을때
@@ -726,7 +726,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
                                     binding.TotalCostValue.setText(total.toString())
 
-                                    binding.CostRoomNumber.setText(tenantRoomNumer)
+                                    binding.CostRoomNumber.setText(tenantRoomNumber)
 
                                     break
                                 }
