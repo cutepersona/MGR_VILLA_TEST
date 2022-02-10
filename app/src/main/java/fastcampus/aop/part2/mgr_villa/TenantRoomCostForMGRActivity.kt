@@ -3,12 +3,14 @@ package fastcampus.aop.part2.mgr_villa
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +23,8 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContentProviderCompat.requireContext
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.customdialog.NoTenantCostDialog
 import fastcampus.aop.part2.mgr_villa.customdialog.RequestTenantDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -41,7 +45,11 @@ import kotlin.math.roundToInt
 class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
     private val binding: ActivityRoomcostformgrBinding by lazy {ActivityRoomcostformgrBinding.inflate(layoutInflater)}
-    private var tenantRoomId : Long = 0
+
+    val firestoreDB = Firebase.firestore
+
+    private var tenantRoomId : String = ""
+    private var tenantRoomNumer : String = ""
 
     private var tonCostAmount: String = ""
     private var cleanCostAmount: String = ""
@@ -61,7 +69,10 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         if (intent.hasExtra("tenantRoomId")){
-            tenantRoomId = intent.getLongExtra("tenantRoomId", 0)
+            tenantRoomId = intent.getStringExtra("tenantRoomId").toString()
+        }
+        if (intent.hasExtra("tenantRoomNumber")){
+            tenantRoomNumer = intent.getStringExtra("tenantRoomNumber").toString()
         }
 
         initToolBar()
@@ -91,8 +102,6 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
         binding.CostYearMonth.addTextChangedListener(object:TextWatcher{
             @RequiresApi(Build.VERSION_CODES.O)
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -100,98 +109,221 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
             @RequiresApi(Build.VERSION_CODES.O)
             override fun afterTextChanged(s: Editable?) {
-                Thread(Runnable {
-                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-                    val ConstCost = villaNoticedb!!.VillaNoticeDao().getStandardCost(
-                        MyApplication.prefs.getString("villaAddress", "").trim()
-                    )
 
-                    val roomNumber = villaNoticedb!!.VillaNoticeDao().getTenantRoom(
-                        tenantRoomId
-                    )
-
-                    val favoriteAccount = villaNoticedb!!.VillaNoticeDao().getFavoriteAccount()
-
-                    val isTenantCost = villaNoticedb!!.VillaNoticeDao().getTenantCost(
-                        MyApplication.prefs.getString("villaAddress", "").trim(),
-                        binding.CostYearMonth.text.substring(0, 4),
-                        binding.CostYearMonth.text.substring(5, 7),
-                        roomNumber
-                    )
-
-                    runOnUiThread {
-
-
-                        if (isTenantCost == null) {
+                firestoreDB.collection("VillaTenantCost")
+                    .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+                    .whereEqualTo("costYear",binding.CostYearMonth.text.substring(0, 4))
+                    .whereEqualTo("costMonth",binding.CostYearMonth.text.substring(5, 7))
+                    .whereEqualTo("roomNumber",tenantRoomNumer)
+                    .get()
+                    .addOnSuccessListener { tenantCostResult ->
+                        // 관리비 등록 이력이 있을때
+                        if (!tenantCostResult.isEmpty) {
+                            for(i in tenantCostResult!!){
+                                binding.CostUid.setText(i.id)
+                                binding.CostRoomNumber.setText(i.data["roomNumber"].toString())
+                                binding.TotalCostValue.setText(i.data["totalCost"].toString())
+                                binding.WriteWaterTon.setText( ( ( i.data["useTon"].toString().toFloat() * 10 ).roundToInt() / 10f ).toString() )
+                                binding.ConstTonCost.setText(i.data["costTon"].toString())
+                                binding.waterCost.setText(i.data["totalUseTon"].toString())
+                                binding.ConstCleanCost.setText(i.data["costClean"].toString())
+                                binding.ConstUsunCost.setText(i.data["costUsun"].toString())
+                                binding.ConstMgrCost.setText(i.data["costMgr"].toString())
+                                break
+                            }
+                            firestoreDB.collection("VillaAccount")
+                                .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                                .get()
+                                .addOnSuccessListener { result ->
+                                    if (!result.isEmpty){
+                                        for (i in result!!) {
+                                            binding.CostBankName.setText(i.data["bankName"].toString().trim())
+                                            binding.CostAccountHolder.setText(i.data["accountHolder"].toString().trim())
+                                            binding.CostAccountNumber.setText(i.data["accountNumber"].toString().trim())
+                                            break
+                                        }
+                                    }
+                                }
+                        } else {
 
                             val noTenantCostDialog = NoTenantCostDialog(this@TenantRoomCostForMGRActivity)
                             noTenantCostDialog.showDialog()
-//
-//                        showToast(binding.CostYearMonth.text.substring(0,4) + "-" + binding.CostYearMonth.text.substring(5, 7)
-//                        + "의 등록된 관리비 정보가 없습니다.")
 
-
-//                            // 오늘 날짜
-//                            val currentDay = LocalDateTime.now()
-//                            val formatter = DateTimeFormatter.ofPattern("yyyy-MM")
-//                            binding.CostYearMonth.setText(currentDay.format(formatter))
-//                            binding.CostYearMonth.setText(
-//                                binding.CostYearMonth.text.substring(0,4) + "-" + binding.CostYearMonth.text.substring(5, 7)
-//                            )
-
-                            binding.ConstTonCost.setText(ConstCost.tonCost.toString())
-                            binding.ConstCleanCost.setText(ConstCost.cleanCost.toString())
-                            binding.ConstUsunCost.setText(ConstCost.usunCost.toString())
-                            binding.ConstMgrCost.setText(ConstCost.mgrCost.toString())
+                            binding.ConstTonCost.setText("0")
+                            binding.ConstCleanCost.setText("0")
+                            binding.ConstUsunCost.setText("0")
+                            binding.ConstMgrCost.setText("0")
 
                             // 초기 톤수 셋팅 1.0 값
-                            binding.WriteWaterTon.setText(1.toFloat().toString())
+                            binding.WriteWaterTon.setText(0.toFloat().toString())
 
                             waterValue = binding.WriteWaterTon.text.toString()
                                 .toFloat() * binding.ConstTonCost.text.toString().replace(",", "")
                                 .toFloat()
                             binding.waterCost.setText(waterValue.toInt().toString())
+                            binding.TotalCostValue.setText("0")
 
-                            val total =
-                                waterValue.toInt() + ConstCost.cleanCost + ConstCost.usunCost + ConstCost.mgrCost
+                            firestoreDB.collection("VillaAccount")
+                                .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                                .get()
+                                .addOnSuccessListener { result ->
+                                    if (!result.isEmpty){
+                                        for (i in result!!) {
+                                            binding.CostBankName.setText(i.data["bankName"].toString().trim())
+                                            binding.CostAccountHolder.setText(i.data["accountHolder"].toString().trim())
+                                            binding.CostAccountNumber.setText(i.data["accountNumber"].toString().trim())
+                                            break
+                                        }
+                                    }
+                                }
 
-                            binding.TotalCostValue.setText(total.toString())
-
-                            binding.CostRoomNumber.setText(roomNumber)
-
-                            binding.CostBankName.setText(favoriteAccount.bankName)
-                            binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
-                            binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
-
-
+                            // 등록이력이 없을 때
+//                            firestoreDB.collection("StandardCost")
+//                                .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+//                                .get()
+//                                .addOnSuccessListener { result ->
+//                                    if (!result.isEmpty) {
+//                                        for (i in result!!) {
+//                                            binding.ConstTonCost.setText(i.data["tonCost"].toString())
+//                                            binding.ConstCleanCost.setText(i.data["cleanCost"].toString())
+//                                            binding.ConstUsunCost.setText(i.data["usunCost"].toString())
+//                                            binding.ConstMgrCost.setText(i.data["mgrCost"].toString())
+//
+//                                            val total = waterValue.toInt() + i.data["cleanCost"].toString()
+//                                                .toInt() + i.data["usunCost"].toString()
+//                                                .toInt() + i.data["mgrCost"].toString().toInt()
+//
+//                                            waterValue = binding.WriteWaterTon.text.toString()
+//                                                .toFloat() * binding.ConstTonCost.text.toString()
+//                                                .replace(",", "").toFloat()
+//                                            binding.waterCost.setText(waterValue.toInt().toString())
+//
+//                                            binding.TotalCostValue.setText(total.toString())
+//
+//                                            binding.CostRoomNumber.setText(tenantRoomNumer)
+//
+//                                            break
+//                                        }
+//                                        firestoreDB.collection("VillaAccount")
+//                                            .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+//                                            .get()
+//                                            .addOnSuccessListener { result ->
+//                                                if (!result.isEmpty){
+//                                                    for (i in result!!) {
+//                                                        binding.CostBankName.setText(i.data["bankName"].toString().trim())
+//                                                        binding.CostAccountHolder.setText(i.data["accountHolder"].toString().trim())
+//                                                        binding.CostAccountNumber.setText(i.data["accountNumber"].toString().trim())
+//                                                        break
+//                                                    }
+//                                                }
+//                                            }
+//
+//                                    }
+//                                }
                         }
-                                                else {
-                            binding.CostUid.setText(isTenantCost.costId.toString())
-                            binding.CostRoomNumber.setText(isTenantCost.roomNumber)
-//                            binding.CostYearMonth.setText(isTenantCost.costYear + "-" + isTenantCost.costMonth)
-                            binding.TotalCostValue.setText(isTenantCost.totalCost.toString())
-                            binding.WriteWaterTon.setText(((isTenantCost.useTon*10).roundToInt() / 10f).toString())
-                            binding.ConstTonCost.setText(isTenantCost.costTon.toString())
-                            binding.waterCost.setText(isTenantCost.totalUseTon.toString())
-                            binding.ConstCleanCost.setText(isTenantCost.costClean.toString())
-                            binding.ConstUsunCost.setText(isTenantCost.costUsun.toString())
-                            binding.ConstMgrCost.setText(isTenantCost.costMgr.toString())
-
-                            binding.CostBankName.setText(favoriteAccount.bankName)
-                            binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
-                            binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
-                        }
-
-
-//                waterValue = binding.WriteWaterTon.toString().toFloat() * ConstCost.tonCost.toFloat()
-
                     }
-                }).start()
 
-//                runBlocking {
-//                    delay(500L)
-//                    job.cancel()
-//                }
+//                firestoreDB.collection("VillaTenantCost")
+//                    .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+//                    .get()
+//                    .addOnSuccessListener { results ->
+//                        if(results.isEmpty){
+//                            showToast("주 계좌가 등록되어 있지 않습니다.")
+//                            return@addOnSuccessListener
+//                        } else {
+//                            firestoreDB.collection("VillaTenantCost")
+//                                .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+//                                .whereEqualTo("costYear",binding.CostYearMonth.text.substring(0, 4))
+//                                .whereEqualTo("costMonth",binding.CostYearMonth.text.substring(5, 7))
+//                                .whereEqualTo("costMonth",binding.CostYearMonth.text.substring(5, 7))
+//                                .get()
+//                                .addOnSuccessListener { results ->
+//                                    if(results.isEmpty){
+//                                        showToast("기준관리비가 등록되어 있지 않습니다.")
+//                                        return@addOnSuccessListener
+//                                    } else {
+//                                        val TenantCostListActivity = Intent(this, TenantCostListActivity::class.java)
+//                                        startActivity(TenantCostListActivity)
+//                                    }
+//                                }
+//                        }
+//                    }
+
+
+//------------------------------------------------------------------------------------------------------------------------------------
+//                Thread(Runnable {
+//                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//                    val ConstCost = villaNoticedb!!.VillaNoticeDao().getStandardCost(
+//                        MyApplication.prefs.getString("villaAddress", "").trim()
+//                    )
+//
+//                    val roomNumber = villaNoticedb!!.VillaNoticeDao().getTenantRoom(
+//                        tenantRoomId
+//                    )
+//
+//                    val favoriteAccount = villaNoticedb!!.VillaNoticeDao().getFavoriteAccount()
+//
+//                    val isTenantCost = villaNoticedb!!.VillaNoticeDao().getTenantCost(
+//                        MyApplication.prefs.getString("villaAddress", "").trim(),
+//                        binding.CostYearMonth.text.substring(0, 4),
+//                        binding.CostYearMonth.text.substring(5, 7),
+//                        roomNumber
+//                    )
+//
+//                    runOnUiThread {
+//
+//
+//                        if (isTenantCost == null) {
+//
+//                            val noTenantCostDialog = NoTenantCostDialog(this@TenantRoomCostForMGRActivity)
+//                            noTenantCostDialog.showDialog()
+//
+//                            binding.ConstTonCost.setText(ConstCost.tonCost.toString())
+//                            binding.ConstCleanCost.setText(ConstCost.cleanCost.toString())
+//                            binding.ConstUsunCost.setText(ConstCost.usunCost.toString())
+//                            binding.ConstMgrCost.setText(ConstCost.mgrCost.toString())
+//
+//                            // 초기 톤수 셋팅 1.0 값
+//                            binding.WriteWaterTon.setText(1.toFloat().toString())
+//
+//                            waterValue = binding.WriteWaterTon.text.toString()
+//                                .toFloat() * binding.ConstTonCost.text.toString().replace(",", "")
+//                                .toFloat()
+//                            binding.waterCost.setText(waterValue.toInt().toString())
+//
+//                            val total =
+//                                waterValue.toInt() + ConstCost.cleanCost + ConstCost.usunCost + ConstCost.mgrCost
+//
+//                            binding.TotalCostValue.setText(total.toString())
+//
+//                            binding.CostRoomNumber.setText(roomNumber)
+//
+//                            binding.CostBankName.setText(favoriteAccount.bankName)
+//                            binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
+//                            binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
+//
+//
+//                        }
+//                                                else {
+//                            binding.CostUid.setText(isTenantCost.costId.toString())
+//                            binding.CostRoomNumber.setText(isTenantCost.roomNumber)
+////                            binding.CostYearMonth.setText(isTenantCost.costYear + "-" + isTenantCost.costMonth)
+//                            binding.TotalCostValue.setText(isTenantCost.totalCost.toString())
+//                            binding.WriteWaterTon.setText(((isTenantCost.useTon*10).roundToInt() / 10f).toString())
+//                            binding.ConstTonCost.setText(isTenantCost.costTon.toString())
+//                            binding.waterCost.setText(isTenantCost.totalUseTon.toString())
+//                            binding.ConstCleanCost.setText(isTenantCost.costClean.toString())
+//                            binding.ConstUsunCost.setText(isTenantCost.costUsun.toString())
+//                            binding.ConstMgrCost.setText(isTenantCost.costMgr.toString())
+//
+//                            binding.CostBankName.setText(favoriteAccount.bankName)
+//                            binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
+//                            binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
+//                        }
+//                    }
+//                }).start()
+//------------------------------------------------------------------------------------------------------------------------------------
+
 
             }
 
@@ -201,59 +333,150 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
     // 관리비 등록하기
     private fun initInsertMgrCost() {
         binding.WriteRoomCostButton.setOnClickListener {
-            Thread(Runnable {
-                if (binding.CostUid.text.isNullOrEmpty()){
-                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
 
-                    villaNoticedb!!.VillaNoticeDao().tenantCostInsert(
-                        VillaTenantCost(
-                            null
-                            ,binding.CostRoomNumber.text.toString().trim()
-                            ,binding.TotalCostValue.text.toString().replace(",","").toInt()
-                            ,binding.CostYearMonth.text.substring(0,4)
-                            ,binding.CostYearMonth.text.substring(5,7)
-                            ,binding.WriteWaterTon.text.toString().replace(",","").toFloat()
-                            ,binding.ConstTonCost.text.toString().replace(",","").toInt()
-                            ,binding.waterCost.text.toString().replace(",","").toInt()
-                            ,binding.ConstCleanCost.text.toString().replace(",","").toInt()
-                            ,binding.ConstUsunCost.text.toString().replace(",","").toInt()
-                            ,binding.ConstMgrCost.text.toString().replace(",","").toInt()
-                            ,""
-                            ,MyApplication.prefs.getString("villaAddress","").trim()
-                        )
-                    )
+            firestoreDB.collection("VillaTenantCost")
+                .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+                .whereEqualTo("costYear",binding.CostYearMonth.text.substring(0, 4))
+                .whereEqualTo("costMonth",binding.CostYearMonth.text.substring(5, 7))
+                .whereEqualTo("roomNumber",tenantRoomNumer)
+                .get()
+                .addOnSuccessListener { tenantCostResult ->
+                    // 관리비 등록 이력이 있을때
+                    if (!tenantCostResult.isEmpty) {
+                        for (i in tenantCostResult!!) {
+                            if (tonUpdateFlag) {
+                                firestoreDB.collection("VillaTenantCost")
+                                    .document(i.id)
+                                    .update(
+                                        mapOf(
+                                            "costId" to binding.CostUid.text.toString().trim(),
+                                            "roomNumber" to binding.CostRoomNumber.text.toString().trim(),
+                                            "totalCost" to binding.TotalCostValue.text.toString().replace(",", "").toInt(),
+                                            "costYear" to binding.CostYearMonth.text.substring(0,4),
+                                            "costMonth" to binding.CostYearMonth.text.substring(5,7),
+                                            "useTon" to binding.WriteWaterTon.text.toString().replace(",", "").toFloat(),
+                                            "costTon" to binding.ConstTonCost.text.toString().replace(",", "").toInt(),
+                                            "totalUseTon" to binding.waterCost.text.toString().replace(",", "").toInt(),
+                                            "costClean" to binding.ConstCleanCost.text.toString().replace(",", "").toInt(),
+                                            "costUsun" to binding.ConstUsunCost.text.toString().replace(",", "").toInt(),
+                                            "costMgr" to binding.ConstMgrCost.text.toString().replace(",", "").toInt(),
+                                            "costStatus" to "",
+                                            "villaAddr" to MyApplication.prefs.getString("villaAddress","").trim()
+                                        )
+                                    )
+                                    .addOnSuccessListener {
+                                        val toCostList =
+                                            Intent(this, TenantCostListActivity::class.java)
+                                        startActivity(toCostList)
+                                    }
+                                break
+                            }
+                        }
+                    } else {
+                        // 신규등록하는 경우
+                        if (tonUpdateFlag){
+                            val villaTenantCost = firestoreDB.collection("VillaTenantCost")
 
-                    runOnUiThread {
-                        showToast(binding.CostRoomNumber.text.toString().trim()+" 의 " + binding.CostYearMonth.text.substring(0,4) + "년 " + binding.CostYearMonth.text.substring(5,7) +"월 관리비가 등록되었습니다.")
-//                        val toCostList = Intent(this, TenantCostListActivity::class.java)
-//                        startActivity(toCostList)
-                    }
+                            val VillaTenantCost = hashMapOf(
+                                "costId" to "0",
+                                "roomNumber" to binding.CostRoomNumber.text.toString().trim(),
+                                "totalCost" to binding.TotalCostValue.text.toString().replace(",","").toInt(),
+                                "costYear" to binding.CostYearMonth.text.substring(0,4),
+                                "costMonth" to binding.CostYearMonth.text.substring(5,7),
+                                "useTon" to binding.WriteWaterTon.text.toString().replace(",","").toFloat(),
+                                "costTon" to binding.ConstTonCost.text.toString().replace(",","").toInt(),
+                                "totalUseTon" to binding.waterCost.text.toString().replace(",","").toInt(),
+                                "costClean" to binding.ConstCleanCost.text.toString().replace(",","").toInt(),
+                                "costUsun" to binding.ConstUsunCost.text.toString().replace(",","").toInt(),
+                                "costMgr" to binding.ConstMgrCost.text.toString().replace(",","").toInt(),
+                                "costStatus" to "",
+                                "villaAddr" to MyApplication.prefs.getString("villaAddress", "").trim()
+                            )
 
-                } else {
-                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-
-                    villaNoticedb!!.VillaNoticeDao().updateTenantCostForId(
-                        binding.TotalCostValue.text.toString().replace(",","").toInt()
-                        ,binding.WriteWaterTon.text.toString().replace(",","").toFloat()
-                        ,binding.ConstTonCost.text.toString().replace(",","").toInt()
-                        ,binding.waterCost.text.toString().replace(",","").toInt()
-                        ,binding.ConstCleanCost.text.toString().replace(",","").toInt()
-                        ,binding.ConstUsunCost.text.toString().replace(",","").toInt()
-                        ,binding.ConstMgrCost.text.toString().replace(",","").toInt()
-                         ,binding.CostUid.text.toString().toLong()
-                        )
-                    runOnUiThread {
-                        if (!tonUpdateFlag){
-                            showToast("톤 수 수정후 완료 버튼을 클릭해주세요.")
+                            villaTenantCost.document(MyApplication.prefs.getString("villaAddress", "").trim() + "_" + binding.CostRoomNumber.text.toString().trim() + "_" + binding.CostYearMonth.text.substring(0,4) + "_" + binding.CostYearMonth.text.substring(5,7))
+                                .set(VillaTenantCost)
+                                .addOnSuccessListener { documentReference ->
+//                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                                    val toCostList = Intent(this, TenantCostListActivity::class.java)
+                                    startActivity(toCostList)
+                                }
+                                .addOnFailureListener { e ->
+                                    showToast("관리비 등록에 실패하였습니다.")
+                                    Log.w(ContentValues.TAG, "Error adding document", e)
+                                    return@addOnFailureListener
+                                }
                         } else {
-                            showToast(binding.CostRoomNumber.text.toString().trim()+" 의 " + binding.CostYearMonth.text.substring(0,4) + "년 " + binding.CostYearMonth.text.substring(5,7) +"월 관리비가 수정되었습니다.")
-//                            val toCostList = Intent(this, TenantCostListActivity::class.java)
-//                            startActivity(toCostList)
+                            showToast("톤 수 수정후 완료 버튼을 클릭해주세요.")
+                            return@addOnSuccessListener
                         }
                     }
                 }
 
-            }).start()
+
+
+
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------------
+//            Thread(Runnable {
+//                if (binding.CostUid.text.isNullOrEmpty()){
+//                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                    villaNoticedb!!.VillaNoticeDao().tenantCostInsert(
+//                        VillaTenantCost(
+//                            ""
+//                            ,binding.CostRoomNumber.text.toString().trim()
+//                            ,binding.TotalCostValue.text.toString().replace(",","").toInt()
+//                            ,binding.CostYearMonth.text.substring(0,4)
+//                            ,binding.CostYearMonth.text.substring(5,7)
+//                            ,binding.WriteWaterTon.text.toString().replace(",","").toFloat()
+//                            ,binding.ConstTonCost.text.toString().replace(",","").toInt()
+//                            ,binding.waterCost.text.toString().replace(",","").toInt()
+//                            ,binding.ConstCleanCost.text.toString().replace(",","").toInt()
+//                            ,binding.ConstUsunCost.text.toString().replace(",","").toInt()
+//                            ,binding.ConstMgrCost.text.toString().replace(",","").toInt()
+//                            ,""
+//                            ,MyApplication.prefs.getString("villaAddress","").trim()
+//                        )
+//                    )
+//
+//                    runOnUiThread {
+//                        showToast(binding.CostRoomNumber.text.toString().trim()+" 의 " + binding.CostYearMonth.text.substring(0,4) + "년 " + binding.CostYearMonth.text.substring(5,7) +"월 관리비가 등록되었습니다.")
+//                        val toCostList = Intent(this, TenantCostListActivity::class.java)
+//                        startActivity(toCostList)
+//                    }
+//
+//                } else {
+//                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//                    villaNoticedb!!.VillaNoticeDao().updateTenantCostForId(
+//                        binding.TotalCostValue.text.toString().replace(",","").toInt()
+//                        ,binding.WriteWaterTon.text.toString().replace(",","").toFloat()
+//                        ,binding.ConstTonCost.text.toString().replace(",","").toInt()
+//                        ,binding.waterCost.text.toString().replace(",","").toInt()
+//                        ,binding.ConstCleanCost.text.toString().replace(",","").toInt()
+//                        ,binding.ConstUsunCost.text.toString().replace(",","").toInt()
+//                        ,binding.ConstMgrCost.text.toString().replace(",","").toInt()
+//                         ,binding.CostUid.text.toString().toLong()
+//                        )
+//                    runOnUiThread {
+//                        if (!tonUpdateFlag){
+//                            showToast("톤 수 수정후 완료 버튼을 클릭해주세요.")
+//                        } else {
+//                            showToast(binding.CostRoomNumber.text.toString().trim()+" 의 " + binding.CostYearMonth.text.substring(0,4) + "년 " + binding.CostYearMonth.text.substring(5,7) +"월 관리비가 수정되었습니다.")
+//                            val toCostList = Intent(this, TenantCostListActivity::class.java)
+//                            startActivity(toCostList)
+//                        }
+//                    }
+//                }
+//
+//            }).start()
+//------------------------------------------------------------------------------------------------------------
+
+
         }
     }
 
@@ -414,71 +637,6 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
         })
 
 
-
-        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
-
-        Thread(Runnable {
-            val ConstCost = villaNoticedb!!.VillaNoticeDao().getStandardCost(
-                MyApplication.prefs.getString("villaAddress","").trim()
-            )
-
-            val roomNumber = villaNoticedb!!.VillaNoticeDao().getTenantRoom(
-                tenantRoomId
-            )
-
-            val favoriteAccount = villaNoticedb!!.VillaNoticeDao().getFavoriteAccount()
-
-            val isTenantCost = villaNoticedb!!.VillaNoticeDao().getTenantCost(
-                MyApplication.prefs.getString("villaAddress","").trim(),binding.CostYearMonth.text.substring(0,4),binding.CostYearMonth.text.substring(5,7),roomNumber
-            )
-
-            runOnUiThread {
-
-                if (isTenantCost==null){
-
-                    binding.ConstTonCost.setText(ConstCost.tonCost.toString())
-                    binding.ConstCleanCost.setText(ConstCost.cleanCost.toString())
-                    binding.ConstUsunCost.setText(ConstCost.usunCost.toString())
-                    binding.ConstMgrCost.setText(ConstCost.mgrCost.toString())
-
-
-                    waterValue = binding.WriteWaterTon.text.toString().toFloat() * binding.ConstTonCost.text.toString().replace(",","").toFloat()
-                    binding.waterCost.setText(waterValue.toInt().toString())
-
-                    val total = waterValue.toInt() + ConstCost.cleanCost + ConstCost.usunCost + ConstCost.mgrCost
-
-                    binding.TotalCostValue.setText(total.toString())
-
-                    binding.CostRoomNumber.setText(roomNumber)
-
-                    binding.CostBankName.setText(favoriteAccount.bankName)
-                    binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
-                    binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
-
-                } else {
-                    binding.CostUid.setText(isTenantCost.costId.toString())
-                    binding.CostRoomNumber.setText(isTenantCost.roomNumber)
-                    binding.CostYearMonth.setText(isTenantCost.costYear + "-" + isTenantCost.costMonth)
-                    binding.TotalCostValue.setText(isTenantCost.totalCost.toString())
-                    binding.WriteWaterTon.setText(((isTenantCost.useTon*10).roundToInt() / 10f).toString())
-                    binding.ConstTonCost.setText(isTenantCost.costTon.toString())
-                    binding.waterCost.setText(isTenantCost.totalUseTon.toString())
-                    binding.ConstCleanCost.setText(isTenantCost.costClean.toString())
-                    binding.ConstUsunCost.setText(isTenantCost.costUsun.toString())
-                    binding.ConstMgrCost.setText(isTenantCost.costMgr.toString())
-
-                    binding.CostBankName.setText(favoriteAccount.bankName)
-                    binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
-                    binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
-                }
-
-
-//                waterValue = binding.WriteWaterTon.toString().toFloat() * ConstCost.tonCost.toFloat()
-
-            }
-        }).start()
-
-
         binding.TotalCostValue.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
             }
@@ -508,6 +666,152 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                 }
             }
         })
+
+        firestoreDB.collection("VillaTenantCost")
+            .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+            .whereEqualTo("costYear",binding.CostYearMonth.text.substring(0, 4))
+            .whereEqualTo("costMonth",binding.CostYearMonth.text.substring(5, 7))
+            .whereEqualTo("roomNumber",tenantRoomNumer)
+            .get()
+            .addOnSuccessListener { tenantCostResult ->
+                // 관리비 등록 이력이 있을때
+                if (!tenantCostResult.isEmpty) {
+                    for(i in tenantCostResult!!){
+                        binding.CostUid.setText(i.id)
+                        binding.CostRoomNumber.setText(i.data["roomNumber"].toString())
+                        binding.CostYearMonth.setText(i.data["costYear"].toString() + "-" + i.data["costMonth"].toString())
+                        binding.TotalCostValue.setText(i.data["totalCost"].toString())
+                        binding.WriteWaterTon.setText( ( ( i.data["useTon"].toString().toFloat() * 10 ).roundToInt() / 10f ).toString() )
+                        binding.ConstTonCost.setText(i.data["costTon"].toString())
+                        binding.waterCost.setText(i.data["totalUseTon"].toString())
+                        binding.ConstCleanCost.setText(i.data["costClean"].toString())
+                        binding.ConstUsunCost.setText(i.data["costUsun"].toString())
+                        binding.ConstMgrCost.setText(i.data["costMgr"].toString())
+                        break
+                    }
+                    firestoreDB.collection("VillaAccount")
+                        .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                        .get()
+                        .addOnSuccessListener { result ->
+                            if (!result.isEmpty){
+                                for (i in result!!) {
+                                    binding.CostBankName.setText(i.data["bankName"].toString().trim())
+                                    binding.CostAccountHolder.setText(i.data["accountHolder"].toString().trim())
+                                    binding.CostAccountNumber.setText(i.data["accountNumber"].toString().trim())
+                                    break
+                                }
+                            }
+                        }
+                } else {
+                    // 등록이력이 없을 때
+                    firestoreDB.collection("StandardCost")
+                        .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+                        .get()
+                        .addOnSuccessListener { result ->
+                            if (!result.isEmpty) {
+                                for (i in result!!) {
+                                    binding.ConstTonCost.setText(i.data["tonCost"].toString())
+                                    binding.ConstCleanCost.setText(i.data["cleanCost"].toString())
+                                    binding.ConstUsunCost.setText(i.data["usunCost"].toString())
+                                    binding.ConstMgrCost.setText(i.data["mgrCost"].toString())
+
+                                    val total = waterValue.toInt() + i.data["cleanCost"].toString()
+                                        .toInt() + i.data["usunCost"].toString()
+                                        .toInt() + i.data["mgrCost"].toString().toInt()
+
+                                    waterValue = binding.WriteWaterTon.text.toString()
+                                        .toFloat() * binding.ConstTonCost.text.toString()
+                                        .replace(",", "").toFloat()
+                                    binding.waterCost.setText(waterValue.toInt().toString())
+
+                                    binding.TotalCostValue.setText(total.toString())
+
+                                    binding.CostRoomNumber.setText(tenantRoomNumer)
+
+                                    break
+                                }
+                                firestoreDB.collection("VillaAccount")
+                                    .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                                    .get()
+                                    .addOnSuccessListener { result ->
+                                        if (!result.isEmpty){
+                                            for (i in result!!) {
+                                                binding.CostBankName.setText(i.data["bankName"].toString().trim())
+                                                binding.CostAccountHolder.setText(i.data["accountHolder"].toString().trim())
+                                                binding.CostAccountNumber.setText(i.data["accountNumber"].toString().trim())
+                                                break
+                                            }
+                                        }
+                                    }
+
+                            }
+                        }
+                }
+            }
+
+//--------------------------------------------------------------------------------------------
+//        val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//        Thread(Runnable {
+//            val ConstCost = villaNoticedb!!.VillaNoticeDao().getStandardCost(
+//                MyApplication.prefs.getString("villaAddress","").trim()
+//            )
+//
+//            val roomNumber = villaNoticedb!!.VillaNoticeDao().getTenantRoom(
+//                tenantRoomId
+//            )
+//
+//            val favoriteAccount = villaNoticedb!!.VillaNoticeDao().getFavoriteAccount()
+//
+//            val isTenantCost = villaNoticedb!!.VillaNoticeDao().getTenantCost(
+//                MyApplication.prefs.getString("villaAddress","").trim(),binding.CostYearMonth.text.substring(0,4),binding.CostYearMonth.text.substring(5,7),roomNumber
+//            )
+//
+//            runOnUiThread {
+//
+//                if (isTenantCost==null){
+//
+//                    binding.ConstTonCost.setText(ConstCost.tonCost.toString())
+//                    binding.ConstCleanCost.setText(ConstCost.cleanCost.toString())
+//                    binding.ConstUsunCost.setText(ConstCost.usunCost.toString())
+//                    binding.ConstMgrCost.setText(ConstCost.mgrCost.toString())
+//
+//
+//                    waterValue = binding.WriteWaterTon.text.toString().toFloat() * binding.ConstTonCost.text.toString().replace(",","").toFloat()
+//                    binding.waterCost.setText(waterValue.toInt().toString())
+//
+//                    val total = waterValue.toInt() + ConstCost.cleanCost + ConstCost.usunCost + ConstCost.mgrCost
+//
+//                    binding.TotalCostValue.setText(total.toString())
+//
+//                    binding.CostRoomNumber.setText(roomNumber)
+//
+//                    binding.CostBankName.setText(favoriteAccount.bankName)
+//                    binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
+//                    binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
+//
+//                } else {
+//                    binding.CostUid.setText(isTenantCost.costId.toString())
+//                    binding.CostRoomNumber.setText(isTenantCost.roomNumber)
+//                    binding.CostYearMonth.setText(isTenantCost.costYear + "-" + isTenantCost.costMonth)
+//                    binding.TotalCostValue.setText(isTenantCost.totalCost.toString())
+//                    binding.WriteWaterTon.setText(((isTenantCost.useTon*10).roundToInt() / 10f).toString())
+//                    binding.ConstTonCost.setText(isTenantCost.costTon.toString())
+//                    binding.waterCost.setText(isTenantCost.totalUseTon.toString())
+//                    binding.ConstCleanCost.setText(isTenantCost.costClean.toString())
+//                    binding.ConstUsunCost.setText(isTenantCost.costUsun.toString())
+//                    binding.ConstMgrCost.setText(isTenantCost.costMgr.toString())
+//
+//                    binding.CostBankName.setText(favoriteAccount.bankName)
+//                    binding.CostAccountHolder.setText(favoriteAccount.accountHolder)
+//                    binding.CostAccountNumber.setText(favoriteAccount.accountNumber)
+//                }
+//
+//
+//
+//            }
+//        }).start()
+// --------------------------------------------------------------------------------------------
 
 
 

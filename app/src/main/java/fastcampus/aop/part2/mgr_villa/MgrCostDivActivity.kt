@@ -6,6 +6,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityChoiceCostAccountBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
@@ -13,6 +15,8 @@ import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 class MgrCostDivActivity: AppCompatActivity() {
 
     private val binding: ActivityChoiceCostAccountBinding by lazy { ActivityChoiceCostAccountBinding.inflate(layoutInflater) }
+
+    val firestoreDB = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +63,34 @@ class MgrCostDivActivity: AppCompatActivity() {
 
     private fun initButtonSetOnClick() {
         binding.MgrCostButton.setOnClickListener {
+
+            firestoreDB.collection("VillaAccount")
+                .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+                .get()
+                .addOnSuccessListener { results ->
+                    if(results.isEmpty){
+                        showToast("주 계좌가 등록되어 있지 않습니다.")
+                        return@addOnSuccessListener
+                    } else {
+                        firestoreDB.collection("StandardCost")
+                            .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+                            .get()
+                            .addOnSuccessListener { results ->
+                                if(results.isEmpty){
+                                    showToast("기준관리비가 등록되어 있지 않습니다.")
+                                    return@addOnSuccessListener
+                                } else {
+                                    val TenantCostListActivity = Intent(this, TenantCostListActivity::class.java)
+                                    startActivity(TenantCostListActivity)
+                                }
+                            }
+                    }
+                }
+
+
+
+
+
 
 //---------------------------------------------------------------------------------------
 //            val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)

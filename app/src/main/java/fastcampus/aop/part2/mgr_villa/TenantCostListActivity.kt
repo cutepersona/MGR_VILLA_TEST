@@ -2,12 +2,16 @@ package fastcampus.aop.part2.mgr_villa
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.adapter.CostTenantAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.TenantAdapter
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -23,7 +27,9 @@ class TenantCostListActivity: AppCompatActivity() {
 
     private val binding:ActivityCosttenantlistBinding by lazy { ActivityCosttenantlistBinding.inflate(layoutInflater)}
 
-    private var TenantCostListItems = arrayListOf<CostTenantLayout>()                   // 리싸이클러 뷰 아이템
+    val firestoreDB = Firebase.firestore
+
+    private var TenantCostListItems = arrayListOf<VillaTenant>()                   // 리싸이클러 뷰 아이템
     private val TenantCostListAdapter = CostTenantAdapter(TenantCostListItems)            // 리싸이클러 뷰 어댑터
 //
 //    private var isNoticeFabOpen = false
@@ -48,9 +54,10 @@ class TenantCostListActivity: AppCompatActivity() {
         TenantCostListAdapter.setItemClickListener(object : CostTenantAdapter.OnItemClickListener{
             override fun onClick(v: View, position: Int) {
 
-                            val RoolCostForMgr = Intent(v.context, TenantRoomCostForMGRActivity::class.java)
-                            RoolCostForMgr.putExtra("tenantRoomId",TenantCostListItems[position].CostTenantRoomId)
-                            startActivity(RoolCostForMgr)
+                val RoolCostForMgr = Intent(v.context, TenantRoomCostForMGRActivity::class.java)
+                RoolCostForMgr.putExtra("tenantRoomId",TenantCostListItems[position].roomId)
+                RoolCostForMgr.putExtra("tenantRoomNumber",TenantCostListItems[position].roomNumber)
+                startActivity(RoolCostForMgr)
 
             }
 
@@ -67,29 +74,53 @@ class TenantCostListActivity: AppCompatActivity() {
     }
 
     private fun initCostTenantRooms(){
-        TenantCostListItems.clear()
 
-        val villadb = VillaNoticeHelper.getInstance(applicationContext)
+        firestoreDB?.collection("VillaTenant")
+            .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+            .orderBy("roomNumber", Query.Direction.ASCENDING)
+            .addSnapshotListener { querySnapshot, e ->
+                TenantCostListItems.clear()
 
-        Thread(Runnable {
+                if (e != null){
+//                    showToast(e.message.toString())
+                    Log.d("VillaTenant/CostTenantAdapter------------------>", e.message.toString())
+                    return@addSnapshotListener
+                }
 
-            val tenantRooms =  villadb!!.VillaNoticeDao().getAllTenantRooms(MyApplication.prefs.getString("villaAddress","").trim())
-
-            for(VillaTenant in tenantRooms) {
-                // 결과를 리싸이클러 뷰에 추가
-                val item = CostTenantLayout(
-                    VillaTenant.roomId
-                    ,VillaTenant.roomNumber
-                    ,VillaTenant.tenantContractDate.toString()
-                    ,VillaTenant.tenantLeaveDate.toString()
-                )
-                TenantCostListItems.add(item)
-            }
-
-            runOnUiThread {
+                for (snapshot in querySnapshot!!.documents){
+                    val item = snapshot.toObject(VillaTenant::class.java)
+                    item!!.roomId = snapshot.id
+                    TenantCostListItems.add(item!!)
+                }
                 TenantCostListAdapter.notifyDataSetChanged()
             }
-        }).start()
+
+//------------------------------------------------------------------------------------------------
+//        TenantCostListItems.clear()
+//
+//        val villadb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//        Thread(Runnable {
+//
+//            val tenantRooms =  villadb!!.VillaNoticeDao().getAllTenantRooms(MyApplication.prefs.getString("villaAddress","").trim())
+//
+//            for(VillaTenant in tenantRooms) {
+//                // 결과를 리싸이클러 뷰에 추가
+//                val item = CostTenantLayout(
+//                    VillaTenant.roomId
+//                    ,VillaTenant.roomNumber
+//                    ,VillaTenant.tenantContractDate.toString()
+//                    ,VillaTenant.tenantLeaveDate.toString()
+//                )
+//                TenantCostListItems.add(item)
+//            }
+//
+//            runOnUiThread {
+//                TenantCostListAdapter.notifyDataSetChanged()
+//            }
+//        }).start()
+//------------------------------------------------------------------------------------------------
+
     }
 //
 //    private fun initAddTenantRoom(){

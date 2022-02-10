@@ -18,18 +18,18 @@ import androidx.room.PrimaryKey
 )
 
 data class VillaTenantCost (
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "costId") var costId: Long?,
-    @ColumnInfo(name = "roomNumber") var roomNumber: String,
-    @ColumnInfo(name = "totalCost") var totalCost: Int,
-    @ColumnInfo(name = "costYear") var costYear: String,
-    @ColumnInfo(name = "costMonth") var costMonth: String,
-    @ColumnInfo(name = "useTon") var useTon: Float,
-    @ColumnInfo(name = "costTon") var costTon: Int,
-    @ColumnInfo(name = "totalUseTon") var totalUseTon: Int,
-    @ColumnInfo(name = "costClean") var costClean: Int,
-    @ColumnInfo(name = "costUsun") var costUsun: Int,
-    @ColumnInfo(name = "costMgr") var costMgr: Int,
-    @ColumnInfo(name = "costStatus") var costStatus: String?,
-    @ColumnInfo(name = "villaAddr") var villaAddr: String
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(name = "costId") var costId: String = "",
+    @ColumnInfo(name = "roomNumber") var roomNumber: String= "",
+    @ColumnInfo(name = "totalCost") var totalCost: Int = 0,
+    @ColumnInfo(name = "costYear") var costYear: String = "",
+    @ColumnInfo(name = "costMonth") var costMonth: String = "",
+    @ColumnInfo(name = "useTon") var useTon: Float = 0.0f,
+    @ColumnInfo(name = "costTon") var costTon: Int = 0,
+    @ColumnInfo(name = "totalUseTon") var totalUseTon: Int = 0,
+    @ColumnInfo(name = "costClean") var costClean: Int = 0,
+    @ColumnInfo(name = "costUsun") var costUsun: Int = 0,
+    @ColumnInfo(name = "costMgr") var costMgr: Int = 0,
+    @ColumnInfo(name = "costStatus") var costStatus: String? = "",
+    @ColumnInfo(name = "villaAddr") var villaAddr: String = ""
 )

@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,10 +8,42 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.R
 import fastcampus.aop.part2.mgr_villa.model.CostTenantLayout
+import fastcampus.aop.part2.mgr_villa.model.VillaTenant
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
-class CostTenantAdapter(val CostTenantList: ArrayList<CostTenantLayout>): RecyclerView.Adapter<CostTenantAdapter.CostTenantViewHolder>() {
+class CostTenantAdapter(val CostTenantList: ArrayList<VillaTenant>): RecyclerView.Adapter<CostTenantAdapter.CostTenantViewHolder>() {
+
+    val firestoreDB = Firebase.firestore
+
+    init {
+        firestoreDB?.collection("VillaTenant")
+            .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+            .orderBy("roomNumber", Query.Direction.ASCENDING)
+            .addSnapshotListener { querySnapshot, e ->
+                CostTenantList.clear()
+
+                if (e != null){
+//                    showToast(e.message.toString())
+                    Log.d("VillaTenant/CostTenantAdapter------------------>", e.message.toString())
+                    return@addSnapshotListener
+                }
+
+                for (snapshot in querySnapshot!!.documents){
+                    val item = snapshot.toObject(VillaTenant::class.java)
+                    item!!.roomId = snapshot.id
+                    CostTenantList.add(item!!)
+                }
+                notifyDataSetChanged()
+            }
+
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CostTenantAdapter.CostTenantViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycleview_costtenants, parent, false)
         return CostTenantViewHolder(view)
@@ -21,10 +54,10 @@ class CostTenantAdapter(val CostTenantList: ArrayList<CostTenantLayout>): Recycl
     }
 
     override fun onBindViewHolder(holder: CostTenantViewHolder, position: Int) {
-        holder.CostTenantRoomNumber.text = CostTenantList[position].CostTenantRoomNumber
-        holder.CostTenantContractDate.text = CostTenantList[position].CostTenantContractDate
-        holder.CostTenantLeaveDate.text = CostTenantList[position].CostTenantLeaveDate
-        holder.CostTenantRoomId.text = CostTenantList[position].CostTenantRoomId.toString()
+        holder.CostTenantRoomNumber.text = CostTenantList[position].roomNumber
+        holder.CostTenantContractDate.text = CostTenantList[position].tenantContractDate
+        holder.CostTenantLeaveDate.text = CostTenantList[position].tenantLeaveDate
+        holder.CostTenantRoomId.text = CostTenantList[position].roomId
 
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(it, position)

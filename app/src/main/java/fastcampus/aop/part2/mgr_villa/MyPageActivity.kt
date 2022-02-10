@@ -100,6 +100,19 @@ class MyPageActivity : AppCompatActivity() {
                                             }
                                         }
 
+                                // 계좌정보 삭제
+                                firestoreDB.collection("VillaAccount")
+                                    .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress",""))
+                                    .get()
+                                    .addOnSuccessListener { results ->
+                                        for(i in results){
+                                            firestoreDB.collection("VillaAccount")
+                                                .document(i.id)
+                                                .delete()
+                                        }
+                                    }
+
+
                                 MyApplication.prefs.clear()
                                 val toMain = Intent(context, MainActivity::class.java)
                                 startActivity(toMain)
