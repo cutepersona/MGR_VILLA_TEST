@@ -532,20 +532,20 @@ class SignUpActivity : AppCompatActivity() {
                                 .set(VillaUsers)
                                 .addOnSuccessListener { documentReference ->
 //                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        userdb!!.VillaNoticeDao().insert(
-                                            VillaUsers(
-                                                userEmailEditText.text.toString().trim(),
-                                                "1",
-                                                userNameEditText.text.toString().trim(),
-                                                userPasswordEditText1.text.toString()
-                                                    .trim(),
-                                                userPhoneNumberEditText.text.toString()
-                                                    .trim(),
-                                                binding.emptyButtomUp.text.toString().trim()
-                                            )
-                                        )
-                                    }
+//                                    CoroutineScope(Dispatchers.IO).launch {
+//                                        userdb!!.VillaNoticeDao().insert(
+//                                            VillaUsers(
+//                                                userEmailEditText.text.toString().trim(),
+//                                                "1",
+//                                                userNameEditText.text.toString().trim(),
+//                                                userPasswordEditText1.text.toString()
+//                                                    .trim(),
+//                                                userPhoneNumberEditText.text.toString()
+//                                                    .trim(),
+//                                                binding.emptyButtomUp.text.toString().trim()
+//                                            )
+//                                        )
+//                                    }
 
                                     showToast("회원가입을 환영합니다.")
 

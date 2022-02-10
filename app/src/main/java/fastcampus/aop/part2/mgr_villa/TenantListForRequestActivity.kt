@@ -20,6 +20,9 @@ import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityTenantrequestlistBinding
 import fastcampus.aop.part2.mgr_villa.model.*
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class TenantListForRequestActivity: AppCompatActivity() {
 
@@ -49,7 +52,7 @@ class TenantListForRequestActivity: AppCompatActivity() {
 
         initToolBar()
         initTenantRooms()
-        TenantRequestListAdapter.notifyDataSetChanged()
+//        TenantRequestListAdapter.notifyDataSetChanged()
 //        initAddTenantRoom()
 
 //
@@ -65,7 +68,8 @@ class TenantListForRequestActivity: AppCompatActivity() {
                 if (!requestResult.isEmpty()){
                     firestoreDB.collection("VillaTenant").document(roomId)
                         .update(mapOf(
-                            "tenantEmail" to MyApplication.prefs.getString("email","")
+                            "roomId" to roomId
+                            ,"tenantEmail" to MyApplication.prefs.getString("email","")
                             ,"tenantStatus" to "Request"
                         ))
 
@@ -148,28 +152,31 @@ class TenantListForRequestActivity: AppCompatActivity() {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun initTenantRooms(){
+        CoroutineScope(Dispatchers.Main).launch {
+            firestoreDB?.collection("VillaTenant")
+                .whereEqualTo("villaAddr", requestAddress).limit(20)
+                .orderBy("roomNumber", Query.Direction.ASCENDING)
+                .addSnapshotListener { querySnapshot, e ->
+                    TenantRequestListItems.clear()
 
-        firestoreDB?.collection("VillaTenant")
-            .whereEqualTo("villaAddr", requestAddress)
-            .orderBy("roomNumber", Query.Direction.ASCENDING)
-            .addSnapshotListener { querySnapshot, e ->
-                TenantRequestListItems.clear()
-
-                if (e != null){
+                    if (e != null){
 //                    showToast(e.message.toString())
-                    Log.d("VillaTenant/TenantRequestAdapter------------------>", e.message.toString())
-                    return@addSnapshotListener
-                }
+                        Log.d("VillaTenant/TenantRequestAdapter------------------>", e.message.toString())
+                        return@addSnapshotListener
+                    }
 
-                for (snapshot in querySnapshot!!.documents){
-                    val item = snapshot.toObject(VillaTenant::class.java)
-                    item!!.roomId = snapshot.id
-                    TenantRequestListItems.add(item!!)
-                }
-                TenantRequestListAdapter.notifyDataSetChanged()
-            }
+                    for (snapshot in querySnapshot!!.documents){
+                        val item = snapshot.toObject(VillaTenant::class.java)
+                        item!!.roomId = snapshot.id
+                        TenantRequestListItems.add(item!!)
 
+                    }
+
+                }
+            TenantRequestListAdapter.notifyDataSetChanged()
+        }
 
         //-----------------------------------------------------------------------------------------------
 //        TenantRequestListItems.clear()

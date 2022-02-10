@@ -1,5 +1,6 @@
 package fastcampus.aop.part2.mgr_villa.adapter
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,32 +17,38 @@ import fastcampus.aop.part2.mgr_villa.model.TenantLayout
 import fastcampus.aop.part2.mgr_villa.model.TenantRequestLayout
 import fastcampus.aop.part2.mgr_villa.model.VillaTenant
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+@SuppressLint("NotifyDataSetChanged")
 class TenantRequestAdapter(val tenantList: ArrayList<VillaTenant>): RecyclerView.Adapter<TenantRequestAdapter.TenantRequestViewHolder>() {
 
     val firestoreDB = Firebase.firestore
 
     init {
-        firestoreDB?.collection("VillaTenant")
-            .whereEqualTo("villaAddr", MyApplication.prefs.getString("requestAddress", "").trim())
-            .orderBy("roomNumber", Query.Direction.ASCENDING)
-            .addSnapshotListener { querySnapshot, e ->
-                tenantList.clear()
+        CoroutineScope(Dispatchers.Main).launch {
+            firestoreDB?.collection("VillaTenant")
+                .whereEqualTo("villaAddr", MyApplication.prefs.getString("requestAddress", "").trim())
+                .orderBy("roomNumber", Query.Direction.ASCENDING)
+                .addSnapshotListener { querySnapshot, e ->
+                    tenantList.clear()
 
-                if (e != null){
+                    if (e != null){
 //                    showToast(e.message.toString())
-                    Log.d("VillaTenant/TenantRequestAdapter------------------>", e.message.toString())
-                    return@addSnapshotListener
-                }
+                        Log.d("VillaTenant/TenantRequestAdapter------------------>", e.message.toString())
+                        return@addSnapshotListener
+                    }
 
-                for (snapshot in querySnapshot!!.documents){
-                    val item = snapshot.toObject(VillaTenant::class.java)
-                    item!!.roomId = snapshot.id
-                    tenantList.add(item!!)
+                    for (snapshot in querySnapshot!!.documents){
+                        val item = snapshot.toObject(VillaTenant::class.java)
+                        item!!.roomId = snapshot.id
+                        tenantList.add(item!!)
+                    }
+                    notifyDataSetChanged()
                 }
-                notifyDataSetChanged()
-            }
-
+            notifyDataSetChanged()
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TenantRequestAdapter.TenantRequestViewHolder {

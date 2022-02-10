@@ -86,21 +86,21 @@ class AddressSearchActivity : AppCompatActivity() {
 
     }
 
-    // 유저정보 가져오기
-    private fun initUsers() {
-        Thread(Runnable {
-
-            val userdb = VillaNoticeHelper.getInstance(applicationContext)
-
-            val userInfo = userdb!!.VillaNoticeDao().getUser(
-                MyApplication.prefs.getString("email","")
-            )
-
-            runOnUiThread {
-                    MyApplication.prefs.setString("userType",userInfo.userType)
-            }
-        }).start()
-    }
+//    // 유저정보 가져오기
+//    private fun initUsers() {
+//        Thread(Runnable {
+//
+//            val userdb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//            val userInfo = userdb!!.VillaNoticeDao().getUser(
+//                MyApplication.prefs.getString("email","")
+//            )
+//
+//            runOnUiThread {
+//                    MyApplication.prefs.setString("userType",userInfo.userType)
+//            }
+//        }).start()
+//    }
 
     private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.addrSearchToolbar)

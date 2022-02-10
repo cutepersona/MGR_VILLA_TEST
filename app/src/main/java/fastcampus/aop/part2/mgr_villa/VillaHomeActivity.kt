@@ -17,6 +17,9 @@ import fastcampus.aop.part2.mgr_villa.databinding.ActivityHomeBinding
 import fastcampus.aop.part2.mgr_villa.fragment.*
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class VillaHomeActivity : AppCompatActivity() {
 
@@ -135,153 +138,164 @@ class VillaHomeActivity : AppCompatActivity() {
         // 관리자인 경우
         if (MyApplication.prefs.getString("userType","").equals("MGR")){
 
-            var tenentCurrentCount = 0
-            firestoreDB.collection("VillaTenant")
-                .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", ""))
-                .get()
-                .addOnCompleteListener{ task ->
-                    if (task.isSuccessful){
-                        for (i in task.result!!) {
-                            tenentCurrentCount ++
+            CoroutineScope(Dispatchers.Main).launch{
+                var tenentCurrentCount = 0
+                firestoreDB.collection("VillaTenant")
+                    .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "")).limit(1)
+                    .get()
+                    .addOnCompleteListener{ task ->
+                        if (task.isSuccessful){
+                            for (i in task.result!!) {
+                                tenentCurrentCount ++
+                            }
                         }
                     }
-                }
 
-            firestoreDB.collection("VillaTenant")
-                .whereEqualTo("tenantEmail", userEmail)
-                .get()
-                .addOnSuccessListener { result ->
-                    if (result.isEmpty){
+                firestoreDB.collection("VillaTenant")
+                    .whereEqualTo("tenantEmail", userEmail).limit(1)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        if (result.isEmpty){
 
-                        // 빌라입주정보 가져오기
-                        firestoreDB.collection("VillaInfo")
-                            .whereEqualTo("villaAddress", MyApplication.prefs.getString("villaAddress", ""))
-                            .get()
-                            .addOnCompleteListener { task ->
-                                // 입주정보가 없을때
-                                if (task.isSuccessful){
-                                    for (i in task.result!!) {
-                                        val bundle = Bundle()
-                                        bundle.putString("roomNumber","")
-                                        bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
-                                        bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
-                                        bundle.putString("currentTenantCount", tenentCurrentCount.toString())
-                                        bundle.putString("totalTenantCount", i.data["villaTenantCount"].toString())
+                            // 빌라입주정보 가져오기
+                            firestoreDB.collection("VillaInfo")
+                                .whereEqualTo("villaAddress", MyApplication.prefs.getString("villaAddress", "")).limit(1)
+                                .get()
+                                .addOnCompleteListener { task ->
+                                    // 입주정보가 없을때
+                                    if (task.isSuccessful){
+                                        for (i in task.result!!) {
+                                            val bundle = Bundle()
+                                            bundle.putString("roomNumber","")
+                                            bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
+                                            bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
+                                            bundle.putString("currentTenantCount", tenentCurrentCount.toString())
+                                            bundle.putString("totalTenantCount", i.data["villaTenantCount"].toString())
 
-                                        // 집 주소 및 전입호수 전달
-                                        val mgrFrag = MgrHomeFragment()
-                                        mgrFrag.arguments = bundle
+                                            // 집 주소 및 전입호수 전달
+                                            val mgrFrag = MgrHomeFragment()
+                                            mgrFrag.arguments = bundle
 
-                                        //                        // 입주자 수 정보 전달.
-                                        //                        val homeTenantFrag = VillaTenantFragment()
-                                        //                        homeTenantFrag.arguments = bundle
+                                            //                        // 입주자 수 정보 전달.
+                                            //                        val homeTenantFrag = VillaTenantFragment()
+                                            //                        homeTenantFrag.arguments = bundle
 
-                                        val transaction = supportFragmentManager.beginTransaction()
-                                        transaction.add(R.id.recycleViewConstraint, mgrFrag)
-                                        transaction.detach(mgrFrag).attach(mgrFrag)
-                                        transaction.commit()
-                                        break
-                                    }
+                                            val transaction = supportFragmentManager.beginTransaction()
+                                            transaction.add(R.id.recycleViewConstraint, mgrFrag)
+                                            transaction.detach(mgrFrag).attach(mgrFrag)
+                                            transaction.commit()
+                                            break
+                                        }
 
-                                }
-                            }
-
-                    } else {
-
-                        var roomNum = ""
-
-                        // 입주 호 가져오기
-                        firestoreDB.collection("VillaTenant")
-                            .whereEqualTo("tenantEmail", userEmail)
-                            .get()
-                            .addOnCompleteListener{ task ->
-                                if (task.isSuccessful){
-                                    for (i in task.result!!) {
-                                        roomNum = i.data["roomNumber"].toString()
-                                        break
                                     }
                                 }
-                            }
 
-                        // 빌라입주정보 가져오기
-                        firestoreDB.collection("VillaInfo")
-                            .whereEqualTo("villaAddress", MyApplication.prefs.getString("villaAddress", ""))
-                            .get()
-                            .addOnCompleteListener { task ->
-                                // 입주정보가 없을때
-                                if (task.isSuccessful){
-                                    for (i in task.result!!) {
-                                        val bundle = Bundle()
-                                        bundle.putString("roomNumber",roomNum)
-                                        bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
-                                        bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
-                                        bundle.putString("currentTenantCount", tenentCurrentCount.toString())
-                                        bundle.putString("totalTenantCount", i.data["villaTenantCount"].toString())
+                        } else {
 
-                                        // 집 주소 및 전입호수 전달
-                                        val mgrFrag = MgrHomeFragment()
-                                        mgrFrag.arguments = bundle
+                            var roomNum = ""
 
-                                        //                        // 입주자 수 정보 전달.
-                                        //                        val homeTenantFrag = VillaTenantFragment()
-                                        //                        homeTenantFrag.arguments = bundle
-
-                                        val transaction = supportFragmentManager.beginTransaction()
-                                        transaction.add(R.id.recycleViewConstraint, mgrFrag)
-                                        transaction.detach(mgrFrag).attach(mgrFrag)
-                                        transaction.commit()
+                            // 입주 호 가져오기
+                            firestoreDB.collection("VillaTenant")
+                                .whereEqualTo("tenantEmail", userEmail).limit(1)
+                                .get()
+                                .addOnCompleteListener{ task ->
+                                    if (task.isSuccessful){
+                                        for (i in task.result!!) {
+                                            roomNum = i.data["roomNumber"].toString()
+                                            break
+                                        }
                                     }
-
                                 }
-                            }
+
+                            // 빌라입주정보 가져오기
+                            firestoreDB.collection("VillaInfo")
+                                .whereEqualTo("villaAddress", MyApplication.prefs.getString("villaAddress", "")).limit(1)
+                                .get()
+                                .addOnCompleteListener { task ->
+                                    // 입주정보가 없을때
+                                    if (task.isSuccessful){
+                                        for (i in task.result!!) {
+                                            val bundle = Bundle()
+                                            bundle.putString("roomNumber",roomNum)
+                                            bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
+                                            bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
+                                            bundle.putString("currentTenantCount", tenentCurrentCount.toString())
+                                            bundle.putString("totalTenantCount", i.data["villaTenantCount"].toString())
+
+                                            // 집 주소 및 전입호수 전달
+                                            val mgrFrag = MgrHomeFragment()
+                                            mgrFrag.arguments = bundle
+
+                                            //                        // 입주자 수 정보 전달.
+                                            //                        val homeTenantFrag = VillaTenantFragment()
+                                            //                        homeTenantFrag.arguments = bundle
+
+                                            val transaction = supportFragmentManager.beginTransaction()
+                                            transaction.add(R.id.recycleViewConstraint, mgrFrag)
+                                            transaction.detach(mgrFrag).attach(mgrFrag)
+                                            transaction.commit()
+                                        }
+
+                                    }
+                                }
+                        }
                     }
-                }
+            }
+
+
         } else {
+            CoroutineScope(Dispatchers.Main).launch {
+                // 세입자 정보
+                var roomNum = ""
 
-            // 세입자 정보
-            var roomNum = ""
-
-            // 입주 호 가져오기
-            firestoreDB.collection("VillaTenant")
-                .whereEqualTo("tenantEmail", userEmail)
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        for (i in task.result!!) {
-                            roomNum = i.data["roomNumber"].toString()
-                            break
+                // 입주 호 가져오기
+                firestoreDB.collection("VillaTenant")
+                    .whereEqualTo("tenantEmail", userEmail).limit(1)
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            for (i in task.result!!) {
+                                roomNum = i.data["roomNumber"].toString()
+                                break
+                            }
                         }
                     }
-                }
 
 
-            // 빌라입주정보 가져오기
-            firestoreDB.collection("VillaTenant")
-                .whereEqualTo("tenantEmail", MyApplication.prefs.getString("email", ""))
-                .get()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful){
-                        for (i in task.result!!) {
-                            val bundle = Bundle()
-                            bundle.putString("roomNumber",roomNum)
-                            bundle.putString("roadAddress",MyApplication.prefs.getString("roadAddress", ""))
-                            bundle.putString("address",MyApplication.prefs.getString("villaAddress", ""))
-                            bundle.putString("currentTenantCount", "0")
-                            bundle.putString("totalTenantCount", "0")
+                // 빌라입주정보 가져오기
+                firestoreDB.collection("VillaTenant")
+                    .whereEqualTo("tenantEmail", MyApplication.prefs.getString("email", ""))
+                    .limit(1)
+                    .get()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            for (i in task.result!!) {
+                                val bundle = Bundle()
+                                bundle.putString("roomNumber", roomNum)
+                                bundle.putString(
+                                    "roadAddress",
+                                    MyApplication.prefs.getString("roadAddress", "")
+                                )
+                                bundle.putString(
+                                    "address",
+                                    MyApplication.prefs.getString("villaAddress", "")
+                                )
+                                bundle.putString("currentTenantCount", "0")
+                                bundle.putString("totalTenantCount", "0")
 
-                            // 집 주소 및 전입호수 전달
-                            val mgrFrag = MgrHomeFragment()
-                            mgrFrag.arguments = bundle
+                                // 집 주소 및 전입호수 전달
+                                val mgrFrag = MgrHomeFragment()
+                                mgrFrag.arguments = bundle
 
-                            val transaction = supportFragmentManager.beginTransaction()
-                            transaction.add(R.id.recycleViewConstraint, mgrFrag)
-                            transaction.detach(mgrFrag).attach(mgrFrag)
-                            transaction.commit()
-                            break
+                                val transaction = supportFragmentManager.beginTransaction()
+                                transaction.add(R.id.recycleViewConstraint, mgrFrag)
+                                transaction.detach(mgrFrag).attach(mgrFrag)
+                                transaction.commit()
+                                break
+                            }
+
                         }
-
                     }
-                }
 
 
             }
@@ -383,7 +397,8 @@ class VillaHomeActivity : AppCompatActivity() {
 //
 //            }
 //        }).start()
-        //-------------------------------------------------------------------------------------------
+            //-------------------------------------------------------------------------------------------
+        }
     }
 
     // HomeFragment에서 하위 Fragment생성

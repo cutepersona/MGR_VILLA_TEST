@@ -119,6 +119,11 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val toLogin = Intent(this, LoginActivity::class.java)
+        startActivity(toLogin)
+    }
 
     private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.addrSearchTenantToolbar)
@@ -130,15 +135,20 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
-        return super.onOptionsItemSelected(item)
+        val toLogin = Intent(this, LoginActivity::class.java)
+        startActivity(toLogin)
+
+        return true
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
 

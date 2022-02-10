@@ -60,31 +60,126 @@ class MyPageActivity : AppCompatActivity() {
             val signOutDialog = SignOutDialog(this)
             signOutDialog.showDialog()
 
-            val villadb = VillaNoticeHelper.getInstance(applicationContext)
 
-            signOutDialog.setOnClickListener(object : SignOutDialog.OnDialogClickListener {
+            signOutDialog.setOnClickListener(object : SignOutDialog.OnDialogClickListener{
                 override fun onClicked(signOut: String, context: Context) {
-                    Thread(Runnable {
-                        Thread.sleep(100L)
-                        villadb!!.VillaNoticeDao().deleteUser(
-                            binding.MyPageUserEmail.text.toString().trim()
-                        )
-                        Thread.sleep(100L)
-                        villadb!!.VillaNoticeDao().signOutTenant(
-                            MyApplication.prefs.getString("villaAddress","")
-                            ,binding.MyPageUserEmail.text.toString().trim()
-                        )
+                    // 관리자 정보 삭제
+                    if (MyApplication.prefs.getString("userType","").equals("MGR")){
+                        // 관리자는 계정 정보 및 주소정보, 계좌 정보 모든 정보 삭제
+                            // 계정정보 삭제
+                        firestoreDB.collection("VillaUsers")
+                            .document(MyApplication.prefs.getString("email",""))
+                            .delete()
+                            .addOnSuccessListener {
+                                // 집주소 정보 삭제
+                                firestoreDB.collection("VillaInfo")
+                                    .document(MyApplication.prefs.getString("villaAddress",""))
+                                    .delete()
 
-                        runOnUiThread {
-                            MyApplication.prefs.clear()
-                            val toMain = Intent(context, MainActivity::class.java)
-                            startActivity(toMain)
-                        }
-                    }).start()
+                                // 세입자 정보 삭제
+                                firestoreDB.collection("VillaTenant")
+                                    .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress",""))
+                                    .get()
+                                    .addOnSuccessListener { results ->
+                                            for(i in results!!){
+                                                firestoreDB.collection("VillaTenant")
+                                                    .document(i.id)
+                                                    .delete()
+                                            }
+                                        }
+
+                                // 공지정보 삭제
+                                firestoreDB.collection("VillaNotice")
+                                    .whereEqualTo("noticeNo",MyApplication.prefs.getString("email",""))
+                                    .get()
+                                    .addOnSuccessListener { results ->
+                                            for(i in results){
+                                                firestoreDB.collection("VillaNotice")
+                                                    .document(i.id)
+                                                    .delete()
+                                            }
+                                        }
+
+                                MyApplication.prefs.clear()
+                                val toMain = Intent(context, MainActivity::class.java)
+                                startActivity(toMain)
+                            }.addOnFailureListener{
+                                showToast("회원탈퇴에 실패하였습니다. 관리자에게 문의 바랍니다.")
+                                return@addOnFailureListener
+                            }
+
+
+                    } else {
+                        // 세입자 정보 삭제
+                        // 계정 정보 및 전입정보 삭제
+                        firestoreDB.collection("VillaUsers")
+                            .document(MyApplication.prefs.getString("email",""))
+                            .delete()
+                            .addOnSuccessListener {
+                                firestoreDB.collection("VillaTenant")
+                                    .whereEqualTo("tenantEmail",MyApplication.prefs.getString("email","")).limit(1)
+                                    .get()
+                                    .addOnCompleteListener { task ->
+                                        if (task.isSuccessful){
+                                            for(i in task.result!!){
+//                                                showToast(i.data["roomId"].toString())
+                                                firestoreDB.collection("VillaTenant")
+                                                    .document(i.data["roomId"].toString())
+                                                    .update(mapOf(
+                                                        "roomId" to "0"
+                                                        ,"tenantContractDate" to ""
+                                                        ,"tenantEmail" to ""
+                                                        ,"tenantLeaveDate" to ""
+                                                        ,"tenantStatus" to ""
+                                                    ))
+                                                break
+                                            }
+                                        }
+                                    }
+                                MyApplication.prefs.clear()
+                                val toMain = Intent(context, MainActivity::class.java)
+                                startActivity(toMain)
+                            }.addOnFailureListener{
+                                showToast("회원탈퇴에 실패하였습니다. 관리자에게 문의 바랍니다.")
+                                return@addOnFailureListener
+                            }
+
+
+
+                    }
+
 
 
                 }
             })
+
+//-----------------------------------------------------------------------------
+//            val villadb = VillaNoticeHelper.getInstance(applicationContext)
+//
+//            signOutDialog.setOnClickListener(object : SignOutDialog.OnDialogClickListener {
+//                override fun onClicked(signOut: String, context: Context) {
+//                    Thread(Runnable {
+//                        Thread.sleep(100L)
+//                        villadb!!.VillaNoticeDao().deleteUser(
+//                            binding.MyPageUserEmail.text.toString().trim()
+//                        )
+//                        Thread.sleep(100L)
+//                        villadb!!.VillaNoticeDao().signOutTenant(
+//                            MyApplication.prefs.getString("villaAddress","")
+//                            ,binding.MyPageUserEmail.text.toString().trim()
+//                        )
+//
+//                        runOnUiThread {
+//                            MyApplication.prefs.clear()
+//                            val toMain = Intent(context, MainActivity::class.java)
+//                            startActivity(toMain)
+//                        }
+//                    }).start()
+//
+//
+//                }
+//            })
+//-----------------------------------------------------------------------------
         }
 
 
