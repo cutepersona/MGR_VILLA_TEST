@@ -8,7 +8,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <color name="main_background">#388D3C</color>
-    <color name="main_button_background">#8BC646</color>
+    <color name="main_background">#556B2F</color>
+<!--  main_background  #388D3C  -->
+    <color name="main_button_background">#6B8E23</color>
+<!-- #8BC646   -->
     <color name="transparent">#00000000</color>
 </resources>

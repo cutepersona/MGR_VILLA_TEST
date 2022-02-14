@@ -47,7 +47,8 @@
 
         <activity android:name=".VillaHomeActivity"/>
 
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".LoginActivity"
+            android:theme="@style/SplashTheme"/>
 
         <activity android:name=".SearchIdActivity"/>
 
@@ -100,6 +101,9 @@
         <activity android:name=".MyPageChangePwActivity"/>
 
         <activity android:name=".MyPageChangePhoneNumActivity"/>
+
+        <activity android:name=".LoadingActivity"/>
+
     </application>
 
 </manifest>

@@ -1,14 +1,23 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.animation.ObjectAnimator
+import android.app.Activity
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.AnticipateInterpolator
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.animation.doOnEnd
 import androidx.core.view.isInvisible
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.firestore.ktx.firestore

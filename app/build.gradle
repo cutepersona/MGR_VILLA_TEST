@@ -39,14 +39,27 @@ android {
     buildFeatures {
         dataBinding true
     }
+
+    viewBinding{
+        enabled true
+    }
 }
 
 dependencies {
 
     // 스와이프
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+
+    // firestore
     implementation 'com.google.firebase:firebase-firestore-ktx:24.0.0'
 
+    // gifDrawable
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.20'
+
+    // shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
     // databinding
     kapt 'com.android.databinding:compiler:3.5.3'

@@ -110,7 +110,9 @@
                     android:inputType="textWebEmailAddress"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userEmailText" />
+                    app:layout_constraintTop_toBottomOf="@+id/userEmailText"
+                    android:nextFocusDown="@id/userNameEditText"
+                    />
 
                 <TextView
                     android:id="@+id/userEmailValid1"
@@ -142,7 +144,8 @@
                     android:inputType="text"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userName" />
+                    app:layout_constraintTop_toBottomOf="@+id/userName"
+                    android:nextFocusDown="@id/userPasswordEditText1"/>
 
                 <TextView
                     android:id="@+id/userNameValid1"
@@ -173,7 +176,8 @@
                     android:inputType="textWebPassword"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userPassword" />
+                    app:layout_constraintTop_toBottomOf="@+id/userPassword"
+                    android:nextFocusDown="@id/userPasswordEditText2"/>
 
                 <TextView
                     android:id="@+id/userPWValid1"
@@ -195,7 +199,8 @@
                     android:inputType="textWebPassword"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/userPWValid1" />
+                    app:layout_constraintTop_toBottomOf="@+id/userPWValid1"
+                    android:nextFocusDown="@id/userPhoneNumberEditText"/>
 
                 <TextView
                     android:id="@+id/userPWValid3"
@@ -304,6 +309,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     android:drawableLeft="@drawable/ic_check_all_terms"
                     android:text="@string/all_terms_check"
+                    android:textColor="@color/white"
                     android:backgroundTint="@color/main_button_background"
                     />
 
@@ -376,11 +382,11 @@
 
         </ScrollView>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/SignUpDone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/main_button_background"
+            android:background="@drawable/button_wrong_background"
             android:text="@string/signUpDone"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"

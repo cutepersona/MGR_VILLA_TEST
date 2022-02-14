@@ -1,34 +1,38 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.*
 import android.content.ContentValues.TAG
+import android.graphics.Color
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.Gravity
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.animation.doOnEnd
 import androidx.core.view.isInvisible
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.nhn.android.naverlogin.OAuthLogin
 import fastcampus.aop.part2.mgr_villa.customdialog.WelcomeDialog
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivitySignupBinding
-import fastcampus.aop.part2.mgr_villa.model.VillaUsers
-import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Math.abs
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
@@ -226,6 +230,8 @@ class SignUpActivity : AppCompatActivity() {
     // firestore Database 이용
     val firestoreDB = Firebase.firestore
 
+    var scrollY: Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -262,6 +268,11 @@ class SignUpActivity : AppCompatActivity() {
 
         countDown.cancel()
 
+        binding.SignUpDone.setTextColor(Color.BLACK)
+
+        initFocusEditText()
+
+
         initEmailEditTextCheck()
         initNameTextCheck()
         initPasswordTextCheck()
@@ -282,6 +293,113 @@ class SignUpActivity : AppCompatActivity() {
 
 
     }
+
+    private fun initFocusEditText() {
+
+        binding.userEmailEditText.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if (hasFocus){
+                    scrollY = 0
+                    binding.signUpScrollView.smoothScrollToView(binding.userEmailText)
+                }
+            }
+        })
+
+        binding.userNameEditText.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if (hasFocus){
+                    scrollY = 0
+                    binding.signUpScrollView.smoothScrollToView(binding.userName)
+                }
+            }
+        })
+
+        binding.userPasswordEditText1.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if (hasFocus){
+                    scrollY = 0
+                    binding.signUpScrollView.smoothScrollToView(binding.userPassword)
+                }
+            }
+        })
+
+        binding.userPasswordEditText2.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if (hasFocus){
+                    scrollY = 0
+                    binding.signUpScrollView.smoothScrollToView(binding.userPasswordEditText1)
+                }
+            }
+        })
+
+        binding.userPhoneNumberEditText.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if (hasFocus){
+                    scrollY = 0
+                    binding.signUpScrollView.smoothScrollToView(binding.userPhoneNumber)
+                }
+            }
+        })
+
+        binding.userAuthCompleteEditText.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if (hasFocus){
+                    scrollY = 0
+                    binding.signUpScrollView.smoothScrollToView(binding.userPhoneNumberEditText)
+                }
+            }
+        })
+
+
+    }
+
+    fun computeDistanceToView(view: View): Int {
+        return abs(calculateRectOnScreen(binding.signUpScrollView).top - (this.scrollY + calculateRectOnScreen(view).top))
+    }
+
+    fun calculateRectOnScreen(view: View): Rect {
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        return Rect(
+            location[0],
+            location[1],
+            location[0] + view.measuredWidth,
+            location[1] + view.measuredHeight
+        )
+    }
+
+//    private fun smoothScorllToView(view: View){
+//
+//        val y = computeDistanceToView(view)
+//        ObjectAnimator.ofInt(this, "scrollY", y).apply {
+//            duration = 1000L // 스크롤이 지속되는 시간을 설정한다. (1000 밀리초 == 1초)
+//        }.start()
+//
+//    }
+
+
+    fun ScrollView.smoothScrollToView(
+        view: View,
+        marginTop: Int = 0,
+        maxDuration: Long = 800L,
+        onEnd: () -> Unit = {}
+    ) {
+        if (this.getChildAt(0).height <= this.height) { // 스크롤의 의미가 없다.
+            onEnd()
+            return
+        }
+        val y = computeDistanceToView(view) - marginTop
+        val ratio = abs(y - this.scrollY) / (this.getChildAt(0).height - this.height).toFloat()
+        ObjectAnimator.ofInt(this, "scrollY", y).apply {
+            duration = (maxDuration * ratio).toLong()
+            interpolator = AccelerateDecelerateInterpolator()
+            doOnEnd {
+                onEnd()
+            }
+            start()
+        }
+    }
+
 
     override fun onBackPressed() {
         super.onBackPressed()
@@ -361,7 +479,11 @@ class SignUpActivity : AppCompatActivity() {
                 necessaryTermsCheck.isChecked = !necessaryTermsCheck.isChecked
                 privacyPolicyCheck.isChecked = !privacyPolicyCheck.isChecked
             }
-
+            if (checkButtonActivate()){
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_background)
+            } else {
+                binding.SignUpDone.setBackgroundResource(R.drawable.button_wrong_background)
+            }
         }
     }
 //
@@ -403,10 +525,17 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkButtonActivate(): Boolean{
+        return (emailflag
+                && nameflag
+                && pwflag
+                && repwflag
+                && termsflag
+                && privacyflag)
+    }
+
 
     private fun checkForm(): Boolean {
-
-
         checkEmail()
         checkName()
         checkPW()
@@ -439,31 +568,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun signUpComplete() {
         SignUpDone.setOnClickListener {
 
-            val userPhone = binding.userPhoneNumberEditText.text.trim().toString()
-            val authNum = binding.userAuthCompleteEditText.text.trim().toString()
 
-            if (authNum.isEmpty()) {
-                showToast("인증 번호를 입력해 주세요.")
-                return@setOnClickListener
-            }
-            if (userPhone.isEmpty()) {
-                showToast("휴대폰 번호를 입력해 주세요.")
-                return@setOnClickListener
-            }
-
-            val authNumber = userAuthCompleteEditText.text.toString()
-            if (authNumber.isNotEmpty()) {
-
-                val phoneCredential =
-                    PhoneAuthProvider.getCredential(
-                        storedVerificationId,
-                        authNumber
-                    )
-                signInWithPhoneAuthCredential(phoneCredential)
-            } else {
-                showToast("아직 인증되지 않았습니다.")
-                return@setOnClickListener
-            }
 
             if (!checkForm()) {
 
@@ -476,6 +581,35 @@ class SignUpActivity : AppCompatActivity() {
 
                 return@setOnClickListener
             } else {
+
+                binding.SignUpDone.setBackgroundResource(R.drawable.button_background)
+                binding.SignUpDone.setTextColor(Color.WHITE)
+
+                val userPhone = binding.userPhoneNumberEditText.text.trim().toString()
+                val authNum = binding.userAuthCompleteEditText.text.trim().toString()
+
+                if (authNum.isEmpty()) {
+                    showToast("인증 번호를 입력해 주세요.")
+                    return@setOnClickListener
+                }
+                if (userPhone.isEmpty()) {
+                    showToast("휴대폰 번호를 입력해 주세요.")
+                    return@setOnClickListener
+                }
+
+                val authNumber = userAuthCompleteEditText.text.toString()
+                if (authNumber.isNotEmpty()) {
+
+                    val phoneCredential =
+                        PhoneAuthProvider.getCredential(
+                            storedVerificationId,
+                            authNumber
+                        )
+                    signInWithPhoneAuthCredential(phoneCredential)
+                } else {
+                    showToast("아직 인증되지 않았습니다.")
+                    return@setOnClickListener
+                }
 
                 // 회원정보 저장
 //                    Log.d("checkForm", "${checkForm().toString()}")
@@ -703,6 +837,11 @@ class SignUpActivity : AppCompatActivity() {
                 // text가 바뀔 때마다 호출된다.
                 // 우린 이 함수를 사용한다.
                 checkEmail()
+                if (checkButtonActivate()){
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_background)
+                } else {
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_wrong_background)
+                }
             }
         })
     }
@@ -714,6 +853,11 @@ class SignUpActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 checkName()
+                if (checkButtonActivate()){
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_background)
+                } else {
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_wrong_background)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -729,6 +873,11 @@ class SignUpActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 checkPW()
+                if (checkButtonActivate()){
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_background)
+                } else {
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_wrong_background)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -744,6 +893,10 @@ class SignUpActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 checkPWrewind()
+                if (checkButtonActivate())
+                {
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_background)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -860,6 +1013,11 @@ class SignUpActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 checkPhoneNumber()
+                if (checkButtonActivate()){
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_background)
+                } else {
+                    binding.SignUpDone.setBackgroundResource(R.drawable.button_wrong_background)
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -884,7 +1042,9 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     private fun showToast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        val toast = Toast.makeText(this, message, Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER,0,0)
+        toast.show()
     }
 
 

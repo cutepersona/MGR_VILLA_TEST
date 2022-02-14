@@ -6,18 +6,17 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/main_background">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tenantTotalArea"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginLeft="10dp"
-            app:layout_constraintTop_toTopOf="parent"
-            >
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tenantCurrentCountArea"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/tenantTotal"
@@ -33,12 +32,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tenantCurrentCountArea"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/tenantTotalArea"
-            app:layout_constraintBottom_toBottomOf="@+id/tenantTotalArea"
             android:layout_marginLeft="20dp"
-            >
+            app:layout_constraintBottom_toBottomOf="@+id/tenantTotalArea"
+            app:layout_constraintEnd_toStartOf="@+id/tenantSlashArea"
+            app:layout_constraintStart_toEndOf="@+id/tenantTotalArea">
 
             <TextView
                 android:id="@+id/tenantCurrentCount"
@@ -54,12 +53,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tenantSlashArea"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/tenantCurrentCountArea"
-            app:layout_constraintBottom_toBottomOf="@+id/tenantTotalArea"
             android:layout_marginLeft="10dp"
-            >
+            app:layout_constraintBottom_toBottomOf="@+id/tenantTotalArea"
+            app:layout_constraintEnd_toStartOf="@+id/tenantTotalCountArea"
+            app:layout_constraintStart_toEndOf="@+id/tenantCurrentCountArea">
 
             <TextView
                 android:id="@+id/tenantSlash"
@@ -75,12 +74,12 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/tenantTotalCountArea"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@+id/tenantSlashArea"
-            app:layout_constraintBottom_toBottomOf="@+id/tenantTotalArea"
             android:layout_marginLeft="10dp"
-            >
+            app:layout_constraintBottom_toBottomOf="@+id/tenantTotalArea"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/tenantSlashArea">
 
             <TextView
                 android:id="@+id/tenantTotalCount"
@@ -93,8 +92,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
@@ -14,6 +16,7 @@ import com.kakao.sdk.common.model.AuthErrorCause.*
 import com.kakao.sdk.user.UserApiClient
 import com.nhn.android.naverlogin.OAuthLogin
 import com.nhn.android.naverlogin.OAuthLoginHandler
+import fastcampus.aop.part2.mgr_villa.R.style
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityMainBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.android.synthetic.main.activity_main.*
@@ -48,12 +51,9 @@ class MainActivity : AppCompatActivity() {
     val naver_client_secret = "Jc4B24yJvN"
     val naver_client_name = "MGR_VILLA"
 
-
-
     @SuppressLint("NewApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(binding.root)
 
 //         키 해쉬값 확인 for Kakako

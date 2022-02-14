@@ -4,7 +4,7 @@
     <solid android:color="@color/white"/>
 
     <stroke android:width="3dp"
-        android:color="#8BC34A"/>
+        android:color="@color/main_button_background"/>
 
     <corners
         android:radius="20dp"/>
