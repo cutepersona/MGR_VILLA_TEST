@@ -13,4 +13,7 @@
     <color name="main_button_background">#6B8E23</color>
 <!-- #8BC646   -->
     <color name="transparent">#00000000</color>
+<!-- delete color-->
+    <color name="del_button_background">#97B35D</color>
+
 </resources>

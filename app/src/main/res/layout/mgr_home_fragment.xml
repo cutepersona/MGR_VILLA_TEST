@@ -115,6 +115,17 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+            <View
+                android:id="@+id/divFirstLine"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                app:layout_constraintStart_toStartOf="@+id/villaTenantCountFragmentArea"
+                app:layout_constraintEnd_toEndOf="@+id/villaTenantCountFragmentArea"
+                app:layout_constraintTop_toBottomOf="@+id/villaTenantCountFragmentArea"
+                app:layout_constraintBottom_toTopOf="@+id/villaNoticeFragmentArea"
+                android:background="@color/main_button_background"
+                />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/villaNoticeFragmentArea"
                 android:layout_width="match_parent"
@@ -138,7 +149,16 @@
 <!--                    />-->
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+            <View
+                android:id="@+id/divSecondLine"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                app:layout_constraintStart_toStartOf="@+id/villaNoticeFragmentArea"
+                app:layout_constraintEnd_toEndOf="@+id/villaNoticeFragmentArea"
+                app:layout_constraintTop_toBottomOf="@+id/villaNoticeFragmentArea"
+                app:layout_constraintBottom_toTopOf="@+id/villaMgrCostFragmentArea"
+                android:background="@color/main_button_background"
+                />
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/villaMgrCostFragmentArea"
                 android:layout_width="match_parent"

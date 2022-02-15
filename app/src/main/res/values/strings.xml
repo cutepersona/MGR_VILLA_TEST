@@ -73,7 +73,7 @@
     <string name="tenantIOPhone">세입자전화번호</string>
     <string name="tenantIONameHint">세입자가 전입요청시 자동입력됩니다.</string>
     <string name="addVillaRoomNumber">빌라가구 등록하기</string>
-    <string name="tenantInOut">빌라 전입,퇴거 하기</string>
+    <string name="tenantInOut">가구 전입,퇴거 하기</string>
     <string name="tenantIn">가구 전입</string>
     <string name="requestTenant">전입요청</string>
     <string name="tenantOut">퇴거 하기</string>
