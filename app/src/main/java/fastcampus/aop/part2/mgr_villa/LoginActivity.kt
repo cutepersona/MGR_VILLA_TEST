@@ -90,18 +90,24 @@ class LoginActivity : AppCompatActivity() {
                                         firestoreDB.collection("VillaInfo")
                                             .whereEqualTo("mailAddress", binding.userEmailEditText.text.toString().trim())
                                             .get()
-                                            .addOnSuccessListener { task ->
+                                            .addOnSuccessListener { result ->
                                                 // 관리자 email로 등록된 집이 없음.
-                                                if (task.isEmpty) {
+                                                if (result.isEmpty) {
 //                                            showToast("집없고 관리자")
                                                     val addrSearchActivity = Intent(this, AddressSearchActivity::class.java)
                                                     addrSearchActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
                                                     startActivity(addrSearchActivity)
                                                 }
                                                 // 관리자 email로 등록된 집이 있음
-                                                if (!task.isEmpty){
+                                                if (!result.isEmpty){
+                                                    for(i in result!!){
+                                                        MyApplication.prefs.setString("villaAddress", i.data["villaAddress"].toString().trim())
+                                                        break
+                                                    }
+
                                                     val mgrHomeActivity = Intent(this, VillaHomeActivity::class.java)
                                                     mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+//
                                                     startActivity(mgrHomeActivity)
                                                 }
                                                 // 세입자 email로 등록된 집이 없음

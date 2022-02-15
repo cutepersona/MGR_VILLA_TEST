@@ -9,14 +9,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.*
 import fastcampus.aop.part2.mgr_villa.databinding.MgrHomeFragmentBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.android.synthetic.main.mgr_home_fragment.*
+import kotlinx.android.synthetic.main.villa_tenant_fragment_in_home.*
 
 class MgrHomeFragment() :Fragment(){
 
     private lateinit var binding: MgrHomeFragmentBinding
+
+    val firestoreDB = Firebase.firestore
 
     private val tenantFragment = VillaTenantFragment()
     private val noticeFragment = VillaNoticeFragment()
@@ -75,6 +80,9 @@ class MgrHomeFragment() :Fragment(){
         binding.hRoomNumber.text = arguments?.getString("roomNumber")
         binding.hRoadAddress.text = arguments?.getString("roadAddress")
 
+//        showToast(currentCount.toString())
+
+
         val bundle = Bundle()
         bundle.putString("currentTenantCount", arguments?.getString("currentTenantCount"))
         bundle.putString("totalTenantCount", arguments?.getString("totalTenantCount"))
@@ -87,6 +95,7 @@ class MgrHomeFragment() :Fragment(){
         val tenantTransaction = childFragmentManager.beginTransaction()
         tenantTransaction.replace(R.id.villaTenantCountFragmentArea, tenantFragment)
         tenantTransaction.commit()
+
 
 
         if (MyApplication.prefs.getString("userType","").equals("TENANT")){

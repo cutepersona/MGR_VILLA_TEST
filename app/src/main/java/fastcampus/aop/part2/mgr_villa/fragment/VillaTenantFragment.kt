@@ -8,6 +8,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import fastcampus.aop.part2.mgr_villa.R
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.VillaTenantFragmentInHomeBinding
@@ -18,6 +20,8 @@ import kotlinx.android.synthetic.main.mgr_home_fragment.*
 class VillaTenantFragment: Fragment() {
 
     private lateinit var binding: VillaTenantFragmentInHomeBinding
+
+    val firestoreDB = Firebase.firestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +38,9 @@ class VillaTenantFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         binding.tenantCurrentCount.text = arguments?.getString("currentTenantCount")
         binding.tenantTotalCount.text = arguments?.getString("totalTenantCount")
 
