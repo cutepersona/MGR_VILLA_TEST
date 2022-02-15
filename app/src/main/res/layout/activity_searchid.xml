@@ -172,8 +172,11 @@
             android:backgroundTint="@color/main_button_background"
             android:text="@string/searchID"
             android:textSize="25sp"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             app:layout_constraintStart_toStartOf="@+id/signUpScrollView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

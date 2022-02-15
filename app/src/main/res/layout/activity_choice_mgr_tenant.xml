@@ -74,11 +74,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/TenantButton"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:backgroundTint="@color/main_button_background"
+                android:background="@drawable/change_phonenum_timer_shape"
                 android:text="@string/tenant"
                 android:textSize="35sp"
                 android:layout_marginLeft="20dp"
@@ -90,11 +90,11 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/MgrButton"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:backgroundTint="@color/main_button_background"
+                android:background="@drawable/change_phonenum_timer_shape"
                 android:text="@string/mgr"
                 android:textSize="35sp"
                 android:layout_marginLeft="20dp"

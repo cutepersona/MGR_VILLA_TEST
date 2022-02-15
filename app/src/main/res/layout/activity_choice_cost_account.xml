@@ -74,11 +74,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/MgrCostButton"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:backgroundTint="@color/main_button_background"
+                android:background="@drawable/change_phonenum_timer_shape"
                 android:text="@string/mgrCostCal"
                 android:textSize="25sp"
                 android:layout_marginLeft="20dp"
@@ -90,11 +90,11 @@
                 app:layout_constraintHorizontal_chainStyle="packed"
                 />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/MgrAccountButton"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
-                android:backgroundTint="@color/main_button_background"
+                android:background="@drawable/change_phonenum_timer_shape"
                 android:text="@string/mgrAccountbt"
                 android:textSize="25sp"
                 android:layout_marginLeft="20dp"
@@ -104,11 +104,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/MgrStandardCostButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/main_button_background"
+                android:background="@drawable/change_phonenum_timer_shape"
                 android:text="@string/mgrStandardCostAdd"
                 android:textSize="25sp"
                 android:layout_margin="20dp"

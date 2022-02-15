@@ -117,7 +117,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/selectBank"
-                            android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             />
@@ -191,7 +190,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:text="@string/AccountHolder"
-                        android:textStyle="bold"
                         app:layout_constraintTop_toBottomOf="@+id/bankSpinnerArea"
                         tools:ignore="MissingConstraints" />
 
@@ -224,7 +222,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:text="@string/AccountNumber"
-                        android:textStyle="bold"
                         app:layout_constraintTop_toBottomOf="@+id/accountHolderValid"
                         tools:ignore="MissingConstraints" />
 
@@ -264,6 +261,9 @@
                 android:backgroundTint="@color/main_button_background"
                 android:text="@string/AddAccount"
                 android:textSize="25sp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

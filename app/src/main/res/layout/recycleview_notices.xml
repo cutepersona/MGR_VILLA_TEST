@@ -7,6 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="5dp"
     >
 
     <TextView
@@ -27,6 +30,7 @@
         android:layout_height="wrap_content"
         android:text="@string/villaNoticeTime"
         android:textSize="18sp"
+        android:layout_marginTop="3dp"
         android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="@+id/NoticeTitle"
         app:layout_constraintTop_toBottomOf="@id/NoticeTitle"

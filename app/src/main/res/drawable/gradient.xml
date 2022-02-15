@@ -5,7 +5,8 @@
 
     <item android:id="@+id/masked">
         <shape android:shape="rectangle">
-            <solid android:color="#676767"/>
+<!--     #676767       -->
+            <solid android:color="#FFFFFF"/>
         </shape>
     </item>
 

@@ -89,14 +89,31 @@
                     android:id="@+id/NoticeWUArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp">
+                   android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    >
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/NoticeTitleArea"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/change_phonenum_timer_shape"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@+id/NoticeContentArea"
+                    >
 
                     <TextView
                         android:id="@+id/villaNoticeText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
                         android:text="@string/villaNoticeTitle"
-                        android:textStyle="bold"
                         tools:ignore="MissingConstraints" />
 
                     <EditText
@@ -104,6 +121,10 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:inputType="text"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:backgroundTint="@color/main_button_background"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/villaNoticeText" />
@@ -119,14 +140,28 @@
 
                         />
 
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/NoticeContentArea"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/change_phonenum_timer_shape"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/NoticeTitleArea"
+                        >
+
+
                     <TextView
                         android:id="@+id/villaNoticeContent"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
                         android:text="@string/noticeContent"
-                        android:textStyle="bold"
-                        app:layout_constraintTop_toBottomOf="@+id/villaNoticeValid"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="5dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         tools:ignore="MissingConstraints" />
 
                     <EditText
@@ -136,6 +171,10 @@
                         android:inputType="text|textMultiLine"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:lines="15"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:backgroundTint="@color/main_button_background"
                         app:layout_constraintStart_toStartOf="parent"
                         android:gravity="top|left"
                         android:scrollbars="vertical"
@@ -151,6 +190,7 @@
                         tools:ignore="MissingConstraints"
 
                         />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -164,28 +204,36 @@
                 android:backgroundTint="@color/main_button_background"
                 android:text="@string/noticeWrite"
                 android:textSize="25sp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/UpdateNoticeButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/main_button_background"
                 android:text="@string/Update"
-                android:textSize="25sp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="15dp"
+                android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/DeleteNoticeButton"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/DeleteNoticeButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/main_button_background"
                 android:text="@string/Delete"
-                android:textSize="25sp"
+                android:textSize="22sp"
+                android:textColor="@color/white"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/UpdateNoticeButton" />
