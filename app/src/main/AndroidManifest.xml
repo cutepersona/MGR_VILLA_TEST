@@ -17,8 +17,9 @@
         android:theme="@style/Theme.Mgr_villa"
         >
         <activity
-        android:name=".MainActivity"
+        android:name=".SplashActivity"
         android:exported="true"
+            android:theme="@style/TransparentStatusTheme"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,6 +45,8 @@
         <activity android:name=".SignUpActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"/>
+
+        <activity android:name=".MainActivity"/>
 
         <activity android:name=".VillaHomeActivity"/>
 
