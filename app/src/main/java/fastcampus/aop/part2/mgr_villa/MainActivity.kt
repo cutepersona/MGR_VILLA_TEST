@@ -10,7 +10,6 @@ import android.os.Looper
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause.*
@@ -79,20 +78,10 @@ class MainActivity : AppCompatActivity() {
         initSearchId()
         initSearchPW()
 
-        // 네이버 로그인 버튼 초기화
-        initNaverButton()
         // 카카오 로그인 초기화
         initMainKakaoButton()
 
 
-    }
-
-    private fun initNaverButton() {
-        binding.naverIcon.setOnClickListener {
-
-            binding.buttonOAuthLoginImg.setOAuthLoginHandler(mOAuthLoginHandler)
-
-        }
     }
 
     val mOAuthLoginHandler: OAuthLoginHandler = @SuppressLint("HandlerLeak")
@@ -144,10 +133,10 @@ class MainActivity : AppCompatActivity() {
                 val errorCode: String = mOAuthLoginInstance.getLastErrorCode(mContext).code
                 val errorDesc = mOAuthLoginInstance.getLastErrorDesc(mContext)
 
-//                Toast.makeText(
-//                    baseContext, "errorCode:" + errorCode
-//                            + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT
-//                ).show()
+                Toast.makeText(
+                    baseContext, "errorCode:" + errorCode
+                            + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -342,9 +331,5 @@ class MainActivity : AppCompatActivity() {
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
-}
-
-private fun ConstraintLayout.setOAuthLoginHandler(mOAuthLoginHandler: OAuthLoginHandler) {
 
 }

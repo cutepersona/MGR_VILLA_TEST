@@ -1,10 +1,12 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -14,14 +16,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.DatePicker
-import android.widget.NumberPicker
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.animation.doOnEnd
 import androidx.core.content.ContentProviderCompat.requireContext
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -33,6 +34,7 @@ import fastcampus.aop.part2.mgr_villa.model.VillaAccount
 import fastcampus.aop.part2.mgr_villa.model.VillaTenantCost
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.coroutines.*
+import java.lang.Exception
 import java.lang.Runnable
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -63,6 +65,8 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
     private var tonUpdateFlag: Boolean = false
 
+    var scrollY: Int = 0
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,11 +95,63 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
         initCalendar()
         initInsertMgrCost()
 
-
+        initFocusEditText()
+        initEmailEditTextCheck()
 
 
 
     }
+
+    private fun initFocusEditText() {
+        binding.WriteWaterTon.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+                if (hasFocus){
+                    scrollY = 0
+                    binding.MgrCostScrollView.smoothScrollToView(binding.WriteWaterTon)
+                }
+            }
+        })
+    }
+
+    fun ScrollView.smoothScrollToView(
+        view: View,
+        marginTop: Int = 0,
+        maxDuration: Long = 500L,
+        onEnd: () -> Unit = {}
+    ) {
+        if (this.getChildAt(0).height <= this.height) { // 스크롤의 의미가 없다.
+            onEnd()
+            return
+        }
+        val y = computeDistanceToView(view) - marginTop
+        val ratio = Math.abs(y - this.scrollY) / (this.getChildAt(0).height - this.height).toFloat()
+        ObjectAnimator.ofInt(this, "scrollY", y).apply {
+            duration = (maxDuration * ratio).toLong()
+            interpolator = AccelerateDecelerateInterpolator()
+            doOnEnd {
+                onEnd()
+            }
+            start()
+        }
+    }
+
+    fun computeDistanceToView(view: View): Int {
+        return Math.abs(
+            calculateRectOnScreen(binding.MgrCostScrollView).top - (this.scrollY + calculateRectOnScreen(view).top)
+        )
+    }
+
+    fun calculateRectOnScreen(view: View): Rect {
+        val location = IntArray(2)
+        view.getLocationOnScreen(location)
+        return Rect(
+            location[0],
+            location[1],
+            location[0] + view.measuredWidth,
+            location[1] + view.measuredHeight
+        )
+    }
+
 
     // 년월 바뀌는 경우
     private fun initChangeYearMonth() {
@@ -550,22 +606,65 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
     }
 
+
+    private fun initEmailEditTextCheck() {
+        binding.WriteWaterTon.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if(binding.WriteWaterTon.text.isNullOrEmpty()){
+                    showToast("톤수를 입력해 주세요.")
+                    binding.WriteWaterTon.setText("1.0")
+                    binding.WriteWaterTon.setSelection(binding.WriteWaterTon.length())
+                    return
+                }
+            }
+        })
+    }
+
     // 톤수 입력하는 부분
     private fun initWriteTon() {
         binding.WriteWaterTon.setOnEditorActionListener { v, actionId, event ->
-            val handled = false
-            if(actionId == EditorInfo.IME_ACTION_DONE){
-                waterValue = binding.WriteWaterTon.text.toString().toFloat() * binding.ConstTonCost.text.toString().replace(",","").toFloat()
-//                waterCostAmount = waterValue.toInt().toString()
-                binding.waterCost.setText(waterValue.toInt().toString())
 
-                totalValue = waterValue.toInt() + binding.ConstCleanCost.text.toString().replace(",","").toInt() + binding.ConstUsunCost.text.toString().replace(",","").toInt() +binding.ConstMgrCost.text.toString().replace(",","").toInt()
-                binding.TotalCostValue.setText(totalValue.toString())
+            val handled = false
+
+                if(actionId == EditorInfo.IME_ACTION_DONE) {
+                    firestoreDB.collection("StandardCost")
+                        .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+                        .get()
+                        .addOnSuccessListener { result ->
+                            if (!result.isEmpty) {
+                                for (i in result!!) {
+                                    binding.ConstTonCost.setText(i.data["tonCost"].toString())
+                                    binding.ConstCleanCost.setText(i.data["cleanCost"].toString())
+                                    binding.ConstUsunCost.setText(i.data["usunCost"].toString())
+                                    binding.ConstMgrCost.setText(i.data["mgrCost"].toString())
+                                    break
+                                }
+
+                                waterValue = binding.WriteWaterTon.text.toString().toFloat() * binding.ConstTonCost.text.toString().replace(",","").toFloat()
+//                waterCostAmount = waterValue.toInt().toString()
+                                binding.waterCost.setText(waterValue.toInt().toString())
+
+                                totalValue = waterValue.toInt() + binding.ConstCleanCost.text.toString().replace(",","").toInt() + binding.ConstUsunCost.text.toString().replace(",","").toInt() +binding.ConstMgrCost.text.toString().replace(",","").toInt()
+                                binding.TotalCostValue.setText(totalValue.toString())
 
 //                handled = true
-                tonUpdateFlag = true
-            }
-            handled
+                                tonUpdateFlag = true
+                            }
+
+
+                        }
+
+                }
+                handled
+
+
+
         }
     }
 

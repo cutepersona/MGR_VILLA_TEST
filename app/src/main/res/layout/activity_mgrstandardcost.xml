@@ -105,8 +105,10 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/tonCost"
                         android:inputType="number"
+                        android:backgroundTint="@color/main_button_background"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:maxLength="8"
                         app:layout_constraintTop_toBottomOf="@+id/tonCostText" />
 
                     <TextView
@@ -126,7 +128,9 @@
                         android:hint="@string/cleanCost"
                         android:inputType="number"
                         app:layout_constraintEnd_toEndOf="parent"
+                        android:maxLength="8"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:backgroundTint="@color/main_button_background"
                         app:layout_constraintTop_toBottomOf="@+id/cleanCostText" />
 
                     <TextView
@@ -146,7 +150,9 @@
                         android:hint="@string/usunCost"
                         android:inputType="number"
                         app:layout_constraintEnd_toEndOf="parent"
+                        android:backgroundTint="@color/main_button_background"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:maxLength="8"
                         app:layout_constraintTop_toBottomOf="@+id/usunCostText" />
 
                     <TextView
@@ -166,7 +172,9 @@
                         android:hint="@string/mgrCost"
                         android:inputType="number"
                         app:layout_constraintEnd_toEndOf="parent"
+                        android:backgroundTint="@color/main_button_background"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:maxLength="8"
                         app:layout_constraintTop_toBottomOf="@+id/mgrCostText" />
 
 

@@ -75,7 +75,7 @@
             app:layout_constraintTop_toBottomOf="@+id/toolbar_layout">
 
             <ScrollView
-                android:id="@+id/signUpScrollView"
+                android:id="@+id/MgrCostScrollView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:fillViewport="true"

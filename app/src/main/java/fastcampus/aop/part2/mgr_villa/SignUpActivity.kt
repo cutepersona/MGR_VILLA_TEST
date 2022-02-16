@@ -381,7 +381,7 @@ class SignUpActivity : AppCompatActivity() {
     fun ScrollView.smoothScrollToView(
         view: View,
         marginTop: Int = 0,
-        maxDuration: Long = 800L,
+        maxDuration: Long = 500L,
         onEnd: () -> Unit = {}
     ) {
         if (this.getChildAt(0).height <= this.height) { // 스크롤의 의미가 없다.

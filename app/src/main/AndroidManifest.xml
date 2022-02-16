@@ -75,7 +75,8 @@
 
         <activity android:name=".VillaMgrAccountsListActivity"/>
 
-        <activity android:name=".MgrStandardCostActivity"/>
+        <activity android:name=".MgrStandardCostActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".TenantListActivity"/>
 
@@ -83,7 +84,8 @@
 
         <activity android:name=".TenantCostListActivity"/>
 
-        <activity android:name=".TenantRoomCostForMGRActivity"/>
+        <activity android:name=".TenantRoomCostForMGRActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name=".TenantInOutVillaActivity"/>
 
