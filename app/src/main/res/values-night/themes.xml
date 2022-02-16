@@ -12,6 +12,10 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/main_button_background</item>
         <!-- Customize your theme here. -->
+        <item name="android:textColorHighlight">@color/main_button_background</item>
+        <item name="android:textCursorDrawable">@drawable/cursor_drawable</item>
+        <item name="android:textSelectHandle">@color/main_button_background</item>
+
     </style>
 
     <style name="DatePickerStyle" parent="Theme.AppCompat.Light.Dialog">
@@ -23,5 +27,6 @@
         <item name="colorControlHighlight">@color/main_button_background</item>
         <!-- 취소/확인버튼 색상 -->
         <item name="android:textColor">@color/main_button_background</item>
+
     </style>
 </resources>

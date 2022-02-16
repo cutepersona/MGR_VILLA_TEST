@@ -51,14 +51,14 @@
                         android:id="@+id/toolBarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="50dp"
                         android:text="@string/mgrCostForRoom"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:layout_marginRight="50dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -96,271 +96,319 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         android:visibility="gone"
-                        />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/CostYearMonth"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/mgrCostYearMonth"
-                        app:layout_constraintStart_toStartOf="parent"
                         android:textSize="25dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/CostRoomNumber"
-                         />
+                        app:layout_constraintBottom_toBottomOf="@+id/CostRoomNumber"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/CostRoomNumber"
+                        app:layout_constraintTop_toTopOf="@+id/CostRoomNumber" />
 
                     <ImageView
                         android:id="@+id/CostCalendar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@+id/CostYearMonth"
-                        android:src="@drawable/ic_calendar_month"
-                        app:layout_constraintTop_toTopOf="@+id/CostYearMonth"
-                        app:layout_constraintBottom_toBottomOf="@+id/CostYearMonth"
                         android:layout_marginLeft="6dp"
-                        />
+                        android:src="@drawable/ic_calendar_month"
+                        app:layout_constraintBottom_toBottomOf="@+id/CostYearMonth"
+                        app:layout_constraintStart_toEndOf="@+id/CostYearMonth"
+                        app:layout_constraintTop_toTopOf="@+id/CostYearMonth" />
 
                     <TextView
                         android:id="@+id/CostRoomNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:background="@drawable/change_phonenum_timer_shape"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="5dp"
                         android:text="@string/roomNumber"
+                        android:textSize="40dp"
                         android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@+id/CostCalendar"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/CostCalendar"
-                        app:layout_constraintBottom_toBottomOf="@+id/CostCalendar"
-                        android:textSize="30dp"
-                        />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/TotalCostText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/TotalRoomCost"
-                        android:textStyle="bold"
-                        android:textSize="25sp"
-                        app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginTop="30dp"
-                        app:layout_constraintTop_toBottomOf="@+id/CostRoomNumber"
+                        android:text="@string/TotalRoomCost"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/TotalCostValue"
-                        />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/CostRoomNumber" />
 
                     <TextView
                         android:id="@+id/TotalCostValue"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/TotalRoomCost"
-                        android:textStyle="bold"
+                        android:text="-"
+                        android:textColor="@color/del_button_background"
                         android:textSize="40sp"
-                        android:textColor="#F44336"
-                        app:layout_constraintTop_toTopOf="@+id/TotalCostText"
+                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/TotalCostText"
-                        app:layout_constraintStart_toEndOf="@+id/TotalCostText"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/TotalCostText"
+                        app:layout_constraintTop_toTopOf="@+id/TotalCostText"
 
                         />
 
-                    <TextView
-                        android:id="@+id/CostBankName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/selectBank"
-                        android:textStyle="bold"
-                        android:textSize="20sp"
-                        android:layout_marginLeft="20dp"
-                        app:layout_constraintTop_toBottomOf="@+id/TotalCostValue"
+                    <View
+                        android:id="@+id/totalUnderLine"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginRight="30dp"
+                        android:background="@color/main_button_background"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginTop="40dp"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/TotalCostValue" />
 
-                    <TextView
-                        android:id="@+id/CostAccountHolder"
-                        android:layout_width="wrap_content"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/mgrCostAccountArea"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/AccountHolder"
-                        android:textSize="25sp"
-                        app:layout_constraintTop_toBottomOf="@+id/CostBankName"
-                        app:layout_constraintStart_toStartOf="@+id/CostBankName"
-                        />
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/change_phonenum_timer_shape"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/totalUnderLine">
 
-                    <TextView
-                        android:id="@+id/CostAccountNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/AccountNumber"
-                        android:textStyle="bold"
-                        android:textSize="25sp"
-                        app:layout_constraintTop_toBottomOf="@+id/CostAccountHolder"
-                        app:layout_constraintStart_toStartOf="@+id/CostAccountHolder"
-                        />
+                        <TextView
+                            android:id="@+id/CostBankName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="2dp"
+                            android:text="@string/selectBank"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/CostAccountHolder"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/AccountHolder"
+                            android:textSize="25sp"
+                            app:layout_constraintStart_toStartOf="@+id/CostBankName"
+                            app:layout_constraintTop_toBottomOf="@+id/CostBankName" />
+
+                        <TextView
+                            android:id="@+id/CostAccountNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="2dp"
+                            android:text="@string/AccountNumber"
+                            android:textSize="25sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/CostAccountHolder"
+                            app:layout_constraintTop_toBottomOf="@+id/CostAccountHolder" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                     <TextView
                         android:id="@+id/WaterCostText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/waterCost"
-                        android:textStyle="bold"
-                        android:textSize="25sp"
                         android:layout_marginLeft="20dp"
-                        app:layout_constraintTop_toBottomOf="@+id/CostAccountNumber"
-                        app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginTop="40dp"
-                        />
+                        android:background="@drawable/important_button_shape"
+                        android:padding="2dp"
+                        android:text="@string/waterCost"
+                        android:textSize="25sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/mgrCostAccountArea" />
 
+
+                    <TextView
+                        android:id="@+id/leftBracket"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:text="("
+                        android:textSize="25sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/WriteWaterTon"
+                        app:layout_constraintStart_toEndOf="@+id/WaterCostText"
+                        app:layout_constraintTop_toTopOf="@+id/WriteWaterTon" />
 
                     <EditText
                         android:id="@+id/WriteWaterTon"
                         android:layout_width="100dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
                         android:inputType="numberDecimal"
-                        app:layout_constraintStart_toEndOf="@+id/WaterCostText"
-                        app:layout_constraintTop_toTopOf="@+id/WaterCostText"
-                        app:layout_constraintBottom_toBottomOf="@+id/WaterCostText"
-                        app:layout_constraintTop_toBottomOf="@+id/TotalCostValue"
-                        android:layout_marginLeft="30dp"
-                        />
+                        android:backgroundTint="@color/main_button_background"
+                        app:layout_constraintStart_toEndOf="@+id/leftBracket"
+                        app:layout_constraintTop_toBottomOf="@+id/waterCost" />
 
                     <TextView
                         android:id="@+id/multiply"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="X"
-                        android:textStyle="bold"
-                        android:textSize="25sp"
                         android:layout_marginLeft="10dp"
-                        app:layout_constraintStart_toEndOf="@+id/WriteWaterTon"
-                        app:layout_constraintTop_toTopOf="@+id/WriteWaterTon"
+                        android:text="X"
+                        android:textSize="25sp"
                         app:layout_constraintBottom_toBottomOf="@+id/WriteWaterTon"
-                        />
+                        app:layout_constraintStart_toEndOf="@+id/WriteWaterTon"
+                        app:layout_constraintTop_toTopOf="@+id/WriteWaterTon" />
 
                     <TextView
                         android:id="@+id/ConstTonCost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/tonCost"
-                        android:textStyle="bold"
                         android:layout_margin="10dp"
-                        app:layout_constraintStart_toEndOf="@+id/multiply"
-                        app:layout_constraintTop_toTopOf="@+id/multiply"
+                        android:text="@string/tonCost"
                         android:textSize="25sp"
                         app:layout_constraintBottom_toBottomOf="@+id/multiply"
-                        />
+                        app:layout_constraintStart_toEndOf="@+id/multiply"
+                        app:layout_constraintTop_toTopOf="@+id/multiply" />
 
                     <TextView
-                        android:id="@+id/equal"
+                        android:id="@+id/rightBracket"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="="
-                        android:textStyle="bold"
-                        android:textSize="30sp"
                         android:layout_marginLeft="10dp"
-                        app:layout_constraintTop_toBottomOf="@+id/WriteWaterTon"
-                        app:layout_constraintStart_toStartOf="@+id/WriteWaterTon"
-                        />
+                        android:text=")"
+                        android:textSize="25sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/WriteWaterTon"
+                        app:layout_constraintStart_toEndOf="@+id/ConstTonCost"
+                        app:layout_constraintTop_toTopOf="@+id/WriteWaterTon" />
+
+                    <!--                    <TextView-->
+                    <!--                        android:id="@+id/equal"-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:text="="-->
+                    <!--                        android:textStyle="bold"-->
+                    <!--                        android:textSize="30sp"-->
+                    <!--                        android:layout_marginLeft="10dp"-->
+                    <!--                        app:layout_constraintTop_toBottomOf="@+id/WriteWaterTon"-->
+                    <!--                        app:layout_constraintStart_toStartOf="@+id/WriteWaterTon"-->
+                    <!--                        />-->
 
                     <TextView
                         android:id="@+id/waterCost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
                         android:text="@string/waterCost"
-                        android:textStyle="bold"
-                        android:layout_margin="10dp"
-                        app:layout_constraintStart_toEndOf="@+id/equal"
-                        app:layout_constraintTop_toTopOf="@+id/equal"
+                        android:textColor="@color/del_button_background"
                         android:textSize="25sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/equal"
-                        />
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/WaterCostText"
+                        app:layout_constraintStart_toEndOf="@+id/WaterCostText"
+                        app:layout_constraintTop_toTopOf="@+id/WaterCostText" />
 
                     <TextView
                         android:id="@+id/cleanCostText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/important_button_shape"
+                        android:padding="2dp"
                         android:text="@string/cleanCost"
+                        android:textSize="25sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@+id/WaterCostText"
-                        app:layout_constraintTop_toBottomOf="@+id/waterCost"
-                        android:textSize="25sp"
-                        android:layout_marginTop="25dp"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/WriteWaterTon" />
 
 
                     <TextView
                         android:id="@+id/ConstCleanCost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
                         android:text="@string/cleanCost"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@+id/cleanCostText"
-                        app:layout_constraintTop_toBottomOf="@+id/waterCost"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="@color/del_button_background"
                         android:textSize="25sp"
-                        android:layout_marginTop="25dp"
-                        />
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/cleanCostText"
+                        app:layout_constraintStart_toEndOf="@+id/cleanCostText"
+                        app:layout_constraintTop_toTopOf="@+id/cleanCostText" />
 
                     <TextView
                         android:id="@+id/usunCostText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/important_button_shape"
+                        android:padding="2dp"
                         android:text="@string/usunCost"
+                        android:textSize="25sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@+id/cleanCostText"
-                        app:layout_constraintTop_toBottomOf="@+id/cleanCostText"
-                        android:textSize="25sp"
-                        android:layout_marginTop="25dp"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/cleanCostText" />
 
 
                     <TextView
                         android:id="@+id/ConstUsunCost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
                         android:text="@string/usunCost"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@+id/usunCostText"
-                        app:layout_constraintTop_toBottomOf="@+id/ConstCleanCost"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="@color/del_button_background"
                         android:textSize="25sp"
-                        android:layout_marginTop="25dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/usunCostText"
+                        app:layout_constraintStart_toEndOf="@+id/usunCostText"
+                        app:layout_constraintTop_toTopOf="@+id/usunCostText"
+
                         />
 
                     <TextView
                         android:id="@+id/mgrCostText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:background="@drawable/important_button_shape"
+                        android:padding="2dp"
                         android:text="@string/mgrCost"
+                        android:textSize="25sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="@+id/usunCostText"
-                        app:layout_constraintTop_toBottomOf="@+id/usunCostText"
-                        android:textSize="25sp"
-                        android:layout_marginTop="25dp"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/usunCostText" />
 
 
                     <TextView
                         android:id="@+id/ConstMgrCost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="40dp"
                         android:text="@string/mgrCost"
-                        android:textStyle="bold"
-                        app:layout_constraintStart_toEndOf="@+id/mgrCostText"
-                        app:layout_constraintTop_toBottomOf="@+id/ConstUsunCost"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:textColor="@color/del_button_background"
                         android:textSize="25sp"
-                        android:layout_marginTop="25dp"
-                        />
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/mgrCostText"
+                        app:layout_constraintStart_toEndOf="@+id/mgrCostText"
+                        app:layout_constraintTop_toTopOf="@+id/mgrCostText" />
 
 
                     <View
                         android:id="@+id/CostEmptyArea"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        app:layout_constraintTop_toBottomOf="@+id/ConstMgrCost"
-                        />
+                        app:layout_constraintTop_toBottomOf="@+id/ConstMgrCost" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -372,12 +420,12 @@
                 android:id="@+id/WriteRoomCostButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
                 android:backgroundTint="@color/main_button_background"
                 android:text="@string/noticeWrite"
-                android:textSize="25sp"
                 android:textColor="@color/white"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
+                android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
