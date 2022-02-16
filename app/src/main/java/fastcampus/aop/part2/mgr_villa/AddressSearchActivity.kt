@@ -54,8 +54,10 @@ class AddressSearchActivity : AppCompatActivity() {
         }
 //        initUsers()
         binding.addrSearchButton.setOnClickListener {
-            if (binding.AddressEditText.text.toString().contains("동")
-                ||binding.AddressEditText.text.toString().contains("길")){
+            if (binding.AddressEditText.text.toString().contains("-")
+                && !binding.AddressEditText.text.toString().equals("길동")
+                && !binding.AddressEditText.text.toString().equals("동길")
+            ){
                 callKakaoAddress(binding.AddressEditText.text.toString())
             }else{
                 callKakaoKeyword(binding.AddressEditText.text.toString())

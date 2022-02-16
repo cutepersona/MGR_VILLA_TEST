@@ -59,8 +59,13 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
         }
 //        initUsers()
         binding.addrSearchTenantButton.setOnClickListener {
-            if (binding.AddressTenantEditText.text.toString().contains("동")
-                ||binding.AddressTenantEditText.text.toString().contains("길")){
+            if (binding.AddressTenantEditText.text.toString().contains("-")
+                && !binding.AddressTenantEditText.text.toString().equals("길동")
+                && !binding.AddressTenantEditText.text.toString().equals("동길")
+//                ||binding.AddressTenantEditText.text.toString().endsWith("-")
+//                && !binding.AddressTenantEditText.text.toString().equals("길동")
+//                && !binding.AddressTenantEditText.text.toString().equals("동길")
+            ){
                 callKakaoAddress(binding.AddressTenantEditText.text.toString())
             }else{
                 callKakaoKeyword(binding.AddressTenantEditText.text.toString())

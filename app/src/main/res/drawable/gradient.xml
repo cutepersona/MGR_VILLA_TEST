@@ -6,7 +6,7 @@
     <item android:id="@+id/masked">
         <shape android:shape="rectangle">
 <!--     #676767       -->
-            <solid android:color="#FFFFFF"/>
+            <solid android:color="@color/main_button_background"/>
         </shape>
     </item>
 

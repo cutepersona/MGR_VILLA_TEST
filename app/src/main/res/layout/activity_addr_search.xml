@@ -92,6 +92,8 @@
                 <EditText
                     android:id="@+id/AddressEditText"
                     android:layout_width="0dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_height="match_parent"
                     android:hint="@string/addr_Search_Hint"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -103,9 +105,11 @@
                     android:id="@+id/addrSearchButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/main_button_background"
+                    android:background="@drawable/change_phonenum_timer_shape"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginRight="2dp"
+                    android:padding="3dp"
                     android:src="@drawable/ic_search"
-                    app:layout_constraintBottom_toBottomOf="@+id/AddressEditText"
                     app:layout_constraintEnd_toEndOf="@+id/AddressEditText"
                     app:layout_constraintTop_toTopOf="@+id/AddressEditText" />
 

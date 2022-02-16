@@ -111,6 +111,10 @@
                     android:layout_height="match_parent"
                     android:hint="@string/addr_Search_Hint"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:backgroundTint="@color/main_button_background"
+                    android:textCursorDrawable="@drawable/cursor_drawable"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -119,9 +123,10 @@
                     android:id="@+id/addrSearchTenantButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/main_button_background"
+                    android:background="@drawable/change_phonenum_timer_shape"
                     android:src="@drawable/ic_search"
-                    app:layout_constraintBottom_toBottomOf="@+id/AddressTenantEditText"
+                    android:layout_marginRight="2dp"
+                    android:padding="3dp"
                     app:layout_constraintEnd_toEndOf="@+id/AddressTenantEditText"
                     app:layout_constraintTop_toTopOf="@+id/AddressTenantEditText" />
 
