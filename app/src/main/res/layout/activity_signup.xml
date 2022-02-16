@@ -109,6 +109,7 @@
                     android:hint="@string/user_email_hint"
                     android:inputType="textWebEmailAddress"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:backgroundTint="@color/main_button_background"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/userEmailText"
                     android:nextFocusDown="@id/userNameEditText"
@@ -142,6 +143,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/user_name_hint"
                     android:inputType="text"
+                    android:backgroundTint="@color/main_button_background"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/userName"
@@ -175,6 +177,7 @@
                     android:hint="@string/user_password_hint"
                     android:inputType="textWebPassword"
                     app:layout_constraintEnd_toEndOf="parent"
+                    android:backgroundTint="@color/main_button_background"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/userPassword"
                     android:nextFocusDown="@id/userPasswordEditText2"/>
@@ -199,6 +202,7 @@
                     android:inputType="textWebPassword"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
+                    android:backgroundTint="@color/main_button_background"
                     app:layout_constraintTop_toBottomOf="@+id/userPWValid1"
                     android:nextFocusDown="@id/userPhoneNumberEditText"/>
 
@@ -229,6 +233,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/userPhoneNumber"
+                    android:backgroundTint="@color/main_button_background"
                     tools:ignore="TextFields" />
 
                 <TextView
@@ -263,6 +268,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/userPhoneNumberValid1"
+                    android:backgroundTint="@color/main_button_background"
                     tools:ignore="TextFields" />
 
                 <androidx.appcompat.widget.AppCompatButton

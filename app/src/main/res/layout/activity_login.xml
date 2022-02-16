@@ -51,13 +51,13 @@
                         android:id="@+id/toolBarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="50dp"
                         android:text="@string/login"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginRight="50dp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -103,12 +103,12 @@
                         android:id="@+id/userEmailEditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:hint="@string/user_email_hint"
-                        android:inputType="textWebEmailAddress"
                         android:backgroundTint="@color/main_button_background"
+                        android:hint="@string/user_email_hint"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
+                        android:inputType="textWebEmailAddress"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:nextFocusDown="@id/userPasswordEditText1"
                         app:layout_constraintTop_toBottomOf="@+id/userEmailText" />
 
                     <TextView
@@ -136,10 +136,12 @@
                         android:id="@+id/userPasswordEditText1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:backgroundTint="@color/main_button_background"
                         android:hint="@string/user_password_hint"
                         android:inputType="textWebPassword"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:textCursorDrawable="@drawable/cursor_drawable"
                         app:layout_constraintTop_toBottomOf="@+id/userPassword" />
 
                     <TextView
@@ -163,11 +165,11 @@
                 android:id="@+id/DoLoginButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:backgroundTint="@color/main_button_background"
                 android:text="@string/login"
                 android:textSize="25sp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

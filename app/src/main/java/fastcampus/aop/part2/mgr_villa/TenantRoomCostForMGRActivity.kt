@@ -133,6 +133,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                             }
                             firestoreDB.collection("VillaAccount")
                                 .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                                .whereEqualTo("favorite", "favorite")
                                 .get()
                                 .addOnSuccessListener { result ->
                                     if (!result.isEmpty){
@@ -165,6 +166,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
                             firestoreDB.collection("VillaAccount")
                                 .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                                .whereEqualTo("favorite", "favorite")
                                 .get()
                                 .addOnSuccessListener { result ->
                                     if (!result.isEmpty){
@@ -691,6 +693,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                     }
                     firestoreDB.collection("VillaAccount")
                         .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                        .whereEqualTo("favorite", "favorite")
                         .get()
                         .addOnSuccessListener { result ->
                             if (!result.isEmpty){
@@ -704,48 +707,83 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                         }
                 } else {
                     // 등록이력이 없을 때
-                    firestoreDB.collection("StandardCost")
-                        .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+                    val noTenantCostDialog = NoTenantCostDialog(this@TenantRoomCostForMGRActivity)
+                    noTenantCostDialog.showDialog()
+
+                    binding.ConstTonCost.setText("0")
+                    binding.ConstCleanCost.setText("0")
+                    binding.ConstUsunCost.setText("0")
+                    binding.ConstMgrCost.setText("0")
+
+
+                    // 초기 톤수 셋팅 1.0 값
+                    binding.WriteWaterTon.setText(0.toFloat().toString())
+
+                    waterValue = binding.WriteWaterTon.text.toString()
+                        .toFloat() * binding.ConstTonCost.text.toString().replace(",", "")
+                        .toFloat()
+                    binding.waterCost.setText(waterValue.toInt().toString())
+                    binding.TotalCostValue.setText("0")
+
+                    firestoreDB.collection("VillaAccount")
+                        .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                        .whereEqualTo("favorite", "favorite")
                         .get()
                         .addOnSuccessListener { result ->
-                            if (!result.isEmpty) {
+                            if (!result.isEmpty){
                                 for (i in result!!) {
-                                    binding.ConstTonCost.setText(i.data["tonCost"].toString())
-                                    binding.ConstCleanCost.setText(i.data["cleanCost"].toString())
-                                    binding.ConstUsunCost.setText(i.data["usunCost"].toString())
-                                    binding.ConstMgrCost.setText(i.data["mgrCost"].toString())
-
-                                    val total = waterValue.toInt() + i.data["cleanCost"].toString()
-                                        .toInt() + i.data["usunCost"].toString()
-                                        .toInt() + i.data["mgrCost"].toString().toInt()
-
-                                    waterValue = binding.WriteWaterTon.text.toString()
-                                        .toFloat() * binding.ConstTonCost.text.toString()
-                                        .replace(",", "").toFloat()
-                                    binding.waterCost.setText(waterValue.toInt().toString())
-
-                                    binding.TotalCostValue.setText(total.toString())
-
-                                    binding.CostRoomNumber.setText(tenantRoomNumber)
-
+                                    binding.CostBankName.setText(i.data["bankName"].toString().trim())
+                                    binding.CostAccountHolder.setText(i.data["accountHolder"].toString().trim())
+                                    binding.CostAccountNumber.setText(i.data["accountNumber"].toString().trim())
                                     break
                                 }
-                                firestoreDB.collection("VillaAccount")
-                                    .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
-                                    .get()
-                                    .addOnSuccessListener { result ->
-                                        if (!result.isEmpty){
-                                            for (i in result!!) {
-                                                binding.CostBankName.setText(i.data["bankName"].toString().trim())
-                                                binding.CostAccountHolder.setText(i.data["accountHolder"].toString().trim())
-                                                binding.CostAccountNumber.setText(i.data["accountNumber"].toString().trim())
-                                                break
-                                            }
-                                        }
-                                    }
-
                             }
                         }
+
+//
+//                    firestoreDB.collection("StandardCost")
+//                        .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
+//                        .get()
+//                        .addOnSuccessListener { result ->
+//                            if (!result.isEmpty) {
+//                                for (i in result!!) {
+//                                    binding.ConstTonCost.setText(i.data["tonCost"].toString())
+//                                    binding.ConstCleanCost.setText(i.data["cleanCost"].toString())
+//                                    binding.ConstUsunCost.setText(i.data["usunCost"].toString())
+//                                    binding.ConstMgrCost.setText(i.data["mgrCost"].toString())
+//
+//                                    val total = waterValue.toInt() + i.data["cleanCost"].toString()
+//                                        .toInt() + i.data["usunCost"].toString()
+//                                        .toInt() + i.data["mgrCost"].toString().toInt()
+//
+//                                    waterValue = binding.WriteWaterTon.text.toString()
+//                                        .toFloat() * binding.ConstTonCost.text.toString()
+//                                        .replace(",", "").toFloat()
+//                                    binding.waterCost.setText(waterValue.toInt().toString())
+//
+//                                    binding.TotalCostValue.setText(total.toString())
+//
+//                                    binding.CostRoomNumber.setText(tenantRoomNumber)
+//
+//                                    break
+//                                }
+//                                firestoreDB.collection("VillaAccount")
+//                                    .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+//                                    .whereEqualTo("favorite", "favorite")
+//                                    .get()
+//                                    .addOnSuccessListener { result ->
+//                                        if (!result.isEmpty){
+//                                            for (i in result!!) {
+//                                                binding.CostBankName.setText(i.data["bankName"].toString().trim())
+//                                                binding.CostAccountHolder.setText(i.data["accountHolder"].toString().trim())
+//                                                binding.CostAccountNumber.setText(i.data["accountNumber"].toString().trim())
+//                                                break
+//                                            }
+//                                        }
+//                                    }
+//
+//                            }
+//                        }
                 }
             }
 

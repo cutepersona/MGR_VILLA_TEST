@@ -114,6 +114,7 @@ class TenantRoomCostForTenantActivity : AppCompatActivity() {
                             }
                             firestoreDB.collection("VillaAccount")
                                 .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                                .whereEqualTo("favorite", "favorite")
                                 .get()
                                 .addOnSuccessListener { result ->
                                     if (!result.isEmpty){
@@ -146,6 +147,7 @@ class TenantRoomCostForTenantActivity : AppCompatActivity() {
 
                             firestoreDB.collection("VillaAccount")
                                 .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                                .whereEqualTo("favorite", "favorite")
                                 .get()
                                 .addOnSuccessListener { result ->
                                     if (!result.isEmpty){
@@ -359,6 +361,7 @@ class TenantRoomCostForTenantActivity : AppCompatActivity() {
                     }
                     firestoreDB.collection("VillaAccount")
                         .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                        .whereEqualTo("favorite", "favorite")
                         .get()
                         .addOnSuccessListener { result ->
                             if (!result.isEmpty){
@@ -400,6 +403,7 @@ class TenantRoomCostForTenantActivity : AppCompatActivity() {
                                 }
                                 firestoreDB.collection("VillaAccount")
                                     .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())
+                                    .whereEqualTo("favorite", "favorite")
                                     .get()
                                     .addOnSuccessListener { result ->
                                         if (!result.isEmpty){
