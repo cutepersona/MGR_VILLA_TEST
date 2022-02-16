@@ -42,16 +42,26 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingHorizontal="20dp"
-            android:background="@color/white"
             android:paddingVertical="10dp"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="@drawable/important_button_shape"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="3dp"
+            >
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="2">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    >
 
                 <TextView
                     android:id="@+id/CostTenantRoomId"
@@ -60,30 +70,61 @@
                     android:textColor="@color/black"
                     android:visibility="gone"/>
 
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/MgrTenantContract"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/important_button_shape"
+                        android:text="계약일"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@color/main_button_background"
+                        android:clickable="false"
+                        />
+
                 <TextView
                     android:id="@+id/CostContractDate"
-                    android:layout_width="110dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/ContractDate"
                     android:textColor="@color/black"
                     android:layout_marginRight="10dp"
                     android:textSize="20sp" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="2dp"
+                    >
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/MgrTenantLeave"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/important_button_shape"
+                        android:text="만료일"
+                        android:layout_marginRight="10dp"
+                        android:textColor="@color/main_button_background"
+                        android:clickable="false"
+                        />
 
                 <TextView
                     android:id="@+id/CostLeaveDate"
-                    android:layout_width="110dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/LeaveDate"
                     android:textColor="@color/black"
                     android:layout_marginRight="10dp"
                     android:textSize="20sp" />
-
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                >
                 <TextView
                     android:id="@+id/CostTenantTitle"
                     android:layout_width="110dp"
@@ -91,7 +132,9 @@
                     android:text="@string/roomNumber"
                     android:textColor="@color/black"
                     android:textStyle="bold"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    android:gravity="center"
+                    />
 
             </LinearLayout>
 

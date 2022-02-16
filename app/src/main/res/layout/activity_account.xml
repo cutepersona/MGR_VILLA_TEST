@@ -123,14 +123,15 @@
 
                         <TextView
                             android:id="@+id/bankNameText"
-                            android:layout_width="match_parent"
+                            android:layout_width="165dp"
                             android:layout_height="35dp"
                             android:hint="@string/BankHint"
                             android:textStyle="bold"
                             android:layout_marginTop="10dp"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            android:paddingLeft="10dp"
                             android:gravity="center_vertical"
+                            android:background="@drawable/important_button_shape"
                             app:layout_constraintTop_toBottomOf="@+id/bankSelectText"
                             />
 
@@ -139,18 +140,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:src="@drawable/ic_arrow_drop_down"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/bankNameText"
                             app:layout_constraintBottom_toBottomOf="@+id/bankNameText"
+                            app:layout_constraintTop_toTopOf="@+id/bankNameText"
                             />
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@drawable/gradient"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="@+id/bankNameText"
-                            />
+<!--                        <View-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="1dp"-->
+<!--                            android:background="@drawable/gradient"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintBottom_toBottomOf="@+id/bankNameText"-->
+<!--                            />-->
 
 
 <!--                        <Spinner-->
@@ -200,6 +202,8 @@
                         android:inputType="text"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:backgroundTint="@color/main_button_background"
+                        android:textCursorDrawable="@color/main_button_background"
                         android:gravity="top|left"
                         android:scrollbars="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/accountHolder" />
@@ -229,10 +233,11 @@
                         android:id="@+id/accountNumberEditText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
+                        android:inputType="number"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:lines="15"
                         app:layout_constraintStart_toStartOf="parent"
+                        android:backgroundTint="@color/main_button_background"
+                        android:textCursorDrawable="@color/main_button_background"
                         android:gravity="top|left"
                         android:scrollbars="vertical"
                         app:layout_constraintTop_toBottomOf="@+id/accountNumber" />

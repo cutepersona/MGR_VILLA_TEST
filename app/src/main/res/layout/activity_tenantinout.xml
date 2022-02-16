@@ -51,13 +51,13 @@
                         android:id="@+id/toolBarTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="50dp"
                         android:text="@string/tenantInOut"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginRight="50dp"
                         app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,154 +104,158 @@
                         android:id="@+id/TenantIORoomNumberText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/roomNumber"
                         android:layout_marginLeft="15dp"
+                        android:text="@string/roomNumber"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/tenantIORoomNumber"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/TenantIORoomNumberText"
+                        android:layout_marginLeft="40dp"
                         android:textSize="30sp"
                         android:textStyle="bold"
-                        android:layout_marginLeft="40dp"
-                        />
+                        android:textColor="@color/black"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/TenantIORoomNumberText" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/tenantIOSelectTenantArea"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:background="@drawable/change_phonenum_timer_shape"
                         app:layout_constraintTop_toBottomOf="@+id/tenantIORoomNumber"
+                        android:layout_margin="3dp"
                         >
+
                         <TextView
                             android:id="@+id/tenantIOEmailText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
                             android:layout_marginLeft="15dp"
+                            android:layout_marginTop="10dp"
                             android:text="@string/tenantIOEmail"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/tenantIOSelectTenantArea"
-                             />
+                            app:layout_constraintTop_toTopOf="@+id/tenantIOSelectTenantArea" />
 
                         <TextView
                             android:id="@+id/tenantIOEmail"
                             android:layout_width="0dp"
                             android:layout_height="35dp"
-                            android:hint="@string/tenantIONameHint"
-                            android:textStyle="bold"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
                             android:layout_marginLeft="15dp"
                             android:layout_marginRight="15dp"
+                            android:hint="@string/tenantIONameHint"
                             android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tenantIOEmailText" />
 
                         <ImageView
                             android:id="@+id/tenantIODropDown"
                             android:layout_width="wrap_content"
                             android:layout_height="35dp"
-                            android:src="@drawable/ic_arrow_drop_down"
-                            app:layout_constraintEnd_toEndOf="parent"
                             android:layout_marginRight="10dp"
                             android:layout_marginBottom="10dp"
-                            app:layout_constraintTop_toBottomOf="@+id/tenantIOEmailText"
+                            android:src="@drawable/ic_arrow_drop_down"
                             android:visibility="gone"
-                            />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIOEmailText" />
 
                         <View
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:background="@drawable/gradient"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
                             android:layout_marginLeft="15dp"
                             android:layout_marginRight="15dp"
+                            android:background="@drawable/gradient"
                             app:layout_constraintBottom_toBottomOf="@+id/tenantIODropDown"
-                            />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
 
                         <TextView
                             android:id="@+id/tenantIONameText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
                             android:layout_marginTop="8dp"
                             android:text="@string/tenantIOName"
-                            app:layout_constraintTop_toBottomOf="@+id/tenantIOEmail"
                             app:layout_constraintStart_toStartOf="parent"
-                            android:layout_marginLeft="15dp"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIOEmail"
                             tools:layout_editor_absoluteX="0dp" />
 
                         <TextView
                             android:id="@+id/tenantIOTenantName"
                             android:layout_width="0dp"
                             android:layout_height="35dp"
-                            android:hint="@string/tenantIONameHint"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:textSize="20sp"
                             android:layout_marginLeft="15dp"
-                            android:textStyle="bold"
                             android:layout_marginRight="15dp"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tenantIONameText"
                             android:gravity="center_vertical"
-                            />
+                            android:hint="@string/tenantIONameHint"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIONameText" />
 
                         <View
                             android:id="@+id/tenantIOTenantNameBottom"
                             android:layout_width="0dp"
                             android:layout_height="1dp"
-                            android:background="@drawable/gradient"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
                             android:layout_marginLeft="15dp"
                             android:layout_marginRight="15dp"
+                            android:background="@drawable/gradient"
                             app:layout_constraintBottom_toBottomOf="@+id/tenantIOTenantName"
-                            />
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
 
                         <TextView
                             android:id="@+id/tenantIOPhoneText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
                             android:layout_marginTop="8dp"
                             android:text="@string/tenantIOPhone"
-                            app:layout_constraintTop_toBottomOf="@+id/tenantIOTenantNameBottom"
                             app:layout_constraintStart_toStartOf="parent"
-                            android:layout_marginLeft="15dp"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIOTenantNameBottom"
                             tools:layout_editor_absoluteX="0dp" />
 
                         <TextView
                             android:id="@+id/tenantIOTenantPhone"
                             android:layout_width="0dp"
                             android:layout_height="35dp"
-                            android:hint="@string/tenantIONameHint"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/tenantIOPhoneText"
                             android:layout_marginLeft="15dp"
                             android:layout_marginRight="15dp"
                             android:gravity="center_vertical"
+                            android:hint="@string/tenantIONameHint"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/black"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/tenantIOPhoneText"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            android:layout_marginBottom="7dp"
                             />
 
-                        <View
-                            android:id="@+id/tenantIOTenantPhoneBottom"
-                            android:layout_width="0dp"
-                            android:layout_height="1dp"
-                            android:background="@drawable/gradient"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintBottom_toBottomOf="@+id/tenantIOTenantPhone"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginRight="15dp"
-                            />
+<!--                        <View-->
+<!--                            android:id="@+id/tenantIOTenantPhoneBottom"-->
+<!--                            android:layout_width="0dp"-->
+<!--                            android:layout_height="1dp"-->
+<!--                            android:layout_marginLeft="15dp"-->
+<!--                            android:layout_marginRight="15dp"-->
+<!--                            android:background="@drawable/gradient"-->
+<!--                            app:layout_constraintTop_toBottomOf="@+id/tenantIOTenantPhone"-->
+<!--                            app:layout_constraintEnd_toEndOf="parent"-->
+<!--                            app:layout_constraintStart_toStartOf="parent"-->
+<!--                            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                            android:layout_marginBottom="3dp"-->
+<!--                            />-->
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -261,93 +265,86 @@
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
                         android:layout_marginTop="30dp"
-                        android:text="@string/ContractDate"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        app:layout_constraintTop_toBottomOf="@+id/tenantIOSelectTenantArea"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/tenantIOLeaveDateText"
+                        android:background="@drawable/important_button_shape"
                         android:clickable="false"
-                        android:background="@drawable/change_phonenum_timer_shape"
-                         />
+                        android:text="@string/ContractDate"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/tenantIOLeaveDateText"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tenantIOSelectTenantArea" />
 
                     <TextView
                         android:id="@+id/tenantIOContractDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:text=""
                         android:textSize="20sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tenantIOContractDateText"
+                        android:textColor="@color/black"
                         app:layout_constraintEnd_toStartOf="@+id/ContractDateCalendar"
-                        android:layout_marginTop="10dp"
-                        />
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tenantIOContractDateText" />
 
                     <ImageView
                         android:id="@+id/ContractDateCalendar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@+id/tenantIOContractDate"
+                        android:layout_marginLeft="6dp"
                         android:src="@drawable/ic_calendar_month"
-                        app:layout_constraintTop_toTopOf="@+id/tenantIOContractDate"
                         app:layout_constraintBottom_toBottomOf="@+id/tenantIOContractDate"
                         app:layout_constraintEnd_toStartOf="@+id/tenantIOLeaveDate"
-                        android:layout_marginLeft="6dp"
-                        />
+                        app:layout_constraintStart_toEndOf="@+id/tenantIOContractDate"
+                        app:layout_constraintTop_toTopOf="@+id/tenantIOContractDate" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/tenantIOLeaveDateText"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
-                        android:text="@string/LeaveDate"
-                        android:textStyle="bold"
-                        android:textSize="18sp"
-                        android:background="@drawable/change_phonenum_timer_shape"
-                        app:layout_constraintTop_toTopOf="@+id/tenantIOContractDateText"
-                        app:layout_constraintStart_toEndOf="@+id/tenantIOContractDateText"
-                        app:layout_constraintEnd_toEndOf="parent"
                         android:layout_marginLeft="20dp"
-                        />
+                        android:background="@drawable/important_button_shape"
+                        android:text="@string/LeaveDate"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/tenantIOContractDateText"
+                        app:layout_constraintTop_toTopOf="@+id/tenantIOContractDateText" />
 
                     <TextView
                         android:id="@+id/tenantIOLeaveDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
                         android:text=""
                         android:textSize="20sp"
-                        app:layout_constraintStart_toEndOf="@+id/ContractDateCalendar"
-                        app:layout_constraintTop_toBottomOf="@+id/tenantIOContractDateText"
+                        android:textColor="@color/black"
                         app:layout_constraintEnd_toStartOf="@+id/LeaveDateCalendar"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginLeft="10dp"
-                        />
+                        app:layout_constraintStart_toEndOf="@+id/ContractDateCalendar"
+                        app:layout_constraintTop_toBottomOf="@+id/tenantIOContractDateText" />
 
                     <ImageView
                         android:id="@+id/LeaveDateCalendar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_constraintStart_toEndOf="@+id/tenantIOLeaveDate"
+                        android:layout_marginLeft="6dp"
                         android:src="@drawable/ic_calendar_month"
-                        app:layout_constraintTop_toTopOf="@+id/tenantIOLeaveDate"
                         app:layout_constraintBottom_toBottomOf="@+id/tenantIOLeaveDate"
                         app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginLeft="6dp"
-                        />
+                        app:layout_constraintStart_toEndOf="@+id/tenantIOLeaveDate"
+                        app:layout_constraintTop_toTopOf="@+id/tenantIOLeaveDate" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/mgrTenantIn"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:textSize="18sp"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/important_button_shape"
                         android:padding="5dp"
                         android:text="관리자 전입"
-                        android:layout_marginRight="15dp"
-                        android:background="@drawable/change_phonenum_timer_shape"
-                        app:layout_constraintTop_toTopOf="@+id/tenantIORoomNumber"
-                        />
-
-
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/tenantIORoomNumber" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -359,30 +356,30 @@
                 android:id="@+id/RequestTenantIntoVillaButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
                 android:backgroundTint="@color/main_button_background"
                 android:text="@string/tenantIn"
-                android:textSize="22sp"
                 android:textColor="@color/white"
+                android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/RequestTenantOutVillaButton"
                 app:layout_constraintHorizontal_weight="1"
-                android:layout_marginLeft="15dp"
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/RequestTenantOutVillaButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:backgroundTint="@color/del_button_background"
                 android:text="@string/tenantOut"
-                android:textSize="22sp"
                 android:textColor="@color/white"
+                android:textSize="22sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_weight="1"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                app:layout_constraintStart_toEndOf="@+id/RequestTenantIntoVillaButton"/>
+                app:layout_constraintStart_toEndOf="@+id/RequestTenantIntoVillaButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

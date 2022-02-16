@@ -267,6 +267,12 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
+    }
+
 
     private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.LoginToolbar)
@@ -278,15 +284,21 @@ class LoginActivity : AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
-        return super.onOptionsItemSelected(item)
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
+
+        return true
+
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
     // email 체크

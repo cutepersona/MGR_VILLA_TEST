@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:dragEdge="right"
+        android:layout_marginTop="3dp"
         app:mode="same_level">
 
 
@@ -42,7 +43,7 @@
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:paddingHorizontal="20dp"
-            android:background="@color/white"
+            android:background="@drawable/important_button_shape"
             android:paddingVertical="10dp"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -71,7 +72,7 @@
                         android:id="@+id/MgrTenantContract"
                         android:layout_width="60dp"
                         android:layout_height="match_parent"
-                        android:background="@drawable/change_phonenum_timer_shape"
+                        android:background="@drawable/important_button_shape"
                         android:text="계약일"
                         android:layout_marginRight="10dp"
                         android:textColor="@color/main_button_background"
@@ -100,7 +101,7 @@
                         android:id="@+id/MgrTenantLeave"
                         android:layout_width="60dp"
                         android:layout_height="match_parent"
-                        android:background="@drawable/change_phonenum_timer_shape"
+                        android:background="@drawable/important_button_shape"
                         android:text="만료일"
                         android:layout_marginRight="10dp"
                         android:textColor="@color/main_button_background"
@@ -146,13 +147,13 @@
             android:paddingHorizontal="20dp"
             android:gravity="bottom"
             >
-            <View
-                android:id="@+id/noticeBottomLine"
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_margin="2dp"
-                app:layout_constraintTop_toBottomOf="@+id/TenantRoomNum"
-                android:background="@drawable/button_background" />
+<!--            <View-->
+<!--                android:id="@+id/noticeBottomLine"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="2dp"-->
+<!--                android:layout_margin="2dp"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/TenantRoomNum"-->
+<!--                android:background="@drawable/button_background" />-->
         </LinearLayout>
 
 

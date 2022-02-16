@@ -66,14 +66,14 @@ class AccountsAdapter(val accountList: ArrayList<VillaAccount>): RecyclerView.Ad
         if(selectedPosition == position){
             holder.favButton.setImageResource(R.drawable.ic_circle_fav)
         }else{
-            holder.favButton.setImageResource(R.drawable.ic_circle_nonfav)
+            holder.favButton.setImageResource(R.drawable.important_button_shape)
         }
 
         if(!accountList[position].favorite.equals("")){
             holder.favButton.setImageResource(R.drawable.ic_circle_fav)
         }
         else{
-            holder.favButton.setImageResource(R.drawable.ic_circle_nonfav)
+            holder.favButton.setImageResource(R.drawable.important_button_shape)
         }
 
 

@@ -106,12 +106,14 @@
                     android:id="@+id/rv_Accounts"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="vertical"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintHorizontal_bias="0.473"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_margin="10dp"
                     tools:listitem="@layout/recycleview_accounts" />
 
 
