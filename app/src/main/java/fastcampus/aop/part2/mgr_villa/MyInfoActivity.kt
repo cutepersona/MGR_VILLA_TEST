@@ -42,6 +42,12 @@ class MyInfoActivity : AppCompatActivity() {
 
     // 개인정보 보호정책
     private fun initPrivacyPolicy() {
+
+        binding.MyInfoTerms.setOnClickListener {
+            val toTerms = Intent(this, TermsActivity::class.java)
+            startActivity(toTerms)
+        }
+
         binding.MyInfoPrivacy.setOnClickListener {
             val toPirvacyPolicy = Intent(this, PrivacyPolicyActivity::class.java)
             startActivity(toPirvacyPolicy)

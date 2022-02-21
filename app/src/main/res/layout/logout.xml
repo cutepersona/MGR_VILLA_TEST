@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/Cancel"
-            android:backgroundTint="@color/main_button_background"
+            android:backgroundTint="@color/del_button_background"
             />
 
         <Button
@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="@string/Done"
-            android:backgroundTint="@color/main_button_background"
+            android:backgroundTint="@color/del_button_background"
             />
 
     </LinearLayout>

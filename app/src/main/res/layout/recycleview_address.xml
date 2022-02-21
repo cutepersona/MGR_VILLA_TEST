@@ -7,8 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="8dp"
-    android:layout_marginLeft="25dp"
-    android:layout_marginRight="25dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:padding="3dp"
     android:background="@drawable/important_button_shape">
 
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:text="도로명주소"
         android:textStyle="bold"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="10dp"
         android:textSize="18sp"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"

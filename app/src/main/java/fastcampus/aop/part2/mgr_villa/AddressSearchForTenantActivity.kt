@@ -45,7 +45,7 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
     val firestoreDB = Firebase.firestore
 
     // 네이버 아이디 로그인
-//    lateinit var mOAuthLoginInstance: OAuthLogin
+    lateinit var mOAuthLoginInstance: OAuthLogin
 
     private val addrTenantListItems = arrayListOf<AddrTenantLayout>()                   // 리싸이클러 뷰 아이템
     private val addrListAdapter = KakaoApiTenantAdapter(addrTenantListItems)            // 리싸이클러 뷰 어댑터
@@ -59,6 +59,8 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.rvAddrsTenant.adapter = addrListAdapter
+
+        mOAuthLoginInstance = OAuthLogin.getInstance()
 
         if(intent.hasExtra("N")){
             naverCheck = intent.getStringExtra("N").toString()
@@ -137,12 +139,11 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-
+        mOAuthLoginInstance.logout(applicationContext)
         if (naverCheck.isNullOrEmpty()){
             val toLogin = Intent(this, LoginActivity::class.java)
             startActivity(toLogin)
         } else {
-//            mOAuthLoginInstance.logout(applicationContext)
             val toMain = Intent(this, MainActivity::class.java)
             startActivity(toMain)
         }

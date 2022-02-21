@@ -168,13 +168,58 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
     }
 
     private fun callMgrSighUpActivity(){
-        val callSignUpActivity = Intent(this, SignUpActivity::class.java)
-        callSignUpActivity.putExtra("mgr","MGR")
-        callSignUpActivity.putExtra("N","N")
-        callSignUpActivity.putExtra("Nemail",Nemail)
-        callSignUpActivity.putExtra("Nname",Nname)
-        callSignUpActivity.putExtra("Nmobile",Nmobile)
-        startActivity(callSignUpActivity)
+
+        if (intent.hasExtra("N")){
+
+            val users = firestoreDB.collection("VillaUsers")
+
+            val VillaUsers = hashMapOf(
+                "mailAddress" to Nemail.trim(),
+                "roomNumber" to "0",
+                "userName" to Nname.trim(),
+                "passWord" to "",
+                "phoneNumber" to Nmobile.trim(),
+                "userType" to "MGR",
+                "signUpType" to "N"
+            )
+
+            users.document(Nemail.trim())
+                .set(VillaUsers)
+                .addOnSuccessListener { documentReference ->
+
+//                        showToast("회원가입을 환영합니다.")
+
+                    firestoreDB.collection("VillaTenant")
+                        .whereEqualTo("tenantEmail", Nemail.trim())
+                        .get()
+                        .addOnSuccessListener { task ->
+                            if(task.isEmpty){
+                                val addrSearchActivity =
+                                    Intent(this, AddressSearchActivity::class.java)
+                                addrSearchActivity.putExtra("N", "N")
+                                addrSearchActivity.putExtra("email", Nemail.trim())
+                                startActivity(addrSearchActivity)
+                            }
+                        }
+
+//                        val toLogin = Intent(this, LoginActivity::class.java)
+//                        startActivity(toLogin)
+                }
+                .addOnFailureListener { e ->
+                    showToast("회원가입에 실패하였습니다.")
+                    Log.w(ContentValues.TAG, "Error adding document", e)
+                    return@addOnFailureListener
+                }
+
+        } else {
+            val callSignUpActivity = Intent(this, SignUpActivity::class.java)
+            callSignUpActivity.putExtra("mgr", "MGR")
+//            callSignUpActivity.putExtra("N", "N")
+//            callSignUpActivity.putExtra("Nemail", Nemail)
+//            callSignUpActivity.putExtra("Nname", Nname)
+//            callSignUpActivity.putExtra("Nmobile", Nmobile)
+            startActivity(callSignUpActivity)
+        }
     }
 
     private fun showToast(message: String) {

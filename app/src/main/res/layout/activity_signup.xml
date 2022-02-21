@@ -392,7 +392,7 @@
             android:id="@+id/SignUpDone"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_wrong_background"
+            android:backgroundTint="@color/main_button_background"
             android:text="@string/signUpDone"
             android:textSize="25sp"
             android:layout_marginLeft="15dp"

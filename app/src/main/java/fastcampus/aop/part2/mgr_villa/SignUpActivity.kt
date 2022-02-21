@@ -286,6 +286,12 @@ class SignUpActivity : AppCompatActivity() {
         allUseTermsCheck()
 
         privPolicyCheck()
+
+        binding.necessaryTerms.setOnClickListener {
+            val toTerms = Intent(this, TermsActivity::class.java)
+            startActivity(toTerms)
+        }
+
         binding.privacyPolicy.setOnClickListener {
             val toPrivacyPolicy = Intent(this, PrivacyPolicyActivity::class.java)
             startActivity(toPrivacyPolicy)

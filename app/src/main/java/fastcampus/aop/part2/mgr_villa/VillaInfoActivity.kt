@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isInvisible
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.nhn.android.naverlogin.OAuthLogin
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityVillainfoBinding
 import fastcampus.aop.part2.mgr_villa.model.VillaInfo
@@ -33,9 +34,13 @@ class VillaInfoActivity : AppCompatActivity() {
     private var tenantCountFlag = false
     val firestoreDB = Firebase.firestore
 
+    lateinit var mOAuthLoginInstance : OAuthLogin
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        mOAuthLoginInstance = OAuthLogin.getInstance()
 
         initToolBar()
         initTenantCountCheck()
@@ -64,6 +69,14 @@ class VillaInfoActivity : AppCompatActivity() {
 
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        mOAuthLoginInstance.logout(applicationContext)
+
+        val toAddressSearch = Intent(this, AddressSearchActivity::class.java)
+        startActivity(toAddressSearch)
+    }
+
     private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.VillaInfoToolbar)
         setSupportActionBar(toolbar)
@@ -74,15 +87,22 @@ class VillaInfoActivity : AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
 
-        return super.onOptionsItemSelected(item)
+        mOAuthLoginInstance.logout(applicationContext)
+
+        val toAddressSearch = Intent(this, AddressSearchActivity::class.java)
+        startActivity(toAddressSearch)
+
+        return true
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
     // 빌라정보등록

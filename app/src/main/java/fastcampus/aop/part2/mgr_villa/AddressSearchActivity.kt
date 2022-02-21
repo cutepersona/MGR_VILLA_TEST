@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.MutableLiveData
+import com.nhn.android.naverlogin.OAuthLogin
 import fastcampus.aop.part2.mgr_villa.Object.KakaoApiRetrofitClient
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
 import fastcampus.aop.part2.mgr_villa.database.VillaNoticeHelper
@@ -38,6 +39,8 @@ class AddressSearchActivity : AppCompatActivity() {
         )
     }
 
+    lateinit var mOAuthLoginInstance : OAuthLogin
+
     private val addrListItems = arrayListOf<AddrLayout>()                   // 리싸이클러 뷰 아이템
     private val addrListAdapter = KakaoApiAdapter(addrListItems)            // 리싸이클러 뷰 어댑터
 
@@ -48,6 +51,8 @@ class AddressSearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.rvAddrs.adapter = addrListAdapter
+
+        mOAuthLoginInstance = OAuthLogin.getInstance()
 
         if(intent.hasExtra("email")){
             binding.emailHidden.setText(intent.getStringExtra("email"))
@@ -104,6 +109,13 @@ class AddressSearchActivity : AppCompatActivity() {
 //        }).start()
 //    }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        mOAuthLoginInstance.logout(applicationContext)
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
+    }
+
     private fun initToolBar() {
         val toolbar = findViewById<Toolbar>(R.id.addrSearchToolbar)
         setSupportActionBar(toolbar)
@@ -114,15 +126,21 @@ class AddressSearchActivity : AppCompatActivity() {
 
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        when (id) {
-            android.R.id.home -> {
-                finish()
-                return true
-            }
-        }
+        mOAuthLoginInstance.logout(applicationContext)
+        val toMain = Intent(this, MainActivity::class.java)
+        startActivity(toMain)
 
-        return super.onOptionsItemSelected(item)
+        return true
+//
+//        val id = item.itemId
+//        when (id) {
+//            android.R.id.home -> {
+//                finish()
+//                return true
+//            }
+//        }
+//
+//        return super.onOptionsItemSelected(item)
     }
 
 
