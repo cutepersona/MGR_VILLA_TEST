@@ -173,7 +173,7 @@
                             android:layout_marginLeft="15dp"
                             android:layout_marginRight="15dp"
                             android:background="@drawable/gradient"
-                            app:layout_constraintBottom_toBottomOf="@+id/tenantIODropDown"
+                            app:layout_constraintBottom_toBottomOf="@+id/tenantIOEmail"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
 

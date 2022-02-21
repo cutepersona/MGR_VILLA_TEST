@@ -106,6 +106,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/mgrCostYearMonth"
                         android:textSize="25dp"
+                        android:layout_marginLeft="45dp"
                         app:layout_constraintBottom_toBottomOf="@+id/TenantCostRoomNumber"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/TenantCostRoomNumber"
@@ -119,13 +120,14 @@
                         android:src="@drawable/ic_calendar_month"
                         app:layout_constraintBottom_toBottomOf="@+id/TenantCostYearMonth"
                         app:layout_constraintStart_toEndOf="@+id/TenantCostYearMonth"
-                        app:layout_constraintTop_toTopOf="@+id/TenantCostYearMonth" />
+                        app:layout_constraintTop_toTopOf="@+id/TenantCostYearMonth"
+                        />
 
                     <TextView
                         android:id="@+id/TenantCostRoomNumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
+                        android:layout_marginLeft="20dp"
                         android:background="@drawable/change_phonenum_timer_shape"
                         android:paddingLeft="10dp"
                         android:paddingTop="5dp"
@@ -180,9 +182,9 @@
                     android:id="@+id/tenantCostAccountArea"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
+                    android:layout_marginLeft="20dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="20dp"
                     android:background="@drawable/change_phonenum_timer_shape"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

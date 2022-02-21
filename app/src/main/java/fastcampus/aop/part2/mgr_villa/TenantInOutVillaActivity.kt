@@ -234,8 +234,8 @@ class TenantInOutVillaActivity : AppCompatActivity() {
     // 전화번호 정규식 적용하기
     private fun initPhoneRegax(phoneNumber: String): String {
         var regaxPhoneNum: String = ""
-
-        val reg = Regex("^\\d{3}-\\d{3,4}-\\d{4}\$")
+//        val reg = Regex("^\\d{3}-\\d{3,4}-\\d{4}\$")
+        val reg = Regex("^01(?:0|1|[6-9])(?:\\d{3}|\\d{4})\\d{4}\$")
 
         if (phoneNumber.length == 11) {
             if (reg.matches(phoneNumber)) {

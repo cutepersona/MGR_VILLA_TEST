@@ -38,10 +38,16 @@ class TenantListForRequestActivity: AppCompatActivity() {
 //
 //    private var isNoticeFabOpen = false
 
+    private var naverCheck : String = ""
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        if(intent.hasExtra("N")){
+            naverCheck = intent.getStringExtra("N").toString()
+        }
 
         if (intent.hasExtra("requestAddress")){
             requestAddress = intent.getStringExtra("requestAddress").toString()
@@ -74,8 +80,16 @@ class TenantListForRequestActivity: AppCompatActivity() {
                         ))
 
                         showToast("전입을 요청하였습니다. 관리자 확인이 필요합니다.")
-                        val toLogin = Intent(context, LoginActivity::class.java )
-                        startActivity(toLogin)
+
+                        if (naverCheck.isNullOrEmpty()){
+                            val toLogin = Intent(context, LoginActivity::class.java )
+                            startActivity(toLogin)
+                        } else {
+                            val toMain = Intent(context, MainActivity::class.java )
+                            startActivity(toMain)
+                        }
+
+
 
 
 

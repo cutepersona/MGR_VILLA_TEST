@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.nhn.android.naverlogin.OAuthLogin
 import fastcampus.aop.part2.mgr_villa.Object.KakaoApiRetrofitClient
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiAdapter
 import fastcampus.aop.part2.mgr_villa.adapter.KakaoApiTenantAdapter
@@ -43,16 +44,25 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
 
     val firestoreDB = Firebase.firestore
 
+    // 네이버 아이디 로그인
+//    lateinit var mOAuthLoginInstance: OAuthLogin
+
     private val addrTenantListItems = arrayListOf<AddrTenantLayout>()                   // 리싸이클러 뷰 아이템
     private val addrListAdapter = KakaoApiTenantAdapter(addrTenantListItems)            // 리싸이클러 뷰 어댑터
 
     private val kakaoApi = KakaoApiRetrofitClient.apiService
+
+    private var naverCheck : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         binding.rvAddrsTenant.adapter = addrListAdapter
+
+        if(intent.hasExtra("N")){
+            naverCheck = intent.getStringExtra("N").toString()
+        }
 
         if(intent.hasExtra("email")){
             binding.emailHiddenTenant.setText(intent.getStringExtra("email"))
@@ -87,6 +97,7 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
                             return@addOnSuccessListener
                         } else {
                             val ToRequestAddr = Intent(v.context, TenantListForRequestActivity::class.java)
+                            ToRequestAddr.putExtra("N",naverCheck.trim())
                             ToRequestAddr.putExtra("requestAddress",addrTenantListItems[position].address_name.trim())
                             startActivity(ToRequestAddr)
                         }
@@ -126,8 +137,17 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        val toLogin = Intent(this, LoginActivity::class.java)
-        startActivity(toLogin)
+
+        if (naverCheck.isNullOrEmpty()){
+            val toLogin = Intent(this, LoginActivity::class.java)
+            startActivity(toLogin)
+        } else {
+//            mOAuthLoginInstance.logout(applicationContext)
+            val toMain = Intent(this, MainActivity::class.java)
+            startActivity(toMain)
+        }
+
+
     }
 
     private fun initToolBar() {
@@ -141,8 +161,14 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
     // 툴바 백버튼
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        val toLogin = Intent(this, LoginActivity::class.java)
-        startActivity(toLogin)
+        if (naverCheck.isNullOrEmpty()){
+            val toLogin = Intent(this, LoginActivity::class.java)
+            startActivity(toLogin)
+        } else {
+//            mOAuthLoginInstance.logout(applicationContext)
+            val toMain = Intent(this, MainActivity::class.java)
+            startActivity(toMain)
+        }
 
         return true
 //        val id = item.itemId

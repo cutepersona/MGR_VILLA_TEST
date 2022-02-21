@@ -97,84 +97,93 @@ class LoginActivity : AppCompatActivity() {
                         .document(binding.userEmailEditText.text.toString().trim())
                         .get()
                         .addOnSuccessListener { task ->
-                            if (task["mailAddress"].toString().equals(binding.userEmailEditText.text.toString().trim())
-                                && task["passWord"].toString().equals(binding.userPasswordEditText1.text.toString().trim())) {
-
-                                MyApplication.prefs.setString("email",task["mailAddress"].toString().trim())
-                                MyApplication.prefs.setString("pw",task["passWord"].toString().trim())
-                                MyApplication.prefs.setString("userType",task["userType"].toString().trim())
-//                                if(!task.exists()){
-
-                                // 관리자 정보 체크
-                                if (task["userType"].toString().equals("MGR")){
-                                    firestoreDB.collection("VillaInfo")
-                                        .whereEqualTo("mailAddress", binding.userEmailEditText.text.toString().trim())
-                                        .get()
-                                        .addOnSuccessListener { result ->
-                                            // 관리자 email로 등록된 집이 없음.
-                                            if (result.isEmpty) {
-//                                            showToast("집없고 관리자")
-                                                val addrSearchActivity = Intent(this, AddressSearchActivity::class.java)
-                                                addrSearchActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
-                                                startActivity(addrSearchActivity)
-                                            }
-                                            // 관리자 email로 등록된 집이 있음
-                                            if (!result.isEmpty){
-                                                for(i in result!!){
-                                                    MyApplication.prefs.setString("villaAddress", i.data["villaAddress"].toString().trim())
-                                                    break
-                                                }
-
-                                                val mgrHomeActivity = Intent(this, VillaHomeActivity::class.java)
-                                                mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
-//
-                                                startActivity(mgrHomeActivity)
-                                            }
-                                            // 세입자 email로 등록된 집이 없음
-
-                                        }
-                                        .addOnFailureListener {
-                                            showToast("로그인 정보 불러오기 실패")
-                                            return@addOnFailureListener
-                                        }
-
-                                }
-                                // 세입자 정보 체크
-                                else {
-                                    firestoreDB.collection("VillaTenant")
-                                        .whereEqualTo("tenantEmail", binding.userEmailEditText.text.toString().trim())
-                                        .get()
-                                        .addOnSuccessListener { task ->
-                                            if(task.isEmpty){
-                                                val addrSearchTenantActivity =
-                                                    Intent(this, AddressSearchForTenantActivity::class.java)
-                                                addrSearchTenantActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
-                                                startActivity(addrSearchTenantActivity)
-                                            } else {
-                                                firestoreDB.collection("VillaTenant")
-                                                    .whereEqualTo("tenantEmail", binding.userEmailEditText.text.toString().trim())
-                                                    .whereEqualTo("tenantStatus","IntoDone")
-                                                    .get()
-                                                    .addOnSuccessListener { task ->
-                                                        if(task.isEmpty){
-                                                            showToast("입주대기 중입니다. 관리자에게 문의바랍니다.")
-                                                        }else {
-                                                            val mgrHomeActivity = Intent(this, VillaHomeActivity::class.java)
-                                                            mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
-                                                            startActivity(mgrHomeActivity)
-                                                        }
-                                                    }.addOnFailureListener {
-                                                        showToast("로그인하지 못하였습니다. 관리자에게 문의 바랍니다.")
-                                                        return@addOnFailureListener
-                                                    }
-                                            }
-                                        }
-                                }
-
-                            } else {
-                                showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+                            if (task["signUpType"].toString().equals("N")){
+                                showToast("네이버로 가입된 계정입니다.")
                                 return@addOnSuccessListener
                             }
+                            else {
+                                if (task["mailAddress"].toString().equals(binding.userEmailEditText.text.toString().trim())
+                                    && task["passWord"].toString().equals(binding.userPasswordEditText1.text.toString().trim())) {
+
+                                    MyApplication.prefs.setString("email",task["mailAddress"].toString().trim())
+                                    MyApplication.prefs.setString("pw",task["passWord"].toString().trim())
+                                    MyApplication.prefs.setString("userType",task["userType"].toString().trim())
+//                                if(!task.exists()){
+
+                                    // 관리자 정보 체크
+                                    if (task["userType"].toString().equals("MGR")){
+                                        firestoreDB.collection("VillaInfo")
+                                            .whereEqualTo("mailAddress", binding.userEmailEditText.text.toString().trim())
+                                            .get()
+                                            .addOnSuccessListener { result ->
+                                                // 관리자 email로 등록된 집이 없음.
+                                                if (result.isEmpty) {
+//                                            showToast("집없고 관리자")
+                                                    val addrSearchActivity = Intent(this, AddressSearchActivity::class.java)
+                                                    addrSearchActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+                                                    startActivity(addrSearchActivity)
+                                                }
+                                                // 관리자 email로 등록된 집이 있음
+                                                if (!result.isEmpty){
+                                                    for(i in result!!){
+                                                        MyApplication.prefs.setString("villaAddress", i.data["villaAddress"].toString().trim())
+                                                        break
+                                                    }
+
+                                                    val mgrHomeActivity = Intent(this, VillaHomeActivity::class.java)
+                                                    mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+//
+                                                    startActivity(mgrHomeActivity)
+                                                }
+                                                // 세입자 email로 등록된 집이 없음
+
+                                            }
+                                            .addOnFailureListener {
+                                                showToast("로그인 정보 불러오기 실패")
+                                                return@addOnFailureListener
+                                            }
+
+                                    }
+                                    // 세입자 정보 체크
+                                    else {
+                                        firestoreDB.collection("VillaTenant")
+                                            .whereEqualTo("tenantEmail", binding.userEmailEditText.text.toString().trim())
+                                            .get()
+                                            .addOnSuccessListener { task ->
+                                                if(task.isEmpty){
+                                                    val addrSearchTenantActivity =
+                                                        Intent(this, AddressSearchForTenantActivity::class.java)
+                                                    addrSearchTenantActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+                                                    startActivity(addrSearchTenantActivity)
+                                                } else {
+                                                    firestoreDB.collection("VillaTenant")
+                                                        .whereEqualTo("tenantEmail", binding.userEmailEditText.text.toString().trim())
+                                                        .whereEqualTo("tenantStatus","IntoDone")
+                                                        .get()
+                                                        .addOnSuccessListener { task ->
+                                                            if(task.isEmpty){
+                                                                showToast("입주대기 중입니다. 관리자에게 문의바랍니다.")
+                                                            }else {
+                                                                val mgrHomeActivity = Intent(this, VillaHomeActivity::class.java)
+                                                                mgrHomeActivity.putExtra("email", binding.userEmailEditText.text.toString().trim())
+                                                                startActivity(mgrHomeActivity)
+                                                            }
+                                                        }.addOnFailureListener {
+                                                            showToast("로그인하지 못하였습니다. 관리자에게 문의 바랍니다.")
+                                                            return@addOnFailureListener
+                                                        }
+                                                }
+                                            }
+                                    }
+
+                                } else {
+                                    showToast("회원정보가 없거나 정보입력이 잘못되었습니다.")
+                                    return@addOnSuccessListener
+                                }
+                            }
+
+
+
 //                             }
                         }
 

@@ -1,18 +1,25 @@
 package fastcampus.aop.part2.mgr_villa
 
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.nhn.android.naverlogin.OAuthLogin
 import fastcampus.aop.part2.mgr_villa.customdialog.mgrCheckDialog
 import fastcampus.aop.part2.mgr_villa.databinding.ActivityChoiceMgrTenantBinding
+import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 
 class ChoiceMgrTenantActivity: AppCompatActivity() {
 
     private val binding: ActivityChoiceMgrTenantBinding by lazy { ActivityChoiceMgrTenantBinding.inflate(layoutInflater) }
+
+    val firestoreDB = Firebase.firestore
 
     lateinit var mOAuthLoginInstance : OAuthLogin
 
@@ -80,13 +87,61 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
     // tenant 버튼 클릭
     private fun initTenantButton() {
         binding.TenantButton.setOnClickListener {
-            val tenantSignUpActivity = Intent(this, SignUpActivity::class.java)
-            tenantSignUpActivity.putExtra("tenant","TENANT")
-            tenantSignUpActivity.putExtra("N","N")
-            tenantSignUpActivity.putExtra("Nemail",Nemail)
-            tenantSignUpActivity.putExtra("Nname",Nname)
-            tenantSignUpActivity.putExtra("Nmobile",Nmobile)
-            startActivity(tenantSignUpActivity)
+
+            if (intent.hasExtra("N")){
+
+                val users = firestoreDB.collection("VillaUsers")
+
+                val VillaUsers = hashMapOf(
+                    "mailAddress" to Nemail.trim(),
+                    "roomNumber" to "0",
+                    "userName" to Nname.trim(),
+                    "passWord" to "",
+                    "phoneNumber" to Nmobile.trim(),
+                    "userType" to "TENANT",
+                    "signUpType" to "N"
+                )
+
+                users.document(Nemail.trim())
+                    .set(VillaUsers)
+                    .addOnSuccessListener { documentReference ->
+
+//                        showToast("회원가입을 환영합니다.")
+
+
+                        firestoreDB.collection("VillaTenant")
+                            .whereEqualTo("tenantEmail", Nemail.trim())
+                            .get()
+                            .addOnSuccessListener { task ->
+                                if(task.isEmpty){
+                                    val addrSearchTenantActivity =
+                                        Intent(this, AddressSearchForTenantActivity::class.java)
+                                    addrSearchTenantActivity.putExtra("N", "N")
+                                    addrSearchTenantActivity.putExtra("email", Nemail.trim())
+                                    startActivity(addrSearchTenantActivity)
+                                }
+                            }
+
+//                        val toLogin = Intent(this, LoginActivity::class.java)
+//                        startActivity(toLogin)
+                    }
+                    .addOnFailureListener { e ->
+                        showToast("회원가입에 실패하였습니다.")
+                        Log.w(ContentValues.TAG, "Error adding document", e)
+                        return@addOnFailureListener
+                    }
+
+//                tenantSignUpActivity.putExtra("N","N")
+//                tenantSignUpActivity.putExtra("Nemail",Nemail)
+//                tenantSignUpActivity.putExtra("Nname",Nname)
+//                tenantSignUpActivity.putExtra("Nmobile",Nmobile)
+            } else {
+                val tenantSignUpActivity = Intent(this, SignUpActivity::class.java)
+                tenantSignUpActivity.putExtra("tenant","TENANT")
+                startActivity(tenantSignUpActivity)
+            }
+
+
 
         }
     }

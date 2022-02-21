@@ -638,7 +638,8 @@ class SignUpActivity : AppCompatActivity() {
                     "userName" to userNameEditText.text.toString().trim(),
                     "passWord" to userPasswordEditText1.text.toString().trim(),
                     "phoneNumber" to userPhoneNumberEditText.text.toString().trim(),
-                    "userType" to binding.emptyButtomUp.text.toString().trim()
+                    "userType" to binding.emptyButtomUp.text.toString().trim(),
+                    "signUpType" to ""
                 )
 //
 //                firestoreDB.collection("VillaUsers")

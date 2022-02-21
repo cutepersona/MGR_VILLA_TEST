@@ -11,6 +11,8 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.AuthErrorCause.*
 import com.kakao.sdk.user.UserApiClient
@@ -37,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     private val binding: ActivityMainBinding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
+    val firestoreDB = Firebase.firestore
 
     private val mainLogo: TextView by lazy{
         findViewById(R.id.MainText)
@@ -103,29 +107,97 @@ class MainActivity : AppCompatActivity() {
                 requestHeaders["Authorization"] = header
 
 
-
                 Thread(Runnable {
                     val responseBody = get(url, requestHeaders)
+                    val loginResult = JSONObject(responseBody)
+                    val response: JSONObject = loginResult.getJSONObject("response")
 
-                    runOnUiThread{
-                        val loginResult = JSONObject(responseBody)
-                        val response: JSONObject = loginResult.getJSONObject("response")
+                    val email = response.getString("email")
+                    val mobile = response.getString("mobile").replace("-","")
+                    val name = response.getString("name")
 
-                        val email = response.getString("email")
-                        val mobile = response.getString("mobile").replace("-","")
-                        val name = response.getString("name")
-
-                        val toTenantDiv = Intent(this@MainActivity, ChoiceMgrTenantActivity::class.java)
-                        toTenantDiv.putExtra("N","NAVER")
-                        toTenantDiv.putExtra("Nemail",email)
-                        toTenantDiv.putExtra("Nname",name)
-                        toTenantDiv.putExtra("Nmobile",mobile)
-                        startActivity(toTenantDiv)
-
-
-                    }
+                    firestoreDB.collection("VillaUsers")
+                        .document(email)
+                        .get()
+                        .addOnSuccessListener { task ->
+                            if (task.exists()){
+                                MyApplication.prefs.setString("email",email.trim())
+                                MyApplication.prefs.setString("userType",task["userType"].toString().trim())
+                                   firestoreDB.collection("VillaTenant")
+                                        .whereEqualTo("tenantEmail", email.trim())
+                                        .get()
+                                        .addOnSuccessListener { task ->
+                                            if(task.isEmpty){
+                                                val addrSearchTenantActivity = Intent(this@MainActivity, AddressSearchForTenantActivity::class.java)
+                                                addrSearchTenantActivity.putExtra("N", "N")
+                                                addrSearchTenantActivity.putExtra("email", email.trim())
+                                                startActivity(addrSearchTenantActivity)
+                                            } else {
+                                                firestoreDB.collection("VillaTenant")
+                                                    .whereEqualTo("tenantEmail", email.trim())
+                                                    .whereEqualTo("tenantStatus","IntoDone")
+                                                    .get()
+                                                    .addOnSuccessListener { task ->
+                                                        if(task.isEmpty){
+                                                            showToast("입주대기 중입니다. 관리자에게 문의바랍니다.")
+                                                        }else {
+                                                            val mgrHomeActivity = Intent(this@MainActivity, VillaHomeActivity::class.java)
+                                                            mgrHomeActivity.putExtra("email", email.trim())
+                                                            startActivity(mgrHomeActivity)
+                                                        }
+                                                    }.addOnFailureListener {
+                                                        showToast("로그인하지 못하였습니다. 관리자에게 문의 바랍니다.")
+                                                        return@addOnFailureListener
+                                                    }
+                                            }
+                                        }
+                            } else {
+                                // 회원가입 안되어 있을때
+                                val toTenantDiv = Intent(this@MainActivity, ChoiceMgrTenantActivity::class.java)
+                                toTenantDiv.putExtra("N","NAVER")
+                                toTenantDiv.putExtra("Nemail",email)
+                                toTenantDiv.putExtra("Nname",name)
+                                toTenantDiv.putExtra("Nmobile",mobile)
+                                startActivity(toTenantDiv)
+                            }
+                        }
 
                 }).start()
+
+
+
+//                Thread(Runnable {
+//                    val responseBody = get(url, requestHeaders)
+//
+//                    runOnUiThread{
+//                        val loginResult = JSONObject(responseBody)
+//                        val response: JSONObject = loginResult.getJSONObject("response")
+//
+//                        val email = response.getString("email")
+//                        val mobile = response.getString("mobile").replace("-","")
+//                        val name = response.getString("name")
+//
+//                        firestoreDB.collection("VillaUsers")
+//                            .document(email)
+//                            .get()
+//                            .addOnCompleteListener { task ->
+//                                if (task.isSuccessful){
+//                                     showToast("text")
+////                                    if (task["mailAddress"].toString().equals(email.trim())){
+////
+////                                    }
+//                                } else {
+//                                    val toTenantDiv = Intent(this@MainActivity, ChoiceMgrTenantActivity::class.java)
+//                                    toTenantDiv.putExtra("N","NAVER")
+//                                    toTenantDiv.putExtra("Nemail",email)
+//                                    toTenantDiv.putExtra("Nname",name)
+//                                    toTenantDiv.putExtra("Nmobile",mobile)
+//                                    startActivity(toTenantDiv)
+//                                }
+//                            }
+//                    }
+//
+//                }).start()
 
 
 //                var intent = Intent(this, )
@@ -133,10 +205,10 @@ class MainActivity : AppCompatActivity() {
                 val errorCode: String = mOAuthLoginInstance.getLastErrorCode(mContext).code
                 val errorDesc = mOAuthLoginInstance.getLastErrorDesc(mContext)
 
-                Toast.makeText(
-                    baseContext, "errorCode:" + errorCode
-                            + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT
-                ).show()
+//                Toast.makeText(
+//                    baseContext, "errorCode:" + errorCode
+//                            + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT
+//                ).show()
             }
         }
     }
@@ -314,7 +386,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun autoLogin(){
         if (MyApplication.prefs.getString("email","") != ""
-            && MyApplication.prefs.getString("pw","") != ""
+//            && MyApplication.prefs.getString("pw","") != ""
             && MyApplication.prefs.getString("villaAddress","") != ""
         ){
             val mgrHomeActivity =
