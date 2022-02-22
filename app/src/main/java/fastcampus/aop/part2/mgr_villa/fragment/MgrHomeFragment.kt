@@ -2,11 +2,13 @@ package fastcampus.aop.part2.mgr_villa.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.ktx.firestore
@@ -16,6 +18,8 @@ import fastcampus.aop.part2.mgr_villa.databinding.MgrHomeFragmentBinding
 import fastcampus.aop.part2.mgr_villa.sharedPreferences.MyApplication
 import kotlinx.android.synthetic.main.mgr_home_fragment.*
 import kotlinx.android.synthetic.main.villa_tenant_fragment_in_home.*
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class MgrHomeFragment() :Fragment(){
 
@@ -74,11 +78,19 @@ class MgrHomeFragment() :Fragment(){
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.hAddress.text = arguments?.getString("address")
         binding.hRoomNumber.text = arguments?.getString("roomNumber")
         binding.hRoadAddress.text = arguments?.getString("roadAddress")
+
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일")
+        val formatted = current.format(formatter)
+
+        binding.hToday.setText(formatted)
+
 
 //        showToast(currentCount.toString())
 
