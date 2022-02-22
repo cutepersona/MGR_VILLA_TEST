@@ -60,13 +60,12 @@ class VillaHomeActivity : AppCompatActivity() {
 
         startShimmerEffect()
 
-
         val handler = Handler()
         handler.postDelayed({
             initHomeFragment()
-            initHomeBottomNavigationBar()
-        }, 2000)
+        }, 1000)
 
+        initHomeBottomNavigationBar()
 
 //            binding.homeShimmerFrameLayout.visibility = View.GONE
 //
