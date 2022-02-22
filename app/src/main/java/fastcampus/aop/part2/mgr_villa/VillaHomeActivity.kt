@@ -2,10 +2,13 @@ package fastcampus.aop.part2.mgr_villa
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.firestore.ktx.firestore
@@ -55,12 +58,46 @@ class VillaHomeActivity : AppCompatActivity() {
 
 //        showToast(MyApplication.prefs.getString("villaAddress","").trim())
 
-        initHomeFragment()
-        initHomeBottomNavigationBar()
+        startShimmerEffect()
+
+
+        val handler = Handler()
+        handler.postDelayed({
+            initHomeFragment()
+            initHomeBottomNavigationBar()
+        }, 2000)
+
+
+//            binding.homeShimmerFrameLayout.visibility = View.GONE
+//
+//        if (binding.homeShimmerFrameLayout.isShimmerStarted){
+//
+//
+//            binding.homeShimmerFrameLayout.visibility = View.GONE
+//            binding.homeShimmerFrameLayout.stopShimmer()
+//
+//        }
 
 //        setBindingFragment()
 
     }
+
+    private fun startShimmerEffect() {
+        binding.homeShimmerFrameLayout.visibility = View.VISIBLE
+        binding.homeShimmerFrameLayout.startShimmer()
+    }
+
+//
+//    override fun onResume() {
+//        super.onResume()
+//        binding.homeShimmerFrameLayout.startShimmer()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        binding.homeShimmerFrameLayout.stopShimmer()
+//    }
+
 
     // 하단 네비게이션 바
     private fun initHomeBottomNavigationBar() {
@@ -80,7 +117,6 @@ class VillaHomeActivity : AppCompatActivity() {
 
             true
         }
-
 
     }
 
@@ -315,6 +351,8 @@ class VillaHomeActivity : AppCompatActivity() {
                     }
 
             }
+
+
 //-------------------------------------------------------------------------------------------
 //        Thread(Runnable {
 //            Thread.sleep(100L)              // 현재 세입자 정보를 바로 못가져와서 Sleep 줌
@@ -415,6 +453,13 @@ class VillaHomeActivity : AppCompatActivity() {
 //        }).start()
             //-------------------------------------------------------------------------------------------
         }
+
+
+        if (binding.homeShimmerFrameLayout.isShimmerStarted){
+            binding.homeShimmerFrameLayout.stopShimmer()
+            binding.homeShimmerFrameLayout.visibility = View.GONE
+        }
+
     }
 
     // HomeFragment에서 하위 Fragment생성
