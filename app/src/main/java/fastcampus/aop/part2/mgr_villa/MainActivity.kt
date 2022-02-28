@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -42,7 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     val firestoreDB = Firebase.firestore
 
-    private val mainLogo: TextView by lazy{
+    private val mainLogo: ImageView by lazy{
         findViewById(R.id.MainText)
     }
 
@@ -363,13 +364,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.MainKakaoButton.setOnClickListener {
-            if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
-                UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
-            }else{
-                UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
-            }
-        }
+//        binding.MainKakaoButton.setOnClickListener {
+//            if(UserApiClient.instance.isKakaoTalkLoginAvailable(this)){
+//                UserApiClient.instance.loginWithKakaoTalk(this, callback = callback)
+//            }else{
+//                UserApiClient.instance.loginWithKakaoAccount(this, callback = callback)
+//            }
+//        }
     }
 
 

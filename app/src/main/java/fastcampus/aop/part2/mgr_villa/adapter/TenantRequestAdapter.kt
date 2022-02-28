@@ -65,9 +65,9 @@ class TenantRequestAdapter(val tenantList: ArrayList<VillaTenant>): RecyclerView
         holder.requestRoomId.text = tenantList[position].roomId
 
         if (!tenantList[position].tenantEmail.equals("")){
-            holder.tenantStatus.setImageResource(R.drawable.intohome)
+            holder.tenantStatus.setImageResource(R.drawable.outhome)
         } else {
-            holder.tenantStatus.setImageResource(R.drawable.emptyhome)
+            holder.tenantStatus.setImageResource(R.drawable.inhome)
         }
 
 

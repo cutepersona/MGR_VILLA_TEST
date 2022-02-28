@@ -26,7 +26,7 @@ class MyInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        Glide.with(this).load(R.raw.chunsic).into(binding.MyInfoImage)
+//        Glide.with(this).load(R.raw.chunsic).into(binding.MyInfoImage)
 
         initToolBar()
         initMyInfo()
