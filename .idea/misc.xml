@@ -8,6 +8,7 @@
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable-v24/my_info_image_shape.xml" value="0.196875" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/activity_login.xml" value="0.3731481481481482" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/add_bottom_shape.xml" value="0.184375" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/add_button_shape.xml" value="0.1555" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/background_underline.xml" value="0.3592592592592593" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/button_background.xml" value="0.20833333333333334" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/drawable/button_wrong_background.xml" value="0.221875" />
@@ -83,7 +84,7 @@
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_accounts.xml" value="0.25" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_address.xml" value="0.18229166666666666" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_banks.xml" value="0.22" />
-        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_costtenants.xml" value="0.19427083333333334" />
+        <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_costtenants.xml" value="0.25" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_notices.xml" value="0.25" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_requesttenants.xml" value="0.2" />
         <entry key="..\:/Users/TAMAMA/AndroidStudioProjects/mgr_villa/app/src/main/res/layout/recycleview_tenants.xml" value="0.33" />

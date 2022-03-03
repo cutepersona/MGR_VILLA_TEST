@@ -16,4 +16,6 @@
 <!-- delete color-->
     <color name="del_button_background">#97B35D</color>
 
+    <color name="tenantList_date_background">#B8CC8B</color>
+
 </resources>

@@ -82,7 +82,7 @@
             android:id="@+id/AddTenantButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_background"
+            android:background="@drawable/add_button_shape"
             android:src="@drawable/ic_add_circle"
             app:layout_constraintBottom_toBottomOf="@+id/tenantRoomNumberEditText"
             app:layout_constraintEnd_toEndOf="@+id/tenantRoomNumberEditText"

@@ -177,6 +177,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                         if (!tenantCostResult.isEmpty) {
                             for(i in tenantCostResult!!){
                                 binding.CostUid.setText(i.id)
+
                                 binding.CostRoomNumber.setText(i.data["roomNumber"].toString())
                                 binding.TotalCostValue.setText(i.data["totalCost"].toString())
                                 binding.WriteWaterTon.setText( ( ( i.data["useTon"].toString().toFloat() * 10 ).roundToInt() / 10f ).toString() )
@@ -205,6 +206,8 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
                             val noTenantCostDialog = NoTenantCostDialog(this@TenantRoomCostForMGRActivity)
                             noTenantCostDialog.showDialog()
+
+                            binding.CostRoomNumber.setText(tenantRoomNumber)
 
                             binding.ConstTonCost.setText("0")
                             binding.ConstCleanCost.setText("0")
@@ -437,7 +440,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
                             val VillaTenantCost = hashMapOf(
                                 "costId" to "0",
-                                "roomNumber" to binding.CostRoomNumber.text.toString().trim(),
+                                "roomNumber" to tenantRoomNumber,
                                 "totalCost" to binding.TotalCostValue.text.toString().replace(",","").toInt(),
                                 "costYear" to binding.CostYearMonth.text.substring(0,4),
                                 "costMonth" to binding.CostYearMonth.text.substring(5,7),
@@ -451,7 +454,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                                 "villaAddr" to MyApplication.prefs.getString("villaAddress", "").trim()
                             )
 
-                            villaTenantCost.document(MyApplication.prefs.getString("villaAddress", "").trim() + "_" + binding.CostRoomNumber.text.toString().trim() + "_" + binding.CostYearMonth.text.substring(0,4) + "_" + binding.CostYearMonth.text.substring(5,7))
+                            villaTenantCost.document(MyApplication.prefs.getString("villaAddress", "").trim() + "_" + tenantRoomNumber.trim() + "_" + binding.CostYearMonth.text.substring(0,4) + "_" + binding.CostYearMonth.text.substring(5,7))
                                 .set(VillaTenantCost)
                                 .addOnSuccessListener { documentReference ->
 //                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
@@ -561,7 +564,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
             month.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
 
             // 최소값 설정
-            year.minValue = 2017
+            year.minValue = 2019
             month.minValue = 1
 
             // 최대값 설정
@@ -805,9 +808,12 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                             }
                         }
                 } else {
+
                     // 등록이력이 없을 때
                     val noTenantCostDialog = NoTenantCostDialog(this@TenantRoomCostForMGRActivity)
                     noTenantCostDialog.showDialog()
+
+                    binding.CostRoomNumber.setText(tenantRoomNumber.trim())
 
                     binding.ConstTonCost.setText("0")
                     binding.ConstCleanCost.setText("0")
@@ -816,7 +822,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
 
 
                     // 초기 톤수 셋팅 1.0 값
-                    binding.WriteWaterTon.setText(0.toFloat().toString())
+                    binding.WriteWaterTon.setText(1.toFloat().toString())
 
                     waterValue = binding.WriteWaterTon.text.toString()
                         .toFloat() * binding.ConstTonCost.text.toString().replace(",", "")
