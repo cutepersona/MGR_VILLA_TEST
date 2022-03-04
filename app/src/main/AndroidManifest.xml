@@ -42,6 +42,8 @@
             </intent-filter>
         </activity>
 
+<!--        <activity android:name=".SplashActivity"/>-->
+
         <activity android:name=".SignUpActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize"/>

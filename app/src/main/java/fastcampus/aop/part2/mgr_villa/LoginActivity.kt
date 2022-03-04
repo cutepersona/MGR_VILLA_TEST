@@ -201,7 +201,7 @@ class LoginActivity : AppCompatActivity() {
                     return@addOnCompleteListener
                 }
             }
-            .addOnFailureListener {
+            .addOnFailureListener { it ->
                 showToast("회원정보를 불러오지 못했습니다.")
                 return@addOnFailureListener
             }

@@ -107,7 +107,6 @@ class MainActivity : AppCompatActivity() {
                 val requestHeaders: MutableMap<String, String> = HashMap()
                 requestHeaders["Authorization"] = header
 
-
                 Thread(Runnable {
                     val responseBody = get(url, requestHeaders)
                     val loginResult = JSONObject(responseBody)
@@ -199,6 +198,8 @@ class MainActivity : AppCompatActivity() {
                                 toTenantDiv.putExtra("Nmobile",mobile)
                                 startActivity(toTenantDiv)
                             }
+                        }.addOnFailureListener { it ->
+                            showToast(it.message.toString())
                         }
 
                 }).start()

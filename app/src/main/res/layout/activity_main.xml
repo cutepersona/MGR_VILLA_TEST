@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/MainLogoLayout"
         android:layout_width="0dp"
@@ -16,6 +20,9 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_weight="2">
+
+
+
 
         <ImageView
             android:id="@+id/MainText"
