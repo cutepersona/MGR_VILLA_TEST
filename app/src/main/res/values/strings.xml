@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MGR_VILLA</string>
+    <string name="app_name">우리빌</string>
     <string name="login_email">계정으로 로그인 하기</string>
     <string name="DoLogin">로그인 하기</string>
     <string name="login">로그인</string>

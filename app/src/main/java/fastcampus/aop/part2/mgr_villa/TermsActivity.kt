@@ -21,7 +21,7 @@ class TermsActivity : AppCompatActivity() {
         initToolBar()
 
         binding.TermsText.setText(
-            "VILLA MGR 서비스 및 콘텐츠 이용약관\n" +
+            "우리빌(WRV) 서비스 및 콘텐츠 이용약관\n" +
                     "\n" +
                     "       제1장 총칙\n" +
                     "\n" +
