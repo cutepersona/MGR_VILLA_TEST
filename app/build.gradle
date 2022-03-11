@@ -13,8 +13,8 @@ android {
         applicationId "fastcampus.aop.part2.mgr_villa"
         minSdk 23
         targetSdk 31
-        versionCode 3
-        versionName "1.1.1"
+        versionCode 4
+        versionName "1.1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -49,6 +49,8 @@ dependencies {
 
     // 스와이프
     implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
+
+    implementation 'com.google.android.gms:play-services-auth:20.1.0'
 
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
 

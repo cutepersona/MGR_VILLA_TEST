@@ -3,8 +3,10 @@
     package="fastcampus.aop.part2.mgr_villa"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.RECEIVE_SMS"/>
+<!--    <uses-permission android:name="android.permission.RECEIVE_SMS"/>-->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+
 
     <application
         android:name=".kakaodata.GlobalApplication"
@@ -16,6 +18,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Mgr_villa"
         >
+<!--        <receiver android:name=".MySMSBroadcastReceiver" android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="com.google.android.gms.auth.api.phone.SMS_RETRIEVED"/>-->
+<!--            </intent-filter>-->
+<!--        </receiver>-->
+
         <activity
         android:name=".SplashActivity"
         android:exported="true"
