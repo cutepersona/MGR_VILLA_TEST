@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.nhn.android.naverlogin.OAuthLogin
@@ -20,6 +21,7 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
     private val binding: ActivityChoiceMgrTenantBinding by lazy { ActivityChoiceMgrTenantBinding.inflate(layoutInflater) }
 
     val firestoreDB = Firebase.firestore
+    val auth = Firebase.auth
 
     lateinit var mOAuthLoginInstance : OAuthLogin
 
@@ -84,6 +86,8 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
 //        return super.onOptionsItemSelected(item)
     }
 
+
+
     // tenant 버튼 클릭
     private fun initTenantButton() {
         binding.TenantButton.setOnClickListener {
@@ -102,34 +106,45 @@ class ChoiceMgrTenantActivity: AppCompatActivity() {
                     "signUpType" to "N"
                 )
 
-                users.document(Nemail.trim())
-                    .set(VillaUsers)
-                    .addOnSuccessListener { documentReference ->
+                auth.signInAnonymously()
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            val user = auth.currentUser
+
+
+                            users.document(Nemail.trim())
+                                .set(VillaUsers)
+                                .addOnSuccessListener { documentReference ->
 
 //                        showToast("회원가입을 환영합니다.")
 
 
-                        firestoreDB.collection("VillaTenant")
-                            .whereEqualTo("tenantEmail", Nemail.trim())
-                            .get()
-                            .addOnSuccessListener { task ->
-                                if(task.isEmpty){
-                                    val addrSearchTenantActivity =
-                                        Intent(this, AddressSearchForTenantActivity::class.java)
-                                    addrSearchTenantActivity.putExtra("N", "N")
-                                    addrSearchTenantActivity.putExtra("email", Nemail.trim())
-                                    startActivity(addrSearchTenantActivity)
-                                }
-                            }
+                                    firestoreDB.collection("VillaTenant")
+                                        .whereEqualTo("tenantEmail", Nemail.trim())
+                                        .get()
+                                        .addOnSuccessListener { task ->
+                                            if(task.isEmpty){
+                                                val addrSearchTenantActivity =
+                                                    Intent(this, AddressSearchForTenantActivity::class.java)
+                                                addrSearchTenantActivity.putExtra("N", "N")
+                                                addrSearchTenantActivity.putExtra("email", Nemail.trim())
+                                                startActivity(addrSearchTenantActivity)
+                                            }
+                                        }
 
 //                        val toLogin = Intent(this, LoginActivity::class.java)
 //                        startActivity(toLogin)
+                                }
+                                .addOnFailureListener { e ->
+                                    showToast("회원가입에 실패하였습니다.")
+                                    Log.w(ContentValues.TAG, "Error adding document", e)
+                                    return@addOnFailureListener
+                                }
+
+
+                        }
                     }
-                    .addOnFailureListener { e ->
-                        showToast("회원가입에 실패하였습니다.")
-                        Log.w(ContentValues.TAG, "Error adding document", e)
-                        return@addOnFailureListener
-                    }
+
 
 //                tenantSignUpActivity.putExtra("N","N")
 //                tenantSignUpActivity.putExtra("Nemail",Nemail)

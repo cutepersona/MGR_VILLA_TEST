@@ -146,12 +146,23 @@ class AddressSearchActivity : AppCompatActivity() {
 
     private fun initAddrSearchEditText(){
         binding.AddressEditText.setOnKeyListener { v, keyCode, event ->
-//            if (event.action == KeyEvent.KEYCODE_BACK){
+            if (event.getAction() == KeyEvent.ACTION_DOWN
+                && event.getKeyCode() == KeyEvent.KEYCODE_DEL){
                 binding.AddressEditText.setText("")
                 addrListItems.clear()
                 addrListAdapter.notifyDataSetChanged()
-//            }
+            }
 
+            if((event.getAction() == KeyEvent.ACTION_DOWN) && keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (binding.AddressEditText.text.toString().contains("-")
+                    && !binding.AddressEditText.text.toString().equals("길동")
+                    && !binding.AddressEditText.text.toString().equals("동길")
+                ){
+                    callKakaoAddress(binding.AddressEditText.text.toString())
+                }else{
+                    callKakaoKeyword(binding.AddressEditText.text.toString())
+                }
+            }
             true
         }
 
@@ -210,16 +221,14 @@ class AddressSearchActivity : AppCompatActivity() {
 
             for(document in searchResult!!.documents){
                 // 결과를 리싸이클러 뷰에 추가
-                var item = AddrLayout(document.road_address.address_name
+                val item = AddrLayout(document.road_address.address_name
                     ,document.address.address_name
                     ,""
                 )
                 addrListItems.add(item)
+                addrListItems.distinct()
             }
-
             addrListAdapter.notifyDataSetChanged()
-
-
         } else {
             showToast("검색 결과가 없습니다.")
         }
@@ -230,19 +239,17 @@ class AddressSearchActivity : AppCompatActivity() {
         if (!searchResult?.documents.isNullOrEmpty()){
 
             addrListItems.clear()
-
+        
             for(document in searchResult!!.documents){
                 // 결과를 리싸이클러 뷰에 추가
-                var item = AddrLayout(document.road_address_name
+                val item = AddrLayout(document.road_address_name
                                     ,document.address_name
                                     ,document.place_name
                 )
                 addrListItems.add(item)
+                addrListItems.distinct()
             }
-
             addrListAdapter.notifyDataSetChanged()
-
-
         } else {
             showToast("검색 결과가 없습니다.")
         }

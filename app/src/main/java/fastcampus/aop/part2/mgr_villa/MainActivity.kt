@@ -12,6 +12,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.kakao.sdk.auth.model.OAuthToken
@@ -41,6 +43,8 @@ class MainActivity : AppCompatActivity() {
         ActivityMainBinding.inflate(layoutInflater)
     }
 
+    private lateinit var auth: FirebaseAuth
+
     val firestoreDB = Firebase.firestore
 
     private val mainLogo: ImageView by lazy{
@@ -67,6 +71,9 @@ class MainActivity : AppCompatActivity() {
 
         val shake = AnimationUtils.loadAnimation(this, R.anim.shake)
         mainLogo.startAnimation(shake)
+
+        auth = Firebase.auth
+        auth.setLanguageCode("kr")
 
         autoLogin()
 

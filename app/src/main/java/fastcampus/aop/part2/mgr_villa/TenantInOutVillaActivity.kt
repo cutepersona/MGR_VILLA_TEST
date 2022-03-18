@@ -353,13 +353,17 @@ class TenantInOutVillaActivity : AppCompatActivity() {
                         for (i in task.result!!) {
                             binding.tenantIOEmail.setText(i.data["mailAddress"].toString())
                             binding.tenantIOTenantName.setText(i.data["userName"].toString())
-                            binding.tenantIOContractDate.setText("-")
-                            binding.tenantIOLeaveDate.setText("-")
+                            binding.tenantIOContractDate.setText("")
+                            binding.tenantIOLeaveDate.setText("")
                             binding.tenantIOTenantPhone.setText(initPhoneRegax(i.data["phoneNumber"].toString()))
                             break
                         }
                     }
                 }
+
+            binding.ContractDateCalendar.isVisible = false
+            binding.LeaveDateCalendar.isVisible = false
+
 
 //            Thread(Runnable {
 //                    val villaNoticedb = VillaNoticeHelper.getInstance(applicationContext)

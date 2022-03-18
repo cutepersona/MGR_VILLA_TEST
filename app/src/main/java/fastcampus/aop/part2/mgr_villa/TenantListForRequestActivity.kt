@@ -127,8 +127,11 @@ class TenantListForRequestActivity: AppCompatActivity() {
 //                    .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress",""))
                     .get()
                     .addOnSuccessListener { task ->
-                        if(!task["tenantEmail"].toString().equals("")){
-                            showToast("이미 거주 중에 있어 입주요청 할 수 없습니다.")
+                        if(task["tenantStatus"].toString().equals("IntoDone")){
+                            showToast("이미 거주중인 가구 입니다.")
+                            return@addOnSuccessListener
+                        } else if (task["tenantStatus"].toString().equals("Request")) {
+                            showToast("입주요청 대기 상태인 가구 입니다.")
                             return@addOnSuccessListener
                         } else {
                             RequestDialog.showDialog(TenantRequestListItems[position].roomNumber, TenantRequestListItems[position].roomId)

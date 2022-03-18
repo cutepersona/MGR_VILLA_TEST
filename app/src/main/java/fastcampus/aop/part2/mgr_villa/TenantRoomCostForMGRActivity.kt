@@ -13,6 +13,7 @@ import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -103,14 +104,14 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
     }
 
     private fun initFocusEditText() {
-        binding.WriteWaterTon.setOnFocusChangeListener(object : View.OnFocusChangeListener {
-            override fun onFocusChange(v: View?, hasFocus: Boolean) {
-                if (hasFocus){
-                    scrollY = 0
-                    binding.MgrCostScrollView.smoothScrollToView(binding.WriteWaterTon)
-                }
-            }
-        })
+//        binding.WriteWaterTon.setOnFocusChangeListener(object : View.OnFocusChangeListener {
+//            override fun onFocusChange(v: View?, hasFocus: Boolean) {
+//                if (hasFocus){
+//                    scrollY = 0
+//                    binding.MgrCostScrollView.smoothScrollToView(binding.WriteWaterTon)
+//                }
+//            }
+//        })
     }
 
     fun ScrollView.smoothScrollToView(
@@ -208,11 +209,11 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                             noTenantCostDialog.showDialog()
 
                             binding.CostRoomNumber.setText(tenantRoomNumber)
-
-                            binding.ConstTonCost.setText("0")
-                            binding.ConstCleanCost.setText("0")
-                            binding.ConstUsunCost.setText("0")
-                            binding.ConstMgrCost.setText("0")
+//
+//                            binding.ConstTonCost.setText("0")
+//                            binding.ConstCleanCost.setText("0")
+//                            binding.ConstUsunCost.setText("0")
+//                            binding.ConstMgrCost.setText("0")
 
                             // 초기 톤수 셋팅 1.0 값
                             binding.WriteWaterTon.setText(0.toFloat().toString())
@@ -431,6 +432,9 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                                         startActivity(toCostList)
                                     }
                                 break
+                            } else {
+                                showToast("키패드의 완료 버튼을 클릭해주세요.")
+                                return@addOnSuccessListener
                             }
                         }
                     } else {
@@ -467,7 +471,7 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                                     return@addOnFailureListener
                                 }
                         } else {
-                            showToast("톤 수 수정후 완료 버튼을 클릭해주세요.")
+                            showToast("키패드의 완료 버튼을 클릭해주세요.")
                             return@addOnSuccessListener
                         }
                     }
@@ -619,9 +623,10 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                tonUpdateFlag = false
                 if(binding.WriteWaterTon.text.isNullOrEmpty()){
                     showToast("톤수를 입력해 주세요.")
-                    binding.WriteWaterTon.setText("1.0")
+//                    binding.WriteWaterTon.setText("1.0")
                     binding.WriteWaterTon.setSelection(binding.WriteWaterTon.length())
                     return
                 }
@@ -633,9 +638,9 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
     private fun initWriteTon() {
         binding.WriteWaterTon.setOnEditorActionListener { v, actionId, event ->
 
-            val handled = false
+            var handled = false
 
-                if(actionId == EditorInfo.IME_ACTION_DONE) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
                     firestoreDB.collection("StandardCost")
                         .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
                         .get()
@@ -656,13 +661,13 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                                 totalValue = waterValue.toInt() + binding.ConstCleanCost.text.toString().replace(",","").toInt() + binding.ConstUsunCost.text.toString().replace(",","").toInt() +binding.ConstMgrCost.text.toString().replace(",","").toInt()
                                 binding.TotalCostValue.setText(totalValue.toString())
 
-//                handled = true
+
                                 tonUpdateFlag = true
                             }
 
 
                         }
-
+                    handled = true
                 }
                 handled
 
@@ -814,15 +819,15 @@ class TenantRoomCostForMGRActivity: AppCompatActivity() {
                     noTenantCostDialog.showDialog()
 
                     binding.CostRoomNumber.setText(tenantRoomNumber.trim())
-
-                    binding.ConstTonCost.setText("0")
-                    binding.ConstCleanCost.setText("0")
-                    binding.ConstUsunCost.setText("0")
-                    binding.ConstMgrCost.setText("0")
+//
+//                    binding.ConstTonCost.setText("0")
+//                    binding.ConstCleanCost.setText("0")
+//                    binding.ConstUsunCost.setText("0")
+//                    binding.ConstMgrCost.setText("0")
 
 
                     // 초기 톤수 셋팅 1.0 값
-                    binding.WriteWaterTon.setText(1.toFloat().toString())
+//                    binding.WriteWaterTon.setText(1.toFloat().toString())
 
                     waterValue = binding.WriteWaterTon.text.toString()
                         .toFloat() * binding.ConstTonCost.text.toString().replace(",", "")

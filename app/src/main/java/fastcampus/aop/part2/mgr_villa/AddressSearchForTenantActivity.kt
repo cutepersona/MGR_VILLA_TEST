@@ -186,11 +186,23 @@ class AddressSearchForTenantActivity : AppCompatActivity() {
 
     private fun initAddrSearchEditText(){
         binding.AddressTenantEditText.setOnKeyListener { v, keyCode, event ->
-//            if (event.action == KeyEvent.KEYCODE_BACK){
+            if (event.getAction() == KeyEvent.ACTION_DOWN
+                && event.getKeyCode() == KeyEvent.KEYCODE_DEL){
                 binding.AddressTenantEditText.setText("")
                 addrTenantListItems.clear()
                 addrListAdapter.notifyDataSetChanged()
-//            }
+            }
+
+            if((event.getAction() == KeyEvent.ACTION_DOWN) && keyCode == KeyEvent.KEYCODE_ENTER) {
+                if (binding.AddressTenantEditText.text.toString().contains("-")
+                    && !binding.AddressTenantEditText.text.toString().equals("길동")
+                    && !binding.AddressTenantEditText.text.toString().equals("동길")
+                ){
+                    callKakaoAddress(binding.AddressTenantEditText.text.toString())
+                }else{
+                    callKakaoKeyword(binding.AddressTenantEditText.text.toString())
+                }
+            }
 
             true
         }
