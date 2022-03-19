@@ -5,9 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
+import androidx.viewpager2.widget.ViewPager2
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import fastcampus.aop.part2.mgr_villa.adapter.IntroViewPagerAdapter
 import fastcampus.aop.part2.mgr_villa.databinding.FragmentOnBoardingBinding
+import kotlinx.android.synthetic.main.fragment_on_boarding.*
 
 class OnBoardingFragment : Fragment() {
 
@@ -24,6 +28,7 @@ class OnBoardingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         //1
         setupViewPager()
+
     }
 
     private fun setupViewPager() {
@@ -41,6 +46,7 @@ class OnBoardingFragment : Fragment() {
         )
 
         binding.introViewPager.adapter = adapter
+        binding.dotsIndicator.setViewPager2(binding.introViewPager)
         //2
         // 사용자가 버튼눌러서 넘어가게끔 함 이거는 추후 수정필요
 //        binding.introViewPager.isUserInputEnabled = false

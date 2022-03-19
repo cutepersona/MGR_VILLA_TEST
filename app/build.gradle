@@ -13,8 +13,8 @@ android {
         applicationId "fastcampus.aop.part2.mgr_villa"
         minSdk 23
         targetSdk 31
-        versionCode 4
-        versionName "1.1.2"
+        versionCode 5
+        versionName "1.1.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -103,6 +103,9 @@ dependencies {
 
     // viewpager2
     implementation("androidx.viewpager2:viewpager2:1.0.0")
+
+    // dotsIndicator
+    implementation 'com.tbuonomo:dotsindicator:4.2'
 
     // navigation bar
     implementation 'com.google.android.material:material:1.3.0'
