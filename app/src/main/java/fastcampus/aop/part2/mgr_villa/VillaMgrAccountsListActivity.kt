@@ -66,32 +66,13 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
             AccountsAdapter.OnSlideButtonClickListener {
             override fun onSlideButtonClick(v: View, imageView: ImageView, position: Int) {
 
-//                val villadb = VillaNoticeHelper.getInstance(applicationContext)
-//                val mgrCheck = MyApplication.prefs.getString("userType", "")
-
-//                if (mgrCheck.equals("MGR")
-//                    && !mgrCheck.equals("")
-//                ) {
                     when (imageView) {
                         imageView.AccountUpdate -> {
-
-
                             val AccountActivity = Intent(v.context, AddAccountActivity::class.java)
                             AccountActivity.putExtra("accountId",AccountListItems[position].accountId)
                             startActivity(AccountActivity)
-
-                            //-----------------------------------------------------------------------------
-//                            Thread(Runnable {
-//                                runOnUiThread {
-//                                    val AccountActivity = Intent(v.context, AddAccountActivity::class.java)
-//                                    AccountActivity.putExtra("accountId",AccountListItems[position].accountId.toString().toLong())
-//                                    startActivity(AccountActivity)
-//                                }
-//                            }).start()
-                            //-----------------------------------------------------------------------------
                         }
                         imageView.AccountDelete -> {
-
                             firestoreDB.collection("VillaAccount")
                                 .document(AccountListItems[position].accountId)
                                 .get()
@@ -105,21 +86,7 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
                                             .delete()
                                     }
                                 }
-
-                            //-----------------------------------------------------------------------------
-//                            Thread(Runnable {
-//                                villadb!!.VillaNoticeDao().deleteAccount(
-//                                    MyApplication.prefs.getString("villaAddress", "").trim(),
-//                                    AccountListItems[position].accountId.toString().toLong()
-//                                )
-//                                runOnUiThread {
-//                                    initAccountsItems()
-//                                }
-//                            }).start()
-                            //-----------------------------------------------------------------------------
-
                         }
-
                     }
 //                }
 
@@ -129,8 +96,6 @@ class VillaMgrAccountsListActivity : AppCompatActivity() {
 
         AccountListAdapter.setItemClickListener( object :AccountsAdapter.OnItemClickListener{
             override fun onClick(v: View, imageView: ImageView, position: Int) {
-
-
                 firestoreDB.collection("VillaAccount")
                     .whereEqualTo("villaAddr",MyApplication.prefs.getString("villaAddress", "").trim())
                     .get()

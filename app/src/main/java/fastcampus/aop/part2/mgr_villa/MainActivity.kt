@@ -96,20 +96,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // 네이버 아이디 로그인 API 연동
     val mOAuthLoginHandler: OAuthLoginHandler = @SuppressLint("HandlerLeak")
     object : OAuthLoginHandler() {
         override fun run(success: Boolean) {
             if (success) {
-//                showToast("네아로")
-
                 val accessToken: String = mOAuthLoginInstance.getAccessToken(baseContext)
-//                val refreshToken: String = mOAuthLoginInstance.getRefreshToken(baseContext)
-//                val expiresAt: Long = mOAuthLoginInstance.getExpiresAt(baseContext)
-//                val tokenType: String = mOAuthLoginInstance.getTokenType(baseContext)
 
                 val header = "Bearer " + accessToken
                 val url = "https://openapi.naver.com/v1/nid/me"
-
 
                 val requestHeaders: MutableMap<String, String> = HashMap()
                 requestHeaders["Authorization"] = header
@@ -123,6 +118,7 @@ class MainActivity : AppCompatActivity() {
                     val mobile = response.getString("mobile").replace("-","")
                     val name = response.getString("name")
 
+                    //
                     firestoreDB.collection("VillaUsers")
                         .document(email)
                         .get()
@@ -131,14 +127,14 @@ class MainActivity : AppCompatActivity() {
                                 MyApplication.prefs.setString("email",email.trim())
                                 MyApplication.prefs.setString("userType",task["userType"].toString().trim())
 
+                                // 로그인 한 유저가 관리자 인 경우
                                 if (MyApplication.prefs.getString("userType","").equals("MGR")){
                                     firestoreDB.collection("VillaInfo")
                                         .whereEqualTo("mailAddress", email.trim())
                                         .get()
                                         .addOnSuccessListener { result ->
-                                            // 관리자 email로 등록된 집이 없음.
+                                            // 관리자 email로 등록된 건물이 없음.
                                             if (result.isEmpty) {
-//                                            showToast("집없고 관리자")
                                                 val addrSearchActivity = Intent(this@MainActivity, AddressSearchActivity::class.java)
                                                 addrSearchActivity.putExtra("email", email.trim())
                                                 startActivity(addrSearchActivity)
@@ -146,17 +142,16 @@ class MainActivity : AppCompatActivity() {
                                             // 관리자 email로 등록된 집이 있음
                                             if (!result.isEmpty){
                                                 for(i in result!!){
+                                                    // 관리자 email로 등록된 집주소를 SharedPreference에 저장
                                                     MyApplication.prefs.setString("villaAddress", i.data["villaAddress"].toString().trim())
                                                     break
                                                 }
-
+                                                // 홈 화면으로 이동
                                                 val mgrHomeActivity = Intent(this@MainActivity, VillaHomeActivity::class.java)
                                                 mgrHomeActivity.putExtra("email", email.trim())
 //
                                                 startActivity(mgrHomeActivity)
                                             }
-                                            // 세입자 email로 등록된 집이 없음
-
                                         }
                                         .addOnFailureListener {
                                             showToast("로그인 정보 불러오기 실패")
@@ -212,50 +207,10 @@ class MainActivity : AppCompatActivity() {
                 }).start()
 
 
-
-//                Thread(Runnable {
-//                    val responseBody = get(url, requestHeaders)
-//
-//                    runOnUiThread{
-//                        val loginResult = JSONObject(responseBody)
-//                        val response: JSONObject = loginResult.getJSONObject("response")
-//
-//                        val email = response.getString("email")
-//                        val mobile = response.getString("mobile").replace("-","")
-//                        val name = response.getString("name")
-//
-//                        firestoreDB.collection("VillaUsers")
-//                            .document(email)
-//                            .get()
-//                            .addOnCompleteListener { task ->
-//                                if (task.isSuccessful){
-//                                     showToast("text")
-////                                    if (task["mailAddress"].toString().equals(email.trim())){
-////
-////                                    }
-//                                } else {
-//                                    val toTenantDiv = Intent(this@MainActivity, ChoiceMgrTenantActivity::class.java)
-//                                    toTenantDiv.putExtra("N","NAVER")
-//                                    toTenantDiv.putExtra("Nemail",email)
-//                                    toTenantDiv.putExtra("Nname",name)
-//                                    toTenantDiv.putExtra("Nmobile",mobile)
-//                                    startActivity(toTenantDiv)
-//                                }
-//                            }
-//                    }
-//
-//                }).start()
-
-
-//                var intent = Intent(this, )
             } else {
                 val errorCode: String = mOAuthLoginInstance.getLastErrorCode(mContext).code
                 val errorDesc = mOAuthLoginInstance.getLastErrorDesc(mContext)
 
-//                Toast.makeText(
-//                    baseContext, "errorCode:" + errorCode
-//                            + ", errorDesc:" + errorDesc, Toast.LENGTH_SHORT
-//                ).show()
             }
         }
     }

@@ -60,19 +60,12 @@ class AddAccountActivity: AppCompatActivity() {
     // 은행 다이얼로그 호출
     private fun initBankDialog(bankList: Array<String>) {
         binding.bankSpinnerArea.setOnClickListener {
-
-//            val bankdialog = Dialog(this)
+            // 계좌 목록 어댑터
             val BankListAdapter = BankDialogAdapter(bankList)            // 리싸이클러 뷰 어댑터
-//            bankdialog.setContentView(R.layout.mgr_addaccount)
-//            bankdialog.setCanceledOnTouchOutside(false)
-//            bankdialog.rv_banks.adapter = BankListAdapter
-//            bankdialog.rv_banks.layoutManager = LinearLayoutManager(this)
-//            bankdialog.show()
-
+            // 계좌 등록 커스텀 다이얼로그 호출
             val mgrBankDialog = mgrAddAccountDialog(this)
             mgrBankDialog.showDialog(BankListAdapter)
-
-
+            // 다이얼로그에서 OnDialogClick시 다이얼로그에서 선언한 Interface
             mgrBankDialog.setOnClickListener( object : mgrAddAccountDialog.OnDialogClickListener{
                 override fun onClicked(bank: String) {
                     binding.bankNameText.setText(bank)
@@ -128,35 +121,6 @@ class AddAccountActivity: AppCompatActivity() {
                 if (!checkForm()) {
                     return@setOnClickListener
                 } else {
-
-
-//
-//                    // 계좌 정보가 없을때 신규 등록
-//                    val villaAccount = firestoreDB.collection("VillaAccount")
-//
-//                    val VillaAccount = hashMapOf(
-//                        "accountId" to "0",
-//                        "bankName" to binding.bankNameText.text.toString().trim(),
-//                        "accountHolder" to binding.accountHolderEditText.text.toString().trim(),
-//                        "accountNumber" to binding.accountNumberEditText.text.toString().trim(),
-//                        "favorite" to "favorite",
-//                        "villaAddr" to MyApplication.prefs.getString("villaAddress", "").trim()
-//                    )
-//
-//                    villaAccount.document(MyApplication.prefs.getString("villaAddress", "").trim() + "_" + binding.accountNumberEditText.text.toString().trim())
-//                        .set(VillaAccount)
-//                        .addOnSuccessListener { documentReference ->
-////                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-//                            val AccountListActivity = Intent(this, VillaMgrAccountsListActivity::class.java)
-//                            startActivity(AccountListActivity)
-//                        }
-//                        .addOnFailureListener { e ->
-//                            showToast("관리비 계좌 등록에 실패하였습니다.")
-//                            Log.w(ContentValues.TAG, "Error adding document", e)
-//                            return@addOnFailureListener
-//                        }
-
-
                     // 계좌 체크
                     firestoreDB.collection("VillaAccount")
                         .whereEqualTo("villaAddr", MyApplication.prefs.getString("villaAddress", "").trim())

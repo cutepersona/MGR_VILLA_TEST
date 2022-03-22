@@ -47,9 +47,7 @@ class OnBoardingFragment : Fragment() {
 
         binding.introViewPager.adapter = adapter
         binding.dotsIndicator.setViewPager2(binding.introViewPager)
-        //2
-        // 사용자가 버튼눌러서 넘어가게끔 함 이거는 추후 수정필요
-//        binding.introViewPager.isUserInputEnabled = false
+
     }
 
     override fun onDestroyView() {

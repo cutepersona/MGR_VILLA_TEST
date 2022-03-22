@@ -64,12 +64,6 @@ class SignUpActivity : AppCompatActivity() {
                 //     user action.
 
                 showToast("90초 이내에 인증을 완료해 주세요.")
-//                UserInfo.phoneAuthNum = credential.smsCode.toString()
-//                binding.phoneAuthEtAuthNum.setText(credential.smsCode.toString())
-//                binding.phoneAuthEtAuthNum.isEnabled = false
-//                Handler(Looper.getMainLooper()).postDelayed({
-//                    verifyPhoneNumberWithCode(credential)
-//                }, 1000)
 
                 signInWithPhoneAuthCredential(credential)
             }
@@ -507,6 +501,7 @@ class SignUpActivity : AppCompatActivity() {
 //        }
 //    }
 
+    // 전화번호 sns인증
     private fun phoneSnsAuthCheck() {
         phoneSnsAuth.setOnClickListener {
             var userPhone = userPhoneNumberEditText.text.trim().toString()
@@ -515,16 +510,17 @@ class SignUpActivity : AppCompatActivity() {
                 showToast("핸드폰 번호를 입력해 주세요.")
                 return@setOnClickListener
             }
-
+            // 타이머 작동
             countDown.start()
 
-//            firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(userPhone, "123456")
+            // FireBase 인증 테스트용
+            // firebaseAuthSettings.setAutoRetrievedSmsCodeForPhoneNumber(userPhone, "123456")
 
             val options = PhoneAuthOptions.newBuilder(auth)
-                .setPhoneNumber("+82" + userPhone)       // Phone number to verify
-                .setTimeout(90L, TimeUnit.SECONDS) // Timeout and unit
-                .setActivity(this@SignUpActivity)                 // Activity (for callback binding)
-                .setCallbacks(collbacks)          // OnVerificationStateChangedCallbacks
+                .setPhoneNumber("+82" + userPhone)              // 국가코드와 합친 전화번호
+                .setTimeout(90L, TimeUnit.SECONDS)       // 인증만료시간
+                .setActivity(this@SignUpActivity)               // Activity (for callback binding)
+                .setCallbacks(collbacks)                        // OnVerificationStateChangedCallbacks
                 .build()
             PhoneAuthProvider.verifyPhoneNumber(options)
 

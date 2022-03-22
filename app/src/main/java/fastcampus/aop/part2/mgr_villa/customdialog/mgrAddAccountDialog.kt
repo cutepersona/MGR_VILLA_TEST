@@ -18,45 +18,44 @@ import kotlinx.coroutines.selects.select
 
 class mgrAddAccountDialog(context: Context) {
 
-
     private val dialog = Dialog(context)
     private lateinit var onClickListener: OnDialogClickListener
 
     private var bank: String = ""
 
+    // onClickListener와 OnDialogClickListener와 연결
     fun setOnClickListener(listener: OnDialogClickListener) {
         onClickListener = listener
+    }
+    // onClicked Interface
+    // 이 다이얼로그에서 선택한 값을 가져오기 위해 선언
+    interface OnDialogClickListener {
+        fun onClicked(bank: String)
     }
 
     fun showDialog(BankListAdapter: BankDialogAdapter) {
         dialog.setContentView(R.layout.mgr_addaccount)
 
-//        dialog.setTitle("은행선택")
-//        dialog.window!!.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT)
         dialog.setCanceledOnTouchOutside(false)
-//        dialog.setCancelable(true)
         dialog.rv_banks.adapter = BankListAdapter
         dialog.rv_banks.layoutManager = LinearLayoutManager(dialog.context)
-//        dialog.rv_banks.addItemDecoration(DividerItemDecoration(dialog.context, LinearLayoutManager.VERTICAL))
         dialog.show()
 
-
+        // BankDialogAdapter의 OnItemClickListener 구현
         BankListAdapter.setItemClickListener(object : BankDialogAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
                 bank = BankListAdapter.bankList[position]
             }
         })
-
-
+        // 취소 버튼
         dialog.cancelButton.setOnClickListener {
             dialog.dismiss()
         }
-
+        // 확인 버튼  클릭시 선택한 값을 onClicked에 담는다.
         dialog.finishButton.setOnClickListener {
             onClickListener.onClicked(bank)
             dialog.dismiss()
         }
-
 
     }
 
@@ -64,9 +63,6 @@ class mgrAddAccountDialog(context: Context) {
         dialog.dismiss()
     }
 
-    interface OnDialogClickListener {
-        fun onClicked(bank: String)
-    }
 
     private fun showToast(message: String) {
         Toast.makeText(dialog.context, message, Toast.LENGTH_SHORT).show()
